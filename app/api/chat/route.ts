@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
         "X-Title": "PartsNow Steve",
       },
       body: JSON.stringify({
-        model: "openai/gpt-4o-mini",
+        model: "openai/gpt-5.3-chat",
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
           ...messages.slice(-10),
