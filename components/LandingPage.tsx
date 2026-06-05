@@ -5,12 +5,7 @@ import Image from "next/image";
 
 type ChatMsg = { role: "steve" | "user"; text: string };
 
-const FALLBACK = [
-  "Got it. What truck are we working on — make, model, and year? And whereabouts is that coming from?",
-  "Okay, that helps. On a rig like that, the usual suspect here is the wheel bearing or the brake hardware on that axle. Can you tell me if it gets worse when you brake?",
-  "Sounds like we're narrowing it down. I'd start with the wheel-end components for your axle. Once you give me the year and engine I can pull the exact parts that fit and check live stock for you.",
-  "Smart to check that first. If you want, call me and we'll walk through it out loud — English (865) 486-4003, Spanish (865) 486-4001. Otherwise, tell me the VIN or truck details and I'll line up the parts.",
-];
+const FALLBACK = "Got it — tell me more about the truck (make, model, year) and I'll point you in the right direction. Or call/text (865) 486-4003 and I'll help right now.";
 
 const SEEDS: Record<string, string> = {
   symptom: "My truck's making a noise it wasn't making yesterday and I'm not sure what part I need.",
@@ -43,31 +38,44 @@ export function LandingPage() {
   const [ctaInput, setCtaInput] = useState("");
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
-  const fallbackIdx = useRef(0);
+  // Keep API-format history separately (excludes greeting)
+  const historyRef = useRef<{ role: "user" | "assistant"; content: string }[]>([]);
 
   useEffect(() => {
     if (bodyRef.current) bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
   }, [messages, typing]);
 
-  const send = useCallback((text: string) => {
+  const send = useCallback(async (text: string) => {
     const t = text.trim();
     if (!t || busy) return;
     setBusy(true);
     setSuggestions([]);
     setMessages((m) => [...m, { role: "user", text: t }]);
+    historyRef.current.push({ role: "user", content: t });
     setTyping(true);
-    const idx = fallbackIdx.current++;
-    setTimeout(() => {
-      const reply = FALLBACK[Math.min(idx, FALLBACK.length - 1)];
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: historyRef.current }),
+      });
+      const data = await res.json();
+      const reply: string = data.reply || FALLBACK;
+      historyRef.current.push({ role: "assistant", content: reply });
       setTyping(false);
       setMessages((m) => {
         const next = [...m, { role: "steve" as const, text: reply }];
         if (next.length <= 4) setSuggestions(FOLLOWUPS);
         return next;
       });
-      setBusy(false);
-      setTimeout(() => inputRef.current?.focus(), 50);
-    }, 900 + Math.random() * 400);
+    } catch {
+      setTyping(false);
+      setMessages((m) => [...m, { role: "steve" as const, text: FALLBACK }]);
+    }
+
+    setBusy(false);
+    setTimeout(() => inputRef.current?.focus(), 50);
   }, [busy]);
 
   const openChat = useCallback((seedKey?: string) => {
