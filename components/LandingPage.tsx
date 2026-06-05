@@ -2,766 +2,497 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
-import {
-  MapPin, Sparkles, MessageSquare, ScanLine, Camera, Search,
-  ImageUp, Upload, ArrowRight, Truck, ListChecks,
-  Disc, Wind, Lightbulb, Cog, Filter, Droplets,
-  Plus, Minus, Phone, Mail, Send, X, Menu, Image as ImageIcon,
-  ScanSearch, GitCommitHorizontal,
-} from "lucide-react";
 
-// ─── i18n ────────────────────────────────────────────────────────────────────
+type ChatMsg = { role: "steve" | "user"; text: string };
 
-type FaqItem = [string, string];
-
-interface Copy {
-  announce: string;
-  nav_how: string; nav_ways: string; nav_cats: string; nav_faq: string; nav_cta: string;
-  phone_en: string; phone_es: string;
-  hero_eyebrow: string; hero_title_1: string; hero_title_2: string; hero_sub: string;
-  mode_describe: string; mode_vin: string; mode_photo: string;
-  ph_describe: string; ph_vin: string; ph_photo: string;
-  hero_btn: string; hero_btn_photo: string;
-  stat_parts: string; stat_dealers: string; stat_ai: string; stat_ai_val: string;
-  stat_lang: string; stat_lang_val: string;
-  pv_title: string; pv_status: string; pv_u1: string; pv_a1: string; pv_open: string;
-  in_stock: string;
-  ways_eyebrow: string; ways_title: string; ways_sub: string;
-  way1_t: string; way1_d: string; way2_t: string; way2_d: string; way3_t: string; way3_d: string;
-  way_cta: string;
-  how_eyebrow: string; how_title: string;
-  how1_t: string; how1_d: string; how2_t: string; how2_d: string; how3_t: string; how3_d: string;
-  cat_eyebrow: string; cat_title: string; cat_all: string;
-  cat_brakes: string; cat_air: string; cat_elec: string; cat_engine: string;
-  cat_filt: string; cat_trailer: string; cat_drive: string; cat_hyd: string;
-  faq_eyebrow: string; faq_title: string; faq: FaqItem[];
-  cta_eyebrow: string; cta_title: string; cta_sub: string; cta_btn: string; cta_call: string;
-  foot_blurb: string; foot_cats: string; foot_res: string; foot_pol: string;
-  res_items: string[]; pol_items: string[];
-  foot_rights: string; foot_operated: string; foot_secured: string;
-  chat_title: string; chat_status: string; chat_help: string; chat_input: string;
-  chat_sugg: string[]; chat_reply: string; chat_reply_photo: string; chat_vendor: string;
-}
-
-const EN: Copy = {
-  announce: "Free Pickup — 2607 Middlebrook Pike, Knoxville, TN 37921",
-  nav_how: "How It Works", nav_ways: "Ask the AI", nav_cats: "Categories", nav_faq: "FAQ",
-  nav_cta: "Try the Assistant",
-  phone_en: "English (865) 486-4003", phone_es: "Español (865) 486-4001",
-  hero_eyebrow: "AGENTIC PARTS COMMERCE",
-  hero_title_1: "Find any truck or trailer part —", hero_title_2: "just ask.",
-  hero_sub: "Describe the symptom, paste a VIN, or snap a photo. The PartsNow AI searches 50,000+ parts with OEM cross-references and gets them shipped from Knoxville.",
-  mode_describe: "Describe", mode_vin: "VIN", mode_photo: "Photo",
-  ph_describe: "I need brake drums for a Peterbilt 579…",
-  ph_vin: "Paste a 17-digit VIN…",
-  ph_photo: "Upload a photo of the part…",
-  hero_btn: "Ask Now", hero_btn_photo: "Upload Photo",
-  stat_parts: "Parts in catalog", stat_dealers: "Trusted dealers",
-  stat_ai: "AI assistant", stat_ai_val: "24/7",
-  stat_lang: "Bilingual", stat_lang_val: "EN / ES",
-  pv_title: "PartsNow AI", pv_status: "Online",
-  pv_u1: "I need brake drums for a 2019 Peterbilt 579, Cummins X15.",
-  pv_a1: "Found 2 brake drums that fit your Peterbilt 579. Both in stock in Knoxville.",
-  pv_open: "Open full assistant →", in_stock: "In stock",
-  ways_eyebrow: "THREE WAYS TO ASK",
-  ways_title: "However you describe it, the AI finds it",
-  ways_sub: "Text, voice, or a photo — in English or Spanish. No part number required.",
-  way1_t: "Describe it",
-  way1_d: "Tell the AI the symptom or what you need in plain language. It maps your words to the right part.",
-  way2_t: "Snap a photo",
-  way2_d: "Upload an image of the worn part. Visual Part ID identifies it and finds exact replacements.",
-  way3_t: "Paste a VIN",
-  way3_d: "Enter a VIN and get parts guaranteed to fit that exact truck, with OEM cross-references.",
-  way_cta: "Try it",
-  how_eyebrow: "HOW IT WORKS", how_title: "From question to parts on the dock",
-  how1_t: "Ask", how1_d: "Describe what you need, paste a VIN, or send a photo. English or Spanish.",
-  how2_t: "Compare", how2_d: "The AI returns matches with OEM cross-references, live stock, and dealer pricing.",
-  how3_t: "Get your parts", how3_d: "Ship nationwide in 3–5 business days, or pick up free in Knoxville, TN.",
-  cat_eyebrow: "BROWSE THE CATALOG", cat_title: "50,000+ parts across every system",
-  cat_all: "View all parts →",
-  cat_brakes: "Brakes & Wheel End", cat_air: "Air System",
-  cat_elec: "Electrical & Lighting", cat_engine: "Engine",
-  cat_filt: "Filtration", cat_trailer: "Trailer Parts",
-  cat_drive: "Driveline", cat_hyd: "Hydraulics",
-  faq_eyebrow: "FAQ", faq_title: "Questions, answered",
-  faq: [
-    ["How accurate is the AI part finder?", "It matches your description, VIN, or photo against 50,000+ parts with OEM cross-references from trusted dealers. Every result shows the dealer, fitment notes, and live stock so you can confirm before you buy."],
-    ["Do you ship nationwide?", "Yes. We ship anywhere in the United States from Knoxville, TN — standard 3–5 business days. Free pickup is available at 2607 Middlebrook Pike."],
-    ["Can I talk to a real person?", "Always. Bilingual support is available at English (865) 486-4003 and Español (865) 486-4001. The AI handles the search; our team handles anything it can't."],
-    ["What if the part doesn't fit?", "Every order is covered by a 30-day return window. If a part doesn't fit or isn't what you needed, send it back."],
-    ["Which truck makes do you support?", "Peterbilt, Kenworth, Freightliner, International, Mack, Volvo, and Western Star — plus trailer parts across all major manufacturers."],
-    ["How do I pay, and can I request a quote?", "Secure checkout via Stripe accepts all major cards. Some items are quote-required — the AI flags those and routes you to a fast quote."],
-  ],
-  cta_eyebrow: "READY WHEN YOU ARE",
-  cta_title: "Find your part in the next minute",
-  cta_sub: "Open the assistant and describe what you need. No account required to search.",
-  cta_btn: "Try the AI Assistant", cta_call: "Call English (865) 486-4003",
-  foot_blurb: "AI-powered agentic commerce for heavy-duty truck and trailer parts. 50,000+ parts from trusted dealers, shipped nationwide from Knoxville, TN.",
-  foot_cats: "Categories", foot_res: "Resources", foot_pol: "Policies",
-  res_items: ["Catalog", "AI Part Finder", "Visual Part ID", "VIN Lookup", "About", "Contact"],
-  pol_items: ["Shipping Policy", "Return Policy", "Terms of Service", "Privacy Policy"],
-  foot_rights: "All rights reserved.",
-  foot_operated: "partsnow.ai is operated by Post Equipment, Inc.",
-  foot_secured: "Secured by Stripe",
-  chat_title: "PartsNow AI", chat_status: "Parts assistant · EN / ES",
-  chat_help: "How can I help you find a part?",
-  chat_input: "Ask about any truck part…",
-  chat_sugg: ["I need brake drums for a Peterbilt 579", "Oil filters for a Kenworth T680", "Paste a VIN"],
-  chat_reply: "Here are 2 parts that fit. Both are in stock in Knoxville and ship nationwide.",
-  chat_reply_photo: "Got it — analyzing the photo. Based on the housing, here are 2 likely matches in stock.",
-  chat_vendor: "Dealer",
-};
-
-const ES: Copy = {
-  announce: "Recogida gratis — 2607 Middlebrook Pike, Knoxville, TN 37921",
-  nav_how: "Cómo Funciona", nav_ways: "Pregunta a la IA", nav_cats: "Categorías", nav_faq: "Preguntas",
-  nav_cta: "Probar el Asistente",
-  phone_en: "Inglés (865) 486-4003", phone_es: "Español (865) 486-4001",
-  hero_eyebrow: "COMERCIO DE PARTES CON IA",
-  hero_title_1: "Encuentra cualquier parte de camión o tráiler —", hero_title_2: "solo pregunta.",
-  hero_sub: "Describe el síntoma, pega un VIN o haz una foto. La IA de PartsNow busca entre más de 50,000 partes con referencias cruzadas OEM y las envía desde Knoxville.",
-  mode_describe: "Describir", mode_vin: "VIN", mode_photo: "Foto",
-  ph_describe: "Necesito tambores de freno para un Peterbilt 579…",
-  ph_vin: "Pega un VIN de 17 dígitos…",
-  ph_photo: "Sube una foto de la parte…",
-  hero_btn: "Preguntar", hero_btn_photo: "Subir Foto",
-  stat_parts: "Partes en catálogo", stat_dealers: "Dealers de confianza",
-  stat_ai: "Asistente IA", stat_ai_val: "24/7",
-  stat_lang: "Bilingüe", stat_lang_val: "EN / ES",
-  pv_title: "PartsNow IA", pv_status: "En línea",
-  pv_u1: "Necesito tambores de freno para un Peterbilt 579 2019, Cummins X15.",
-  pv_a1: "Encontré 2 tambores de freno para tu Peterbilt 579. Ambos en stock en Knoxville.",
-  pv_open: "Abrir asistente completo →", in_stock: "En stock",
-  ways_eyebrow: "TRES FORMAS DE PREGUNTAR",
-  ways_title: "Como lo describas, la IA lo encuentra",
-  ways_sub: "Texto, voz o una foto — en inglés o español. Sin número de parte.",
-  way1_t: "Descríbelo",
-  way1_d: "Dile a la IA el síntoma o lo que necesitas en lenguaje natural. Traduce tus palabras a la parte correcta.",
-  way2_t: "Haz una foto",
-  way2_d: "Sube una imagen de la parte desgastada. Visual Part ID la identifica y encuentra reemplazos exactos.",
-  way3_t: "Pega un VIN",
-  way3_d: "Ingresa un VIN y obtén partes garantizadas para ese camión, con referencias cruzadas OEM.",
-  way_cta: "Probar",
-  how_eyebrow: "CÓMO FUNCIONA", how_title: "De la pregunta a las partes en el muelle",
-  how1_t: "Pregunta", how1_d: "Describe lo que necesitas, pega un VIN o envía una foto. En inglés o español.",
-  how2_t: "Compara", how2_d: "La IA devuelve coincidencias con referencias OEM, stock en vivo y precios de dealer.",
-  how3_t: "Recibe tus partes", how3_d: "Envío nacional en 3–5 días hábiles, o recogida gratis en Knoxville, TN.",
-  cat_eyebrow: "EXPLORA EL CATÁLOGO", cat_title: "Más de 50,000 partes en cada sistema",
-  cat_all: "Ver todas las partes →",
-  cat_brakes: "Frenos y Cubo", cat_air: "Sistema de Aire",
-  cat_elec: "Eléctrico e Iluminación", cat_engine: "Motor",
-  cat_filt: "Filtración", cat_trailer: "Partes de Tráiler",
-  cat_drive: "Transmisión", cat_hyd: "Hidráulica",
-  faq_eyebrow: "PREGUNTAS", faq_title: "Preguntas, respondidas",
-  faq: [
-    ["¿Qué tan precisa es la búsqueda con IA?", "Compara tu descripción, VIN o foto contra más de 50,000 partes con referencias cruzadas OEM de dealers de confianza. Cada resultado muestra el dealer, notas de compatibilidad y stock en vivo para que confirmes antes de comprar."],
-    ["¿Envían a todo el país?", "Sí. Enviamos a cualquier punto de Estados Unidos desde Knoxville, TN — estándar de 3 a 5 días hábiles. Recogida gratis disponible en 2607 Middlebrook Pike."],
-    ["¿Puedo hablar con una persona real?", "Siempre. Soporte bilingüe en Inglés (865) 486-4003 y Español (865) 486-4001. La IA hace la búsqueda; nuestro equipo se encarga de lo demás."],
-    ["¿Qué pasa si la parte no encaja?", "Cada pedido tiene una ventana de devolución de 30 días. Si una parte no encaja o no es lo que necesitabas, devuélvela."],
-    ["¿Qué marcas de camión soportan?", "Peterbilt, Kenworth, Freightliner, International, Mack, Volvo y Western Star — más partes de tráiler de todos los fabricantes principales."],
-    ["¿Cómo pago, y puedo pedir una cotización?", "Pago seguro vía Stripe con todas las tarjetas principales. Algunos artículos requieren cotización — la IA los marca y te lleva a una cotización rápida."],
-  ],
-  cta_eyebrow: "CUANDO ESTÉS LISTO",
-  cta_title: "Encuentra tu parte en el próximo minuto",
-  cta_sub: "Abre el asistente y describe lo que necesitas. No necesitas cuenta para buscar.",
-  cta_btn: "Probar el Asistente de IA", cta_call: "Llama Inglés (865) 486-4003",
-  foot_blurb: "Comercio agéntico con IA para partes de camión y tráiler de alto rendimiento. Más de 50,000 partes de dealers de confianza, enviadas desde Knoxville, TN.",
-  foot_cats: "Categorías", foot_res: "Recursos", foot_pol: "Políticas",
-  res_items: ["Catálogo", "Buscador IA", "Visual Part ID", "Búsqueda VIN", "Nosotros", "Contacto"],
-  pol_items: ["Política de Envío", "Política de Devolución", "Términos de Servicio", "Privacidad"],
-  foot_rights: "Todos los derechos reservados.",
-  foot_operated: "partsnow.ai es operado por Post Equipment, Inc.",
-  foot_secured: "Asegurado por Stripe",
-  chat_title: "PartsNow IA", chat_status: "Asistente de partes · EN / ES",
-  chat_help: "¿Cómo te ayudo a encontrar una parte?",
-  chat_input: "Pregunta por cualquier parte de camión…",
-  chat_sugg: ["Necesito tambores de freno para un Peterbilt 579", "Filtros de aceite para un Kenworth T680", "Pega un VIN"],
-  chat_reply: "Aquí tienes 2 partes que encajan. Ambas en stock en Knoxville y con envío nacional.",
-  chat_reply_photo: "Listo — analizando la foto. Por la carcasa, aquí van 2 coincidencias probables en stock.",
-  chat_vendor: "Dealer",
-};
-
-type Lang = "en" | "es";
-type SearchMode = "describe" | "vin" | "photo";
-
-// ─── Chat types ───────────────────────────────────────────────────────────────
-
-interface PartData {
-  sku: string; title: string; vendor: string; price: number; bg: string;
-}
-
-const PARTS: PartData[] = [
-  { sku: "STE-BD-0429", title: 'Brake Drum 16.5" x 7"', vendor: "Post Onsite", price: 218.40, bg: "radial-gradient(circle at 50% 45%, #64748b, #334155)" },
-  { sku: "PAI-BD-9045", title: 'Drum, Outboard 16.5" x 8-5/8"', vendor: "PAI Industries", price: 264.10, bg: "radial-gradient(circle at 40% 40%, #9aa4b2, #4b5563)" },
+const FALLBACK = [
+  "Got it. What truck are we working on — make, model, and year? And whereabouts is that coming from?",
+  "Okay, that helps. On a rig like that, the usual suspect here is the wheel bearing or the brake hardware on that axle. Can you tell me if it gets worse when you brake?",
+  "Sounds like we're narrowing it down. I'd start with the wheel-end components for your axle. Once you give me the year and engine I can pull the exact parts that fit and check live stock for you.",
+  "Smart to check that first. If you want, call me and we'll walk through it out loud — English (865) 486-4003, Spanish (865) 486-4001. Otherwise, tell me the VIN or truck details and I'll line up the parts.",
 ];
 
-type ChatMsg =
-  | { r: "u"; c: string }
-  | { r: "u"; k: "photo"; c: "" }
-  | { r: "a"; c: string }
-  | { r: "a"; k: "parts"; c: PartData[] };
+const SEEDS: Record<string, string> = {
+  symptom: "My truck's making a noise it wasn't making yesterday and I'm not sure what part I need.",
+  photo: "I've got the old part in my hand but there's no number on it. Can I send you a photo so you can identify it?",
+  vin: "Can you look up the right parts using my VIN? I'll give you the number.",
+  es: "Hola Steve, necesito ayuda para encontrar una pieza para mi camión. ¿Me puedes ayudar?",
+};
 
-// ─── Main component ───────────────────────────────────────────────────────────
+const FOLLOWUPS = ["It's a 2020 Kenworth T680", "Gets worse when I brake", "Can I just call instead?"];
+
+const FAQ_ITEMS = [
+  { q: "Do I have to buy anything?", a: "No. Ask Steve whatever you need and leave. The help is free." },
+  { q: "Do I need to make an account?", a: "No account, no sign-up. Open the chat, call, or text and go." },
+  { q: "What if I don't know the part name or number?", a: "That's the whole point of Steve. Describe the problem, send a photo, or give a VIN. He figures out the part and tells you where to start." },
+  { q: "Can I call or text instead of typing?", a: 'Yes. Chat on the site, call, or text. English: <a href="tel:+18654864003">(865) 486-4003</a>. Spanish: <a href="tel:+18654864001">(865) 486-4001</a>. Both lines take calls and texts.' },
+  { q: "Does Steve speak Spanish?", a: "Yes. Ask in Spanish and he'll answer in Spanish. The Spanish line is (865) 486-4001." },
+  { q: "When can I reach him?", a: "Any hour, any day. Nights, weekends, holidays." },
+  { q: "What if I want to order the part?", a: "Steve can pull it from PartsNow.ai, new or OEM, and get it shipped or set up for pickup in Knoxville. Up to you." },
+];
 
 export function LandingPage() {
-  const [lang, setLang] = useState<Lang>("en");
   const [chatOpen, setChatOpen] = useState(false);
-  const [chatSeed, setChatSeed] = useState("");
-  const [chatMode, setChatMode] = useState<SearchMode>("describe");
-  const [chatNonce, setChatNonce] = useState(0);
-
-  useEffect(() => {
-    const saved = localStorage.getItem("pn_lang") as Lang | null;
-    if (saved === "en" || saved === "es") setLang(saved);
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("pn_lang", lang);
-    document.documentElement.lang = lang;
-  }, [lang]);
-
-  const t = lang === "en" ? EN : ES;
-
-  const ask = useCallback((seed = "", mode: SearchMode = "describe") => {
-    setChatSeed(seed);
-    setChatMode(mode);
-    setChatNonce((n) => n + 1);
-    setChatOpen(true);
-  }, []);
-
-  return (
-    <div className="pn-lp">
-      <LPNav t={t} lang={lang} setLang={setLang} onAsk={ask} />
-      <main>
-        <LPHero t={t} onAsk={ask} />
-        <LPWays t={t} onAsk={ask} />
-        <LPHow t={t} />
-        <LPCategories t={t} />
-        <LPFaq t={t} />
-        <LPFinalCTA t={t} onAsk={ask} />
-      </main>
-      <LPFooter t={t} />
-      <button className="lp-launcher" onClick={() => ask()} aria-label="Open AI assistant">
-        <Sparkles size={24} />
-      </button>
-      <LPChat
-        open={chatOpen}
-        onClose={() => setChatOpen(false)}
-        t={t}
-        seed={chatSeed}
-        mode={chatMode}
-        nonce={chatNonce}
-      />
-    </div>
-  );
-}
-
-// ─── Nav ──────────────────────────────────────────────────────────────────────
-
-function LPNav({ t, lang, setLang, onAsk }: { t: Copy; lang: Lang; setLang: (l: Lang) => void; onAsk: (seed?: string, mode?: SearchMode) => void }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const links = [
-    { key: "nav_ways", href: "#ways" },
-    { key: "nav_how", href: "#how" },
-    { key: "nav_cats", href: "#categories" },
-    { key: "nav_faq", href: "#faq" },
-  ] as const;
-
-  return (
-    <header className="lp-header">
-      <div className="lp-announce">
-        <MapPin size={13} />
-        <span>{t.announce}</span>
-      </div>
-      <div className="lp-nav">
-        <a href="#top" className="lp-nav-logo">
-          <Image src="/logo.svg" alt="partsnow.ai" width={120} height={30} />
-        </a>
-
-        <nav className="lp-nav-links">
-          {links.map((l) => (
-            <a key={l.key} href={l.href} className="lp-nav-link">{t[l.key]}</a>
-          ))}
-        </nav>
-
-        <div className="lp-nav-right">
-          <div className="lp-lang" role="group" aria-label="Language">
-            <button className={"lp-lang-btn" + (lang === "en" ? " is-on" : "")} onClick={() => setLang("en")}>EN</button>
-            <button className={"lp-lang-btn" + (lang === "es" ? " is-on" : "")} onClick={() => setLang("es")}>ES</button>
-          </div>
-          <button className="lp-btn lp-btn-primary lp-nav-cta" onClick={() => onAsk()}>
-            <Sparkles size={16} />
-            <span>{t.nav_cta}</span>
-          </button>
-          <button className="lp-burger" onClick={() => setMenuOpen((o) => !o)} aria-label="Menu">
-            {menuOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
-        </div>
-      </div>
-
-      {menuOpen && (
-        <div className="lp-mobile-menu">
-          {links.map((l) => (
-            <a key={l.key} href={l.href} className="lp-mobile-link" onClick={() => setMenuOpen(false)}>{t[l.key]}</a>
-          ))}
-          <button
-            className="lp-btn lp-btn-primary"
-            style={{ width: "100%", justifyContent: "center", marginTop: 8 }}
-            onClick={() => { setMenuOpen(false); onAsk(); }}
-          >
-            <Sparkles size={16} />
-            <span>{t.nav_cta}</span>
-          </button>
-        </div>
-      )}
-    </header>
-  );
-}
-
-// ─── Hero ─────────────────────────────────────────────────────────────────────
-
-function LPHero({ t, onAsk }: { t: Copy; onAsk: (seed?: string, mode?: SearchMode) => void }) {
-  const [mode, setMode] = useState<SearchMode>("describe");
-  const [val, setVal] = useState("");
-
-  const modes: { id: SearchMode; label: string; icon: React.ReactNode }[] = [
-    { id: "describe", label: t.mode_describe, icon: <MessageSquare size={15} /> },
-    { id: "vin", label: t.mode_vin, icon: <ScanLine size={15} /> },
-    { id: "photo", label: t.mode_photo, icon: <Camera size={15} /> },
-  ];
-
-  function submit(e: React.FormEvent) {
-    e.preventDefault();
-    const seed = val.trim() || (mode === "vin" ? "1XKAD49X9KJ123456" : mode === "photo" ? "" : t.ph_describe.replace("…", ""));
-    onAsk(seed, mode);
-  }
-
-  return (
-    <section className="lp-hero" id="top">
-      <div className="lp-hero-bg" />
-      <div className="lp-hero-inner">
-        <div className="lp-hero-copy">
-          <span className="lp-eyebrow lp-hero-eyebrow">{t.hero_eyebrow}</span>
-          <h1 className="lp-hero-title">
-            <span>{t.hero_title_1}</span>{" "}
-            <span className="lp-hero-accent">{t.hero_title_2}</span>
-          </h1>
-          <p className="lp-hero-sub">{t.hero_sub}</p>
-
-          <form className="lp-search" onSubmit={submit}>
-            <div className="lp-search-tabs">
-              {modes.map((m) => (
-                <button
-                  key={m.id}
-                  type="button"
-                  className={"lp-tab" + (mode === m.id ? " is-on" : "")}
-                  onClick={() => setMode(m.id)}
-                >
-                  {m.icon}
-                  <span>{m.label}</span>
-                </button>
-              ))}
-            </div>
-            <div className="lp-search-row">
-              {mode === "photo" ? (
-                <div className="lp-search-photo">
-                  <ImageUp size={20} />
-                  <span>{t.ph_photo}</span>
-                </div>
-              ) : (
-                <div className="lp-search-field">
-                  {mode === "vin" ? <ScanLine size={18} className="lp-search-ic" /> : <Search size={18} className="lp-search-ic" />}
-                  <input
-                    value={val}
-                    onChange={(e) => setVal(e.target.value)}
-                    placeholder={mode === "vin" ? t.ph_vin : t.ph_describe}
-                    className={mode === "vin" ? "lp-mono" : ""}
-                  />
-                </div>
-              )}
-              <button type="submit" className="lp-btn lp-btn-primary lp-search-btn">
-                {mode === "photo" ? <Upload size={16} /> : <Sparkles size={16} />}
-                <span>{mode === "photo" ? t.hero_btn_photo : t.hero_btn}</span>
-              </button>
-            </div>
-          </form>
-
-          <div className="lp-hero-stats">
-            <div className="lp-stat"><span className="lp-stat-val">50,000+</span><span className="lp-stat-lbl">{t.stat_parts}</span></div>
-            <div className="lp-stat"><span className="lp-stat-val">93</span><span className="lp-stat-lbl">{t.stat_dealers}</span></div>
-            <div className="lp-stat"><span className="lp-stat-val">{t.stat_ai_val}</span><span className="lp-stat-lbl">{t.stat_ai}</span></div>
-            <div className="lp-stat"><span className="lp-stat-val">{t.stat_lang_val}</span><span className="lp-stat-lbl">{t.stat_lang}</span></div>
-          </div>
-        </div>
-
-        <div className="lp-hero-preview">
-          <div className="lp-pv-card">
-            <div className="lp-pv-head">
-              <div className="lp-pv-avatar"><Sparkles size={16} /></div>
-              <div className="lp-pv-meta">
-                <span className="lp-pv-name">{t.pv_title}</span>
-                <span className="lp-pv-status"><span className="lp-dot" />{t.pv_status}</span>
-              </div>
-            </div>
-            <div className="lp-pv-body">
-              <div className="lp-pv-msg lp-pv-user">{t.pv_u1}</div>
-              <div className="lp-pv-msg lp-pv-ai">{t.pv_a1}</div>
-              {PARTS.map((p) => (
-                <div key={p.sku} className="lp-pv-part">
-                  <div className="lp-pv-thumb" style={{ background: p.bg }} />
-                  <div className="lp-pv-part-info">
-                    <span className="lp-sku">{p.sku}</span>
-                    <span className="lp-pv-part-title">{p.title}</span>
-                    <span className="lp-pv-part-vendor">
-                      {p.vendor} · <span className="lp-instock"><span className="lp-dot lp-dot-sm" />{t.in_stock}</span>
-                    </span>
-                  </div>
-                  <span className="lp-pv-price">${p.price.toFixed(2)}</span>
-                </div>
-              ))}
-            </div>
-            <button className="lp-pv-open" onClick={() => onAsk("", "describe")}>{t.pv_open}</button>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ─── Ways ─────────────────────────────────────────────────────────────────────
-
-function LPWays({ t, onAsk }: { t: Copy; onAsk: (seed?: string, mode?: SearchMode) => void }) {
-  const ways: { title: string; desc: string; icon: React.ReactNode; mode: SearchMode }[] = [
-    { title: t.way1_t, desc: t.way1_d, icon: <MessageSquare size={26} />, mode: "describe" },
-    { title: t.way2_t, desc: t.way2_d, icon: <ScanSearch size={26} />, mode: "photo" },
-    { title: t.way3_t, desc: t.way3_d, icon: <ScanLine size={26} />, mode: "vin" },
-  ];
-  return (
-    <section className="lp-section" id="ways">
-      <div className="lp-container">
-        <div className="lp-sec-head">
-          <span className="lp-eyebrow">{t.ways_eyebrow}</span>
-          <h2 className="lp-sec-title">{t.ways_title}</h2>
-          <p className="lp-sec-sub">{t.ways_sub}</p>
-        </div>
-        <div className="lp-ways-grid">
-          {ways.map((w) => (
-            <button key={w.title} className="lp-way-card" onClick={() => onAsk("", w.mode)}>
-              <div className="lp-way-ic">{w.icon}</div>
-              <h3 className="lp-way-title">{w.title}</h3>
-              <p className="lp-way-desc">{w.desc}</p>
-              <span className="lp-way-cta">{t.way_cta} <ArrowRight size={15} /></span>
-            </button>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ─── How it works ─────────────────────────────────────────────────────────────
-
-function LPHow({ t }: { t: Copy }) {
-  const steps = [
-    { n: "01", title: t.how1_t, desc: t.how1_d, icon: <MessageSquare size={26} />, cls: "lp-ic-primary" },
-    { n: "02", title: t.how2_t, desc: t.how2_d, icon: <ListChecks size={26} />, cls: "lp-ic-accent" },
-    { n: "03", title: t.how3_t, desc: t.how3_d, icon: <Truck size={26} />, cls: "lp-ic-success" },
-  ];
-  return (
-    <section className="lp-section lp-section-alt" id="how">
-      <div className="lp-container">
-        <div className="lp-sec-head">
-          <span className="lp-eyebrow">{t.how_eyebrow}</span>
-          <h2 className="lp-sec-title">{t.how_title}</h2>
-        </div>
-        <div className="lp-how-grid">
-          {steps.map((s) => (
-            <div key={s.n} className="lp-how-step">
-              <div className="lp-how-top">
-                <div className={"lp-how-ic " + s.cls}>{s.icon}</div>
-                <span className="lp-how-num">{s.n}</span>
-              </div>
-              <h3 className="lp-how-title">{s.title}</h3>
-              <p className="lp-how-desc">{s.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ─── Categories ───────────────────────────────────────────────────────────────
-
-function LPCategories({ t }: { t: Copy }) {
-  const cats: { key: keyof Pick<Copy, "cat_brakes"|"cat_air"|"cat_elec"|"cat_engine"|"cat_filt"|"cat_trailer"|"cat_drive"|"cat_hyd">; icon: React.ReactNode }[] = [
-    { key: "cat_brakes", icon: <Disc size={22} /> },
-    { key: "cat_air", icon: <Wind size={22} /> },
-    { key: "cat_elec", icon: <Lightbulb size={22} /> },
-    { key: "cat_engine", icon: <Cog size={22} /> },
-    { key: "cat_filt", icon: <Filter size={22} /> },
-    { key: "cat_trailer", icon: <Truck size={22} /> },
-    { key: "cat_drive", icon: <GitCommitHorizontal size={22} /> },
-    { key: "cat_hyd", icon: <Droplets size={22} /> },
-  ];
-  return (
-    <section className="lp-section" id="categories">
-      <div className="lp-container">
-        <div className="lp-sec-head lp-sec-head-row">
-          <div>
-            <span className="lp-eyebrow">{t.cat_eyebrow}</span>
-            <h2 className="lp-sec-title">{t.cat_title}</h2>
-          </div>
-          <a href="https://partsnow.ai/products" className="lp-link-arrow">{t.cat_all}</a>
-        </div>
-        <div className="lp-cat-grid">
-          {cats.map((c) => (
-            <a key={c.key} href={`https://partsnow.ai/products?type=${encodeURIComponent(t[c.key])}`} className="lp-cat-tile">
-              <div className="lp-cat-ic">{c.icon}</div>
-              <span className="lp-cat-name">{t[c.key]}</span>
-              <ArrowRight size={16} className="lp-cat-arrow" />
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ─── FAQ ──────────────────────────────────────────────────────────────────────
-
-function LPFaq({ t }: { t: Copy }) {
-  const [open, setOpen] = useState<number>(0);
-  return (
-    <section className="lp-section lp-section-alt" id="faq">
-      <div className="lp-container lp-faq-wrap">
-        <div className="lp-sec-head">
-          <span className="lp-eyebrow">{t.faq_eyebrow}</span>
-          <h2 className="lp-sec-title">{t.faq_title}</h2>
-        </div>
-        <div className="lp-faq-list">
-          {t.faq.map((row, i) => (
-            <div key={i} className={"lp-faq-item" + (open === i ? " is-open" : "")}>
-              <button className="lp-faq-q" onClick={() => setOpen(open === i ? -1 : i)}>
-                <span>{row[0]}</span>
-                <span className="lp-faq-toggle">
-                  {open === i ? <Minus size={18} /> : <Plus size={18} />}
-                </span>
-              </button>
-              <div className="lp-faq-a"><p>{row[1]}</p></div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ─── Final CTA ────────────────────────────────────────────────────────────────
-
-function LPFinalCTA({ t, onAsk }: { t: Copy; onAsk: (seed?: string, mode?: SearchMode) => void }) {
-  return (
-    <section className="lp-finalcta">
-      <div className="lp-finalcta-bg" />
-      <div className="lp-container lp-finalcta-inner">
-        <span className="lp-eyebrow lp-eyebrow-light">{t.cta_eyebrow}</span>
-        <h2 className="lp-finalcta-title">{t.cta_title}</h2>
-        <p className="lp-finalcta-sub">{t.cta_sub}</p>
-        <div className="lp-finalcta-actions">
-          <button className="lp-btn lp-btn-primary lp-btn-lg" onClick={() => onAsk("", "describe")}>
-            <Sparkles size={18} />
-            <span>{t.cta_btn}</span>
-          </button>
-          <a className="lp-btn lp-btn-ghost lp-btn-lg" href="tel:8654864003">
-            <Phone size={17} />
-            <span>{t.cta_call}</span>
-          </a>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ─── Footer ───────────────────────────────────────────────────────────────────
-
-function LPFooter({ t }: { t: Copy }) {
-  const year = new Date().getFullYear();
-  const cats: (keyof Pick<Copy, "cat_brakes"|"cat_air"|"cat_engine"|"cat_filt"|"cat_trailer"|"cat_drive">)[] =
-    ["cat_brakes", "cat_air", "cat_engine", "cat_filt", "cat_trailer", "cat_drive"];
-  return (
-    <footer className="lp-footer">
-      <div className="lp-container lp-footer-grid">
-        <div className="lp-footer-brand">
-          <Image src="/logo-white.svg" alt="partsnow.ai" width={120} height={28} className="lp-footer-logo" />
-          <p className="lp-footer-blurb">{t.foot_blurb}</p>
-          <div className="lp-footer-contact">
-            <div><Phone size={14} className="lp-fic" /><span>{t.phone_en}</span></div>
-            <div><Phone size={14} className="lp-fic" /><span>{t.phone_es}</span></div>
-            <div><Mail size={14} className="lp-fic" /><span>support@partsnow.ai</span></div>
-            <div className="lp-footer-addr"><MapPin size={14} className="lp-fic" /><span>2607 Middlebrook Pike<br />Knoxville, TN 37921</span></div>
-          </div>
-        </div>
-        <div className="lp-footer-col">
-          <h4 className="lp-footer-h">{t.foot_cats}</h4>
-          <ul>{cats.map((k) => <li key={k}><a href="#categories">{t[k]}</a></li>)}</ul>
-        </div>
-        <div className="lp-footer-col">
-          <h4 className="lp-footer-h">{t.foot_res}</h4>
-          <ul>{t.res_items.map((item) => <li key={item}><a href="https://partsnow.ai/products">{item}</a></li>)}</ul>
-        </div>
-        <div className="lp-footer-col">
-          <h4 className="lp-footer-h">{t.foot_pol}</h4>
-          <ul>{t.pol_items.map((item) => <li key={item}><a href="#top">{item}</a></li>)}</ul>
-        </div>
-      </div>
-      <div className="lp-container lp-footer-bottom">
-        <div>
-          <div className="lp-footer-copy">© {year} partsnow.ai. {t.foot_rights}</div>
-          <div className="lp-footer-legal">{t.foot_operated}</div>
-        </div>
-        <div className="lp-footer-pay">
-          <div className="lp-pay-row">
-            {["VISA", "MC", "AMEX", "DISCOVER"].map((c) => <span key={c} className="lp-pay">{c}</span>)}
-          </div>
-          <span className="lp-footer-sep">|</span>
-          <span className="lp-footer-secured">{t.foot_secured}</span>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
-// ─── Chat drawer ──────────────────────────────────────────────────────────────
-
-function LPChat({
-  open, onClose, t, seed, mode, nonce,
-}: {
-  open: boolean; onClose: () => void; t: Copy;
-  seed: string; mode: SearchMode; nonce: number;
-}) {
-  const [msgs, setMsgs] = useState<ChatMsg[]>([]);
-  const [input, setInput] = useState("");
+  const [messages, setMessages] = useState<ChatMsg[]>([]);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const [typing, setTyping] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [opened, setOpened] = useState(false);
+  const [faqOpen, setFaqOpen] = useState<number | null>(null);
+  const [heroInput, setHeroInput] = useState("");
+  const [ctaInput, setCtaInput] = useState("");
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  function pushReply(photo: boolean) {
-    setTyping(true);
-    if (timer.current) clearTimeout(timer.current);
-    timer.current = setTimeout(() => {
-      setTyping(false);
-      setMsgs((m) => [
-        ...m,
-        { r: "a", c: photo ? t.chat_reply_photo : t.chat_reply },
-        { r: "a", k: "parts", c: PARTS },
-      ]);
-    }, 950);
-  }
-
-  const send = useCallback((text?: string) => {
-    const txt = (text ?? input).trim();
-    if (!txt) return;
-    setInput("");
-    setMsgs((m) => [...m, { r: "u", c: txt }]);
-    pushReply(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [input, t]);
-
-  function sendPhoto() {
-    setMsgs((m) => [...m, { r: "u", k: "photo", c: "" }]);
-    pushReply(true);
-  }
-
-  useEffect(() => {
-    if (!open || !nonce) return;
-    if (mode === "photo" && !seed) { sendPhoto(); return; }
-    if (seed) { send(seed); }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nonce]);
+  const fallbackIdx = useRef(0);
 
   useEffect(() => {
     if (bodyRef.current) bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
-  }, [msgs, typing]);
+  }, [messages, typing]);
 
-  if (!open) return null;
+  const send = useCallback((text: string) => {
+    const t = text.trim();
+    if (!t || busy) return;
+    setBusy(true);
+    setSuggestions([]);
+    setMessages((m) => [...m, { role: "user", text: t }]);
+    setTyping(true);
+    const idx = fallbackIdx.current++;
+    setTimeout(() => {
+      const reply = FALLBACK[Math.min(idx, FALLBACK.length - 1)];
+      setTyping(false);
+      setMessages((m) => {
+        const next = [...m, { role: "steve" as const, text: reply }];
+        if (next.length <= 4) setSuggestions(FOLLOWUPS);
+        return next;
+      });
+      setBusy(false);
+      setTimeout(() => inputRef.current?.focus(), 50);
+    }, 900 + Math.random() * 400);
+  }, [busy]);
+
+  const openChat = useCallback((seedKey?: string) => {
+    setChatOpen(true);
+    if (!opened) {
+      setOpened(true);
+      setMessages([{ role: "steve", text: "Hey, I'm Steve — your parts guy at PartsNow. Tell me what's going on with your truck, or what part you're chasing. No account needed, and this is free." }]);
+      setSuggestions(["It's making a noise", "Warning light is on", "I have a part number"]);
+    }
+    if (seedKey) {
+      const seed = SEEDS[seedKey] || seedKey;
+      setTimeout(() => send(seed), 360);
+    }
+    setTimeout(() => inputRef.current?.focus(), 280);
+  }, [opened, send]);
+
+  const closeChat = () => setChatOpen(false);
+
+  const submitHero = (e: React.FormEvent) => {
+    e.preventDefault();
+    const t = heroInput.trim();
+    openChat();
+    if (t) { setTimeout(() => send(t), 360); setHeroInput(""); }
+  };
+
+  const submitCta = (e: React.FormEvent) => {
+    e.preventDefault();
+    const t = ctaInput.trim();
+    openChat();
+    if (t) { setTimeout(() => send(t), 360); setCtaInput(""); }
+  };
+
+  const sendFromPanel = () => {
+    const t = inputRef.current;
+    if (t) { send(t.value); t.value = ""; t.style.height = "auto"; }
+  };
+
   return (
-    <div className="lp-chat-overlay">
-      <div className="lp-chat-scrim" onClick={onClose} />
-      <aside className="lp-chat">
-        <div className="lp-chat-head">
-          <div className="lp-chat-avatar"><Sparkles size={18} /></div>
-          <div className="lp-chat-meta">
-            <span className="lp-chat-name">{t.chat_title}</span>
-            <span className="lp-chat-status">{t.chat_status}</span>
+    <>
+      {/* NAV */}
+      <nav className="nav nav-main">
+        <div className="wrap">
+          <Image className="logo" src="/logo-white.svg" alt="PartsNow.ai" width={140} height={42} />
+          <div className="nav-links">
+            <a href="#how">How it works</a>
+            <a href="#about">About us</a>
+            <a href="#faq">FAQs</a>
           </div>
-          <button className="lp-chat-close" onClick={onClose} aria-label="Close"><X size={18} /></button>
+          <div className="nav-right">
+            <button className="btn btn-chat btn-sm" onClick={() => openChat()}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              Chat with Steve
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* HERO */}
+      <header className="hero hero-chat">
+        <div className="globe" />
+        <div className="wrap">
+          <div className="hero-center">
+            <div className="steve-avatar">
+              <span className="sa-mono">S</span>
+              <span className="sa-spark">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.6 5.2L19 9l-5.4 1.8L12 16l-1.6-5.2L5 9l5.4-1.8z"/></svg>
+              </span>
+              <span className="sa-live" />
+            </div>
+            <p className="ava-cap">Steve · AI truck parts specialist</p>
+            <h1>Truck down?<br /><span className="teal">Start here.</span></h1>
+            <p className="sub">Steve is a <strong>free AI specialist for heavy-duty truck and trailer parts.</strong> Tell him the noise, the warning light, or what&apos;s acting up — and he&apos;ll help you find the right part and where to start.</p>
+
+            <form className="chatbox" onSubmit={submitHero} autoComplete="off">
+              <input className="chatbox-input" type="text" value={heroInput} onChange={(e) => setHeroInput(e.target.value)} placeholder="Tell Steve what's going on with your truck…" />
+              <button className="chatbox-send" type="submit">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m13 5 7 7-7 7"/></svg>
+              </button>
+            </form>
+
+            <div className="quick-chips">
+              <button className="qchip" onClick={() => openChat("symptom")}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12h3l2-6 4 12 2-6h7"/></svg>
+                Describe a symptom
+              </button>
+              <button className="qchip" onClick={() => openChat("photo")}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg>
+                Upload a photo
+              </button>
+              <button className="qchip" onClick={() => openChat("vin")}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10v4M11 10v4M15 10l2 4M17 10l-2 4"/></svg>
+                Enter a VIN
+              </button>
+              <button className="qchip qchip-es" onClick={() => openChat("es")}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+                En español
+              </button>
+            </div>
+
+            <p className="hero-microline">Free. No account. Or call/text: <a href="tel:+18654864003">(865) 486-4003</a> EN · <a href="tel:+18654864001">(865) 486-4001</a> ES</p>
+          </div>
+        </div>
+      </header>
+
+      {/* THE PROBLEM */}
+      <section className="section problem">
+        <div className="wrap">
+          <div className="problem-inner">
+            <h2>You know the symptom.<br />Not the part number.</h2>
+            <p>The truck&apos;s making a sound it didn&apos;t make yesterday. A light&apos;s on. Something&apos;s leaking and you&apos;re not sure from where. You don&apos;t need a catalogue with 50,000 parts to scroll through. You need a straight answer: what&apos;s wrong, which part fixes it, and what to do first.</p>
+            <div className="steve-for-box">
+              <span>That&apos;s what Steve is for.</span>
+              <span className="down-arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* MEET STEVE */}
+      <section className="section meet" id="meet">
+        <div className="wrap">
+          <div className="portrait-col">
+            <div className="steve-portrait">
+              <div className="online"><span className="dot" />Online now</div>
+              <span className="mono">S</span>
+              <Image className="badge-icon" src="/PartsNow-Icon.png" alt="" width={96} height={96} />
+            </div>
+          </div>
+          <div className="info">
+            <span className="eyebrow">Meet Steve</span>
+            <h2>Your AI parts specialist.</h2>
+            <p className="bio">Steve is an AI assistant with a deep knowledge base for heavy-duty trucks and trailers. Talk to him the way you&apos;d talk to a mechanic who knows your rig. He understands plain descriptions, so you don&apos;t need the right terms or the part number. Tell him what&apos;s happening and he&apos;ll lead you toward a fix: <strong>what else to check, what to fix first,</strong> and where a budget alternative makes sense if money&apos;s tight.</p>
+            <p className="bio">Reach him however&apos;s easiest. Chat on the site, call, or send a text. He answers any hour, in English or Spanish.</p>
+            <blockquote className="pull-quote">
+              <span className="qmark">&ldquo;</span>
+              Tell me what the truck&apos;s doing. I&apos;ll help you figure out the part and where to start.
+              <cite><span className="s-ava">S</span>Steve</cite>
+            </blockquote>
+            <div className="contact-cluster compact">
+              <button className="btn btn-chat" onClick={() => openChat()}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Chat with Steve
+              </button>
+              <a className="btn btn-call" href="tel:+18654864003">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                Call Steve
+              </a>
+              <a className="btn btn-text" href="sms:+18654864003">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/></svg>
+                Text Steve
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className="section how" id="how">
+        <div className="wrap">
+          <div className="sec-head">
+            <span className="eyebrow">How it works</span>
+            <h2>Three steps. No part number required.</h2>
+          </div>
+          <div className="steps">
+            <div className="step">
+              <div className="num">01</div>
+              <div className="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+              <h3>Tell Steve what&apos;s going on</h3>
+              <p>Open the chat, call, or send a text. Describe the problem in your own words. Add a photo or VIN if you&apos;ve got one.</p>
+            </div>
+            <div className="step">
+              <div className="num">02</div>
+              <div className="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg></div>
+              <h3>He works it out with you</h3>
+              <p>Steve asks a couple of quick questions if he needs to, then tells you the part, what to check first, and your options — including a budget alternative.</p>
+            </div>
+            <div className="step">
+              <div className="num">03</div>
+              <div className="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13 5.4 5M7 13l-2.3 4.6a1 1 0 0 0 .9 1.4h11"/><circle cx="9" cy="20" r="1"/><circle cx="17" cy="20" r="1"/></svg></div>
+              <h3>Order it, or don&apos;t</h3>
+              <p>When you&apos;re ready, Steve can pull the part from <strong>PartsNow.ai</strong> and get it shipped or set up for pickup. No pressure — the answer is free whether you buy or not.</p>
+            </div>
+          </div>
+
+          <div className="contact-cluster center" style={{ marginTop: 48 }}>
+            <button className="btn btn-chat btn-lg" onClick={() => openChat()}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              Chat with Steve
+            </button>
+            <a className="btn btn-call btn-lg" href="tel:+18654864003">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              Call Steve
+            </a>
+            <a className="btn btn-text btn-lg" href="sms:+18654864003">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/></svg>
+              Text Steve
+            </a>
+          </div>
+          <p className="contact-lines center">English: <a href="tel:+18654864003">(865) 486-4003</a> · Español: <a href="tel:+18654864001">(865) 486-4001</a></p>
+
+          <figure className="how-video after-cta">
+            <div className="video-frame">
+              <button className="video-play" type="button" onClick={() => openChat()}>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              </button>
+              <span className="video-tag">Demo · 0:48</span>
+              <span className="video-hint">See Steve in action — type a symptom, he names the part</span>
+            </div>
+            <figcaption>See Steve in action.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      {/* REAL SITUATIONS */}
+      <section className="section situations" id="situations">
+        <div className="wrap">
+          <div className="sec-head">
+            <span className="eyebrow">Real situations</span>
+            <h2>Stuff people ask Steve every day.</h2>
+          </div>
+          <div className="scenario-grid">
+            <article className="scenario-card" style={{ backgroundImage: "url('/scene-brake-wheel.jpg')" }}>
+              <span className="quote-icon">&ldquo;</span>
+              <p className="ask">Grinding noise when I brake and a light on the dash. What do I fix first?</p>
+              <div className="resolve"><span className="s-ava">S</span>Steve walks through it and tells you where to start.</div>
+            </article>
+            <article className="scenario-card" style={{ backgroundImage: "url('/scene-mechanic-part.jpg')" }}>
+              <span className="quote-icon">&ldquo;</span>
+              <p className="ask">I&apos;ve got the old part in my hand but no number on it. Here&apos;s a photo.</p>
+              <div className="resolve"><span className="s-ava">S</span>Send the picture. He&apos;ll match it.</div>
+            </article>
+            <article className="scenario-card" style={{ backgroundImage: "url('/scene-night-call.jpg')" }}>
+              <span className="quote-icon">&ldquo;</span>
+              <p className="ask">Truck&apos;s down at 2 a.m. and every counter&apos;s closed. Can you help?</p>
+              <div className="resolve"><span className="s-ava">S</span>Steve&apos;s up. Chat, call, or text — he answers.</div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      {/* ABOUT US */}
+      <section className="about-section" id="about">
+        <div className="globe" />
+        <div className="wrap">
+          <div className="about-head">
+            <Image className="about-logo" src="/logo-white.svg" alt="PartsNow.ai" width={140} height={40} />
+            <span className="trust-eyebrow">About us</span>
+            <h2 className="about-title">An AI-powered agentic commerce platform.</h2>
+            <p className="about-lead">PartsNow.ai is an AI-powered agentic commerce platform connecting fleet operators, repair shops, and owner-operators with the parts they need.</p>
+          </div>
+          <div className="stats">
+            <div className="stat"><div className="n">50,000+</div><div className="l">New &amp; OEM parts</div></div>
+            <div className="stat"><div className="n">93</div><div className="l">Trusted dealers</div></div>
+            <div className="stat"><div className="n">Knoxville, TN</div><div className="l">Nationwide shipping</div></div>
+            <div className="stat"><div className="n">Free</div><div className="l">Local pickup</div></div>
+          </div>
+          <div className="about-cta">
+            <div className="ac-copy">
+              <h3>Already know the part?</h3>
+              <p>Browse the full catalogue — 50,000+ new and OEM parts, shipped nationwide with free local pickup in Knoxville.</p>
+            </div>
+            <a className="btn-catalogue-light" href="https://partsnow.ai" target="_blank" rel="noopener">
+              Browse the catalogue
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m13 5 7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="section faq" id="faq">
+        <div className="wrap">
+          <div className="sec-head">
+            <span className="eyebrow">Quick questions</span>
+            <h2>The straight answers.</h2>
+          </div>
+          <div className="faq-list">
+            {FAQ_ITEMS.map((item, i) => (
+              <div key={i} className={`faq-item${faqOpen === i ? " open" : ""}`}>
+                <button className="faq-q" onClick={() => setFaqOpen(faqOpen === i ? null : i)}>
+                  {item.q}<span className="pm" />
+                </button>
+                <div className="faq-a" style={{ maxHeight: faqOpen === i ? 300 : 0 }}>
+                  <p dangerouslySetInnerHTML={{ __html: item.a }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FINAL CTA */}
+      <section className="final-cta">
+        <div className="globe" />
+        <div className="wrap">
+          <h2>Your truck won&apos;t fix itself.<br />Ask Steve.</h2>
+          <p>Free answer in about a minute. No account, no catch. Chat, call, or text — English or Spanish, any hour.</p>
+          <form className="chatbox on-dark" onSubmit={submitCta} autoComplete="off">
+            <input className="chatbox-input" type="text" value={ctaInput} onChange={(e) => setCtaInput(e.target.value)} placeholder="Tell Steve what's going on…" />
+            <button className="chatbox-send" type="submit">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m13 5 7 7-7 7"/></svg>
+            </button>
+          </form>
+          <div className="cta-altlines">
+            <a href="tel:+18654864003">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              Call
+            </a>
+            <a href="sms:+18654864003">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/></svg>
+              Text
+            </a>
+            <span className="alt-nums">(865) 486-4003 EN · (865) 486-4001 ES</span>
+          </div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="footer footer-slim">
+        <div className="wrap">
+          <div className="fbrand">
+            <Image className="logo" src="/logo-white.svg" alt="PartsNow.ai" width={120} height={28} />
+            <p className="blurb">AI-powered truck and trailer parts. 50,000+ parts from trusted dealers, shipped nationwide. Based in Knoxville, TN.</p>
+          </div>
+          <div className="fcontact-block">
+            <div className="fcontact">
+              EN <a href="tel:+18654864003">(865) 486-4003</a> · ES <a href="tel:+18654864001">(865) 486-4001</a><br />
+              Both lines take calls and texts · <a href="mailto:support@partsnow.ai">support@partsnow.ai</a>
+            </div>
+            <div className="fsocial">
+              <a href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.74v20.52C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.74V1.74C24 .78 23.2 0 22.22 0z"/></svg>
+              </a>
+              <a href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07c0 6.02 4.39 11.01 10.13 11.93v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.08 24 18.09 24 12.07z"/></svg>
+              </a>
+              <a href="https://www.youtube.com/" target="_blank" rel="noopener" aria-label="YouTube">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2C0 8.07 0 12 0 12s0 3.93.5 5.8a3.02 3.02 0 0 0 2.12 2.14c1.88.51 9.38.51 9.38.51s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14C24 15.93 24 12 24 12s0-3.93-.5-5.8zM9.6 15.6V8.4l6.27 3.6L9.6 15.6z"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div className="wrap">
+          <div className="fbottom">
+            <span>© 2026 PartsNow.ai · An agentic commerce platform by talkrev.ai</span>
+            <span>Knoxville, TN</span>
+          </div>
+        </div>
+      </footer>
+
+      {/* STEVE FAB */}
+      {!chatOpen && (
+        <button className="steve-fab" onClick={() => openChat()}>
+          <span className="fab-ava">S</span>
+          <span>Chat with Steve</span>
+        </button>
+      )}
+
+      {/* OVERLAY */}
+      <div className={`steve-overlay${chatOpen ? " open" : ""}`} onClick={closeChat} />
+
+      {/* STEVE PANEL */}
+      <div className={`steve-panel${chatOpen ? " open" : ""}`} role="dialog" aria-label="Chat with Steve">
+        <div className="sp-head">
+          <div className="sp-ava">S<span className="live" /></div>
+          <div className="sp-meta">
+            <div className="nm">Steve</div>
+            <div className="st">
+              <span style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--success-500)", display: "inline-block" }} />
+              Online · Parts consultant
+            </div>
+          </div>
+          <a className="sp-call" href="tel:+18654864003">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            Call
+          </a>
+          <button className="sp-close" onClick={closeChat} aria-label="Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
         </div>
 
-        <div className="lp-chat-body" ref={bodyRef}>
-          {msgs.length === 0 && !typing && (
-            <div className="lp-chat-empty">
-              <p>{t.chat_help}</p>
-              <div className="lp-chat-sugg">
-                {t.chat_sugg.map((s) => (
-                  <button key={s} onClick={() => send(s)}>{s}</button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {msgs.map((m, i) => {
-            if ("k" in m && m.k === "parts") {
-              return (
-                <div key={i} className="lp-chat-parts">
-                  {(m.c as PartData[]).map((p) => (
-                    <div key={p.sku} className="lp-chat-part">
-                      <div className="lp-chat-part-thumb" style={{ background: p.bg }} />
-                      <div className="lp-chat-part-info">
-                        <span className="lp-sku">{p.sku}<span className="lp-dot lp-dot-sm" /></span>
-                        <span className="lp-chat-part-title">{p.title}</span>
-                        <span className="lp-chat-part-vendor">{p.vendor}</span>
-                      </div>
-                      <span className="lp-chat-part-price">${p.price.toFixed(2)}</span>
-                      <ArrowRight size={14} style={{ color: "var(--muted)" }} />
-                    </div>
-                  ))}
-                </div>
-              );
-            }
-            if ("k" in m && m.k === "photo") {
-              return (
-                <div key={i} className="lp-chat-line lp-chat-line-user">
-                  <div className="lp-chat-bubble lp-chat-bubble-user" style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <ImageIcon size={16} />
-                    <span>part-photo.jpg</span>
-                  </div>
-                </div>
-              );
-            }
-            const user = m.r === "u";
-            return (
-              <div key={i} className={"lp-chat-line" + (user ? " lp-chat-line-user" : "")}>
-                {!user && <div className="lp-chat-aiav"><Sparkles size={12} /></div>}
-                <div className={"lp-chat-bubble" + (user ? " lp-chat-bubble-user" : " lp-chat-bubble-ai")}>{m.c}</div>
-              </div>
-            );
-          })}
-
+        <div className="sp-body" ref={bodyRef}>
+          {messages.map((m, i) => (
+            <div key={i} className={`sp-msg ${m.role}`}>{m.text}</div>
+          ))}
           {typing && (
-            <div className="lp-chat-line">
-              <div className="lp-chat-aiav"><Sparkles size={12} /></div>
-              <div className="lp-chat-bubble lp-chat-bubble-ai lp-chat-typing">
-                <span /><span /><span />
-              </div>
-            </div>
+            <div className="sp-typing"><span /><span /><span /></div>
           )}
         </div>
 
-        <form className="lp-chat-input-bar" onSubmit={(e) => { e.preventDefault(); send(); }}>
-          <input value={input} onChange={(e) => setInput(e.target.value)} placeholder={t.chat_input} />
-          <button type="submit" aria-label="Send"><Send size={16} /></button>
-        </form>
-      </aside>
-    </div>
+        {suggestions.length > 0 && (
+          <div className="sp-suggest">
+            {suggestions.map((s) => (
+              <button key={s} className="sg" onClick={() => { setSuggestions([]); send(s); }}>{s}</button>
+            ))}
+          </div>
+        )}
+
+        <div className="sp-foot">
+          <textarea
+            ref={inputRef}
+            rows={1}
+            placeholder="Describe the problem or part…"
+            onInput={(e) => {
+              const el = e.currentTarget;
+              el.style.height = "auto";
+              el.style.height = Math.min(el.scrollHeight, 120) + "px";
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                send(e.currentTarget.value);
+                e.currentTarget.value = "";
+                e.currentTarget.style.height = "auto";
+              }
+            }}
+          />
+          <button className="sp-send" disabled={busy} onClick={sendFromPanel} aria-label="Send">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+          </button>
+        </div>
+        <div className="sp-disclaim">Steve is an AI assistant. Always confirm safety-critical repairs with a pro.</div>
+      </div>
+    </>
   );
 }
