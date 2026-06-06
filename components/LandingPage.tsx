@@ -441,7 +441,7 @@ export function LandingPage() {
       {/* STEVE FAB */}
       {!chatOpen && (
         <button className="steve-fab" onClick={() => openChat()}>
-          <span className="fab-ava">S</span>
+          <span className="fab-ava"><Image src="/steve-face.png" alt="Steve" width={38} height={38} /></span>
           <span>Chat with Steve</span>
         </button>
       )}
@@ -452,7 +452,7 @@ export function LandingPage() {
       {/* STEVE PANEL */}
       <div className={`steve-panel${chatOpen ? " open" : ""}`} role="dialog" aria-label="Chat with Steve">
         <div className="sp-head">
-          <div className="sp-ava">S<span className="live" /></div>
+          <div className="sp-ava"><Image src="/steve-face.png" alt="Steve" width={42} height={42} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 20%", borderRadius: "50%" }} /></div>
           <div className="sp-meta">
             <div className="nm">Steve</div>
             <div className="st">
