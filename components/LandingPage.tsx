@@ -21,8 +21,7 @@ const FAQ_ITEMS = [
   { q: "Do I need to make an account?", a: "No account, no sign-up. Open the chat, call, or text and go." },
   { q: "What if I don't know the part name or number?", a: "That's the whole point of Steve. Describe the problem, send a photo, or give a VIN. He figures out the part and tells you where to start." },
   { q: "Can I call or text instead of typing?", a: 'Yes. Chat on the site, call, or text. English: <a href="tel:+18654864003">(865) 486-4003</a>. Spanish: <a href="tel:+18654864001">(865) 486-4001</a>. Both lines take calls and texts.' },
-  { q: "Does Steve speak Spanish?", a: "Yes. Ask in Spanish and he'll answer in Spanish. The Spanish line is (865) 486-4001." },
-  { q: "When can I reach him?", a: "Any hour, any day. Nights, weekends, holidays." },
+  { q: "Does Steve speak any other language?", a: 'Yes. Ask in Spanish and he\'ll answer in Spanish. The Spanish line is <a href="tel:+18654864001">(865) 486-4001</a>.' },
   { q: "What if I want to order the part?", a: "Steve can pull it from PartsNow.ai, new or OEM, and get it shipped or set up for pickup in Knoxville. Up to you." },
 ];
 
@@ -139,7 +138,7 @@ export function LandingPage() {
         <div className="wrap">
           <div className="hero-center">
             <div className="steve-avatar">
-              <span className="sa-mono">S</span>
+              <Image className="sa-photo" src="/steve-face.png" alt="Steve" width={96} height={96} />
               <span className="sa-spark">
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.6 5.2L19 9l-5.4 1.8L12 16l-1.6-5.2L5 9l5.4-1.8z"/></svg>
               </span>
@@ -147,7 +146,7 @@ export function LandingPage() {
             </div>
             <p className="ava-cap">Steve · AI truck parts specialist</p>
             <h1>Truck down?<br /><span className="teal">Start here.</span></h1>
-            <p className="sub">Steve is a <strong>free AI specialist for heavy-duty truck and trailer parts.</strong> Tell him the noise, the warning light, or what&apos;s acting up — and he&apos;ll help you find the right part and where to start.</p>
+            <p className="sub">Steve is a <strong>free AI specialist for heavy-duty truck and trailer parts.</strong> Describe what you need, he&apos;ll help you identify the issue, find the right part, or point you in the right direction.</p>
 
             <form className="chatbox" onSubmit={submitHero} autoComplete="off">
               <input className="chatbox-input" type="text" value={heroInput} onChange={(e) => setHeroInput(e.target.value)} placeholder="Tell Steve what's going on with your truck…" />
@@ -184,8 +183,8 @@ export function LandingPage() {
       <section className="section problem">
         <div className="wrap">
           <div className="problem-inner">
-            <h2>You know the symptom.<br />Not the part number.</h2>
-            <p>The truck&apos;s making a sound it didn&apos;t make yesterday. A light&apos;s on. Something&apos;s leaking and you&apos;re not sure from where. You don&apos;t need a catalogue with 50,000 parts to scroll through. You need a straight answer: what&apos;s wrong, which part fixes it, and what to do first.</p>
+            <h2>Stop searching.<br />Just describe it.</h2>
+            <p>The truck&apos;s making a sound it didn&apos;t make yesterday. A light&apos;s on. Something&apos;s leaking and you&apos;re not sure from where. You don&apos;t need a catalogue with 50,000 parts to scroll through. You need a straight answer: <strong>what&apos;s wrong, which part fixes it, and what to do first.</strong></p>
             <div className="steve-for-box">
               <span>That&apos;s what Steve is for.</span>
               <span className="down-arrow" aria-hidden="true">
@@ -201,21 +200,21 @@ export function LandingPage() {
         <div className="wrap">
           <div className="portrait-col">
             <div className="steve-portrait">
+              <Image className="portrait-photo" src="/steve.png" alt="Steve, AI parts specialist" width={340} height={340} />
               <div className="online"><span className="dot" />Online now</div>
-              <span className="mono">S</span>
-              <Image className="badge-icon" src="/PartsNow-Icon.png" alt="" width={96} height={96} />
             </div>
           </div>
           <div className="info">
             <span className="eyebrow">Meet Steve</span>
             <h2>Your AI parts specialist.</h2>
-            <p className="bio">Steve is an AI assistant with a deep knowledge base for heavy-duty trucks and trailers. Talk to him the way you&apos;d talk to a mechanic who knows your rig. He understands plain descriptions, so you don&apos;t need the right terms or the part number. Tell him what&apos;s happening and he&apos;ll lead you toward a fix: <strong>what else to check, what to fix first,</strong> and where a budget alternative makes sense if money&apos;s tight.</p>
-            <p className="bio">Reach him however&apos;s easiest. Chat on the site, call, or send a text. He answers any hour, in English or Spanish.</p>
+            <p className="bio">Steve is an AI assistant with a deep knowledge base for heavy-duty trucks and trailers. Talk to him the way you&apos;d talk to a mechanic who knows your rig. He understands plain descriptions, so you don&apos;t need the right terms or the part number.</p>
+            <p className="bio">Tell him what&apos;s happening and he&apos;ll lead you toward a fix: <strong>what else to check, what to fix first,</strong> and where a budget alternative makes sense if money&apos;s tight.</p>
             <blockquote className="pull-quote">
               <span className="qmark">&ldquo;</span>
               Tell me what the truck&apos;s doing. I&apos;ll help you figure out the part and where to start.
-              <cite><span className="s-ava">S</span>Steve</cite>
+              <cite><span className="s-ava"><Image src="/steve-face.png" alt="" width={24} height={24} /></span>Steve</cite>
             </blockquote>
+            <p className="bio reach-line"><strong>Reach him however&apos;s easiest:</strong></p>
             <div className="contact-cluster compact">
               <button className="btn btn-chat" onClick={() => openChat()}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -262,7 +261,7 @@ export function LandingPage() {
             </div>
           </div>
 
-          <div className="contact-cluster center" style={{ marginTop: 48 }}>
+          <div className="contact-cluster center" style={{ marginTop: 56 }}>
             <button className="btn btn-chat btn-lg" onClick={() => openChat()}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
               Chat with Steve
@@ -279,6 +278,7 @@ export function LandingPage() {
           <p className="contact-lines center">English: <a href="tel:+18654864003">(865) 486-4003</a> · Español: <a href="tel:+18654864001">(865) 486-4001</a></p>
 
           <figure className="how-video after-cta">
+            <figcaption>See Steve in action.</figcaption>
             <div className="video-frame">
               <button className="video-play" type="button" onClick={() => openChat()}>
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
@@ -286,7 +286,6 @@ export function LandingPage() {
               <span className="video-tag">Demo · 0:48</span>
               <span className="video-hint">See Steve in action — type a symptom, he names the part</span>
             </div>
-            <figcaption>See Steve in action.</figcaption>
           </figure>
         </div>
       </section>
@@ -302,17 +301,29 @@ export function LandingPage() {
             <article className="scenario-card" style={{ backgroundImage: "url('/scene-brake-wheel.jpg')" }}>
               <span className="quote-icon">&ldquo;</span>
               <p className="ask">Grinding noise when I brake and a light on the dash. What do I fix first?</p>
-              <div className="resolve"><span className="s-ava">S</span>Steve walks through it and tells you where to start.</div>
+              <div className="resolve"><span className="s-ava"><Image src="/steve-face.png" alt="" width={22} height={22} /></span>Steve walks through it and tells you where to start.</div>
+              <a className="scenario-watch" href="https://youtube.com/shorts/Ypnt4WmSMS4" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                Watch the video
+              </a>
             </article>
             <article className="scenario-card" style={{ backgroundImage: "url('/scene-mechanic-part.jpg')" }}>
               <span className="quote-icon">&ldquo;</span>
               <p className="ask">I&apos;ve got the old part in my hand but no number on it. Here&apos;s a photo.</p>
-              <div className="resolve"><span className="s-ava">S</span>Send the picture. He&apos;ll match it.</div>
+              <div className="resolve"><span className="s-ava"><Image src="/steve-face.png" alt="" width={22} height={22} /></span>Send the picture. He&apos;ll match it.</div>
+              <a className="scenario-watch" href="https://youtube.com/shorts/F5T3WIJqd0Y" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                Watch the video
+              </a>
             </article>
             <article className="scenario-card" style={{ backgroundImage: "url('/scene-night-call.jpg')" }}>
               <span className="quote-icon">&ldquo;</span>
               <p className="ask">Truck&apos;s down at 2 a.m. and every counter&apos;s closed. Can you help?</p>
-              <div className="resolve"><span className="s-ava">S</span>Steve&apos;s up. Chat, call, or text — he answers.</div>
+              <div className="resolve"><span className="s-ava"><Image src="/steve-face.png" alt="" width={22} height={22} /></span>Steve&apos;s up. Chat, call, or text — he answers.</div>
+              <a className="scenario-watch" href="https://youtube.com/shorts/h-LZ5V-Vofg" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                Watch the video
+              </a>
             </article>
           </div>
         </div>
@@ -323,10 +334,9 @@ export function LandingPage() {
         <div className="globe" />
         <div className="wrap">
           <div className="about-head">
-            <Image className="about-logo" src="/logo-white.svg" alt="PartsNow.ai" width={140} height={40} />
+            <Image className="about-logo" src="/logo-white.svg" alt="PartsNow.ai" width={180} height={64} />
             <span className="trust-eyebrow">About us</span>
-            <h2 className="about-title">An AI-powered agentic commerce platform.</h2>
-            <p className="about-lead">PartsNow.ai is an AI-powered agentic commerce platform connecting fleet operators, repair shops, and owner-operators with the parts they need.</p>
+            <p className="about-lead"><strong>PartsNow.ai is an AI-powered agentic commerce platform</strong> connecting fleet operators, repair shops, and owner-operators with the parts they need.</p>
           </div>
           <div className="stats">
             <div className="stat"><div className="n">50,000+</div><div className="l">New &amp; OEM parts</div></div>
