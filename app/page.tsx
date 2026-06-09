@@ -26,18 +26,32 @@ const jsonLd = {
         "https://www.facebook.com/1157337360790693",
         "https://www.youtube.com/playlist?list=PL3qg78k_nkrfPi1bgleu20Nr4k7MXRUHW",
       ],
-      contactPoint: {
-        "@type": "ContactPoint",
-        telephone: "+1-865-290-5485",
-        contactType: "customer support",
-        availableLanguage: ["English", "Spanish"],
-        hoursAvailable: {
-          "@type": "OpeningHoursSpecification",
-          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-          opens: "00:00",
-          closes: "23:59",
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+          telephone: "+1-865-290-5485",
+          contactType: "customer support",
+          availableLanguage: ["English"],
+          hoursAvailable: {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            opens: "00:00",
+            closes: "23:59",
+          },
         },
-      },
+        {
+          "@type": "ContactPoint",
+          telephone: "+1-865-217-5813",
+          contactType: "customer support",
+          availableLanguage: ["Spanish"],
+          hoursAvailable: {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            opens: "00:00",
+            closes: "23:59",
+          },
+        },
+      ],
     },
     {
       "@type": "AutoPartsStore",

@@ -166,7 +166,7 @@ export function LandingPage() {
               </button>
             </div>
 
-            <p className="hero-microline">Free. No account. Or call/text: <a href="tel:+18652905485">(865) 290-5485</a></p>
+            <p className="hero-microline">Free. No account. Or call/text: <a href="tel:+18652905485">(865) 290-5485</a> EN · <a href="tel:+18652175813">(865) 217-5813</a> ES</p>
           </div>
         </div>
       </header>
@@ -267,7 +267,7 @@ export function LandingPage() {
               Text Mike
             </a>
           </div>
-          <p className="contact-lines center">Talk to Mike: <a href="tel:+18652905485">(865) 290-5485</a> — calls and texts, English or Spanish</p>
+          <p className="contact-lines center">English: <a href="tel:+18652905485">(865) 290-5485</a> · Español: <a href="tel:+18652175813">(865) 217-5813</a> — calls and texts</p>
 
           <figure className="how-video after-cta">
             <figcaption>See Mike in action.</figcaption>
@@ -392,7 +392,7 @@ export function LandingPage() {
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/></svg>
               Text
             </a>
-            <span className="alt-nums">(865) 290-5485</span>
+            <span className="alt-nums">(865) 290-5485 EN · (865) 217-5813 ES</span>
           </div>
         </div>
       </section>
@@ -406,8 +406,8 @@ export function LandingPage() {
           </div>
           <div className="fcontact-block">
             <div className="fcontact">
-              <a href="tel:+18652905485">(865) 290-5485</a><br />
-              Calls and texts, English or Spanish · <a href="mailto:support@partsnow.ai">support@partsnow.ai</a>
+              EN <a href="tel:+18652905485">(865) 290-5485</a> · ES <a href="tel:+18652175813">(865) 217-5813</a><br />
+              Both lines take calls and texts · <a href="mailto:support@partsnow.ai">support@partsnow.ai</a>
             </div>
             <div className="fsocial">
               <a href="https://www.linkedin.com/company/partsnow-ai" target="_blank" rel="noopener" aria-label="LinkedIn">
