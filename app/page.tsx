@@ -3,6 +3,9 @@ import { FAQ_ITEMS } from "@/app/faq-data";
 
 const SITE_URL = "https://agent.partsnow.ai";
 
+// Build-time freshness signal — refreshed on every deploy (recency matters for AI search).
+const LAST_UPDATED = new Date().toISOString();
+
 const stripHtml = (s: string) => s.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
 
 const jsonLd = {
@@ -18,6 +21,18 @@ const jsonLd = {
       description:
         "AI-powered heavy-duty truck and trailer parts platform. 50,000+ new and OEM parts from trusted dealers, shipped nationwide from Knoxville, TN.",
       sameAs: ["https://partsnow.ai"],
+      contactPoint: {
+        "@type": "ContactPoint",
+        telephone: "+1-865-290-5485",
+        contactType: "customer support",
+        availableLanguage: ["English", "Spanish"],
+        hoursAvailable: {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+          opens: "00:00",
+          closes: "23:59",
+        },
+      },
     },
     {
       "@type": "AutoPartsStore",
@@ -47,11 +62,13 @@ const jsonLd = {
       url: SITE_URL,
       name: "PartsNow.ai — Ask Michael",
       inLanguage: "en-US",
+      dateModified: LAST_UPDATED,
       publisher: { "@id": `${SITE_URL}/#organization` },
     },
     {
       "@type": "FAQPage",
       "@id": `${SITE_URL}/#faq`,
+      dateModified: LAST_UPDATED,
       mainEntity: FAQ_ITEMS.map((f) => ({
         "@type": "Question",
         name: f.q,
