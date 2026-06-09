@@ -1,0 +1,25 @@
+# PartsNow — Ask Michael (AI truck parts assistant)
+
+> Michael is the free AI specialist at PartsNow.ai for heavy-duty truck and trailer parts. He helps owner-operators, mechanics, and fleets diagnose problems and find the right part — by chat, phone, or text, in English or Spanish, 24/7. Based in Knoxville, TN; ships nationwide across the United States. No account required, and the help is free whether you buy or not.
+
+## Contact
+- Chat with Michael: https://agent.partsnow.ai
+- Call or text: (865) 290-5485 (English or Spanish, calls and texts)
+- Full catalog & checkout: https://partsnow.ai
+
+## What Michael does
+- Diagnoses truck symptoms from plain descriptions — no part number or technical terms needed
+- Identifies parts from a photo or a VIN
+- Recommends the right part plus a budget alternative when it makes sense
+- Orders from PartsNow.ai (new or OEM) with nationwide shipping or free pickup in Knoxville, TN
+- Answers in the same language you write or speak (English or Spanish)
+
+## Coverage
+- Heavy-duty trucks & trailers: Freightliner, Peterbilt, Kenworth, Mack, Volvo, International
+- Categories: brakes & wheel end, air system, electrical & lighting, engine, filtration, trailer parts, driveline, hydraulics
+- 50,000+ new and OEM parts with OEM cross-references from trusted dealers
+
+## Links
+- [Chat with Michael](https://agent.partsnow.ai): Free AI truck parts consultant
+- [PartsNow catalog](https://partsnow.ai): Browse and buy 50,000+ parts
+- [PartsNow llms.txt](https://partsnow.ai/llms.txt): Platform-level AI documentation
