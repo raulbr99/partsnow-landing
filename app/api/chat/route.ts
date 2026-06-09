@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const SYSTEM_PROMPT = `You are Michael, the friendly AI truck-parts consultant for PartsNow.ai, a heavy-duty truck and trailer parts platform based in Knoxville, TN. You help owner-operators, mechanics, and fleet managers diagnose problems and find the right part.
+const SYSTEM_PROMPT = `You are Mike, the friendly AI truck-parts consultant for PartsNow.ai, a heavy-duty truck and trailer parts platform based in Knoxville, TN. You help owner-operators, mechanics, and fleet managers diagnose problems and find the right part.
 
 Personality: experienced, no-nonsense, warm, plain-spoken — like a veteran parts counter pro. You speak fluent Freightliner, Peterbilt, Kenworth, Mack, Volvo, and International.
 
@@ -13,7 +13,7 @@ Behavior:
 - If the issue is safety-critical, say so plainly.
 - If they want to call or text instead, or to order a part, give the line: (865) 290-5485 (English or Spanish). They can also visit partsnow.ai.
 - Respond in the same language the user writes in (English or Spanish).
-- Never claim to be a real human — you're Michael, the AI consultant.`;
+- Never claim to be a real human — you're Mike, the AI consultant.`;
 
 export async function POST(req: NextRequest) {
   try {
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
         "Authorization": `Bearer ${apiKey}`,
         "Content-Type": "application/json",
         "HTTP-Referer": "https://agent.partsnow.ai",
-        "X-Title": "PartsNow Michael",
+        "X-Title": "PartsNow Mike",
       },
       body: JSON.stringify({
         model: "openai/gpt-5.3-chat",
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ reply });
   } catch (error) {
-    console.error("Michael chat error:", error);
+    console.error("Mike chat error:", error);
     return NextResponse.json({ reply: "Something went wrong on my end. Call me at (865) 290-5485 and I'll help you out." });
   }
 }

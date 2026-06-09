@@ -20,7 +20,12 @@ const jsonLd = {
       logo: `${SITE_URL}/PartsNow-Icon.png`,
       description:
         "AI-powered heavy-duty truck and trailer parts platform. 50,000+ new and OEM parts from trusted dealers, shipped nationwide from Knoxville, TN.",
-      sameAs: ["https://partsnow.ai"],
+      sameAs: [
+        "https://partsnow.ai",
+        "https://www.linkedin.com/company/partsnow-ai",
+        "https://www.facebook.com/1157337360790693",
+        "https://www.youtube.com/playlist?list=PL3qg78k_nkrfPi1bgleu20Nr4k7MXRUHW",
+      ],
       contactPoint: {
         "@type": "ContactPoint",
         telephone: "+1-865-290-5485",
@@ -37,7 +42,7 @@ const jsonLd = {
     {
       "@type": "AutoPartsStore",
       "@id": `${SITE_URL}/#localbusiness`,
-      name: "PartsNow.ai — Ask Michael",
+      name: "PartsNow.ai — Ask Mike",
       image: `${SITE_URL}/PartsNow-Icon.png`,
       url: SITE_URL,
       telephone: "+1-865-290-5485",
@@ -54,13 +59,13 @@ const jsonLd = {
       availableLanguage: ["English", "Spanish"],
       priceRange: "$$",
       description:
-        "Talk to Michael, a free AI specialist for heavy-duty truck and trailer parts — by chat, call, or text. Describe a symptom, paste a VIN, or send a photo. English & Spanish, 24/7.",
+        "Talk to Mike, a free AI specialist for heavy-duty truck and trailer parts — by chat, call, or text. Describe a symptom, paste a VIN, or send a photo. English & Spanish, 24/7.",
     },
     {
       "@type": "WebSite",
       "@id": `${SITE_URL}/#website`,
       url: SITE_URL,
-      name: "PartsNow.ai — Ask Michael",
+      name: "PartsNow.ai — Ask Mike",
       inLanguage: "en-US",
       dateModified: LAST_UPDATED,
       publisher: { "@id": `${SITE_URL}/#organization` },

@@ -12,7 +12,7 @@ const SEEDS: Record<string, string> = {
   symptom: "My truck's making a noise it wasn't making yesterday and I'm not sure what part I need.",
   photo: "I've got the old part in my hand but there's no number on it. Can I send you a photo so you can identify it?",
   vin: "Can you look up the right parts using my VIN? I'll give you the number.",
-  es: "Hola Michael, necesito ayuda para encontrar una pieza para mi camión. ¿Me puedes ayudar?",
+  es: "Hola Mike, necesito ayuda para encontrar una pieza para mi camión. ¿Me puedes ayudar?",
 };
 
 const FOLLOWUPS = ["It's a 2020 Kenworth T680", "Gets worse when I brake", "Can I just call instead?"];
@@ -73,7 +73,7 @@ export function LandingPage() {
     setChatOpen(true);
     if (!opened) {
       setOpened(true);
-      setMessages([{ role: "steve", text: "Hey, I'm Michael — your parts guy at PartsNow. Tell me what's going on with your truck, or what part you're chasing. No account needed, and this is free." }]);
+      setMessages([{ role: "steve", text: "Hey, I'm Mike — your parts guy at PartsNow. Tell me what's going on with your truck, or what part you're chasing. No account needed, and this is free." }]);
       setSuggestions(["It's making a noise", "Warning light is on", "I have a part number"]);
     }
     if (seedKey) {
@@ -118,7 +118,7 @@ export function LandingPage() {
           <div className="nav-right">
             <button className="btn btn-chat btn-sm" onClick={() => openChat()}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-              Chat with Michael
+              Chat with Mike
             </button>
           </div>
         </div>
@@ -130,18 +130,18 @@ export function LandingPage() {
         <div className="wrap">
           <div className="hero-center">
             <div className="steve-avatar">
-              <Image className="sa-photo" src="/steve-face.png" alt="Michael" width={96} height={96} />
+              <Image className="sa-photo" src="/steve-face.png" alt="Mike" width={96} height={96} />
               <span className="sa-spark">
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.6 5.2L19 9l-5.4 1.8L12 16l-1.6-5.2L5 9l5.4-1.8z"/></svg>
               </span>
               <span className="sa-live" />
             </div>
-            <p className="ava-cap">Michael · AI truck parts specialist</p>
+            <p className="ava-cap">Mike · AI truck parts specialist</p>
             <h1>Truck down?<br /><span className="teal">Start here.</span></h1>
-            <p className="sub">Michael is a <strong>free AI specialist for heavy-duty truck and trailer parts.</strong> Describe what you need, he&apos;ll help you identify the issue, find the right part, or point you in the right direction.</p>
+            <p className="sub">Mike is a <strong>free AI specialist for heavy-duty truck and trailer parts.</strong> Describe what you need, he&apos;ll help you identify the issue, find the right part, or point you in the right direction.</p>
 
             <form className="chatbox" onSubmit={submitHero} autoComplete="off">
-              <input className="chatbox-input" type="text" value={heroInput} onChange={(e) => setHeroInput(e.target.value)} placeholder="Tell Michael what's going on with your truck…" />
+              <input className="chatbox-input" type="text" value={heroInput} onChange={(e) => setHeroInput(e.target.value)} placeholder="Tell Mike what's going on with your truck…" />
               <button className="chatbox-send" type="submit">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m13 5 7 7-7 7"/></svg>
               </button>
@@ -178,7 +178,7 @@ export function LandingPage() {
             <h2>Stop searching.<br />Just describe it.</h2>
             <p>The truck&apos;s making a sound it didn&apos;t make yesterday. A light&apos;s on. Something&apos;s leaking and you&apos;re not sure from where. You don&apos;t need a catalogue with 50,000 parts to scroll through. You need a straight answer: <strong>what&apos;s wrong, which part fixes it, and what to do first.</strong></p>
             <div className="steve-for-box">
-              <span>That&apos;s what Michael is for.</span>
+              <span>That&apos;s what Mike is for.</span>
               <span className="down-arrow" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
               </span>
@@ -192,33 +192,33 @@ export function LandingPage() {
         <div className="wrap">
           <div className="portrait-col">
             <div className="steve-portrait">
-              <Image className="portrait-photo" src="/steve.png" alt="Michael, AI parts specialist" width={340} height={340} />
+              <Image className="portrait-photo" src="/steve.png" alt="Mike, AI parts specialist" width={340} height={340} />
               <div className="online"><span className="dot" />Online now</div>
             </div>
           </div>
           <div className="info">
-            <span className="eyebrow">Meet Michael</span>
+            <span className="eyebrow">Meet Mike</span>
             <h2>Your AI parts specialist.</h2>
-            <p className="bio">Michael is an AI assistant with a deep knowledge base for heavy-duty trucks and trailers. Talk to him the way you&apos;d talk to a mechanic who knows your rig. He understands plain descriptions, so you don&apos;t need the right terms or the part number.</p>
+            <p className="bio">Mike is an AI assistant with a deep knowledge base for heavy-duty trucks and trailers. Talk to him the way you&apos;d talk to a mechanic who knows your rig. He understands plain descriptions, so you don&apos;t need the right terms or the part number.</p>
             <p className="bio">Tell him what&apos;s happening and he&apos;ll lead you toward a fix: <strong>what else to check, what to fix first,</strong> and where a budget alternative makes sense if money&apos;s tight.</p>
             <blockquote className="pull-quote">
               <span className="qmark">&ldquo;</span>
               Tell me what the truck&apos;s doing. I&apos;ll help you figure out the part and where to start.
-              <cite><span className="s-ava"><Image src="/steve-face.png" alt="" width={24} height={24} /></span>Michael</cite>
+              <cite><span className="s-ava"><Image src="/steve-face.png" alt="" width={24} height={24} /></span>Mike</cite>
             </blockquote>
             <p className="bio reach-line"><strong>Reach him however&apos;s easiest:</strong></p>
             <div className="contact-cluster compact">
               <button className="btn btn-chat" onClick={() => openChat()}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                Chat with Michael
+                Chat with Mike
               </button>
               <a className="btn btn-call" href="tel:+18652905485">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                Call Michael
+                Call Mike
               </a>
               <a className="btn btn-text" href="sms:+18652905485">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/></svg>
-                Text Michael
+                Text Mike
               </a>
             </div>
           </div>
@@ -236,47 +236,47 @@ export function LandingPage() {
             <div className="step">
               <div className="num">01</div>
               <div className="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-              <h3>Tell Michael what&apos;s going on</h3>
+              <h3>Tell Mike what&apos;s going on</h3>
               <p>Open the chat, call, or send a text. Describe the problem in your own words. Add a photo or VIN if you&apos;ve got one.</p>
             </div>
             <div className="step">
               <div className="num">02</div>
               <div className="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg></div>
               <h3>He works it out with you</h3>
-              <p>Michael asks a couple of quick questions if he needs to, then tells you the part, what to check first, and your options — including a budget alternative.</p>
+              <p>Mike asks a couple of quick questions if he needs to, then tells you the part, what to check first, and your options — including a budget alternative.</p>
             </div>
             <div className="step">
               <div className="num">03</div>
               <div className="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13 5.4 5M7 13l-2.3 4.6a1 1 0 0 0 .9 1.4h11"/><circle cx="9" cy="20" r="1"/><circle cx="17" cy="20" r="1"/></svg></div>
               <h3>Order it, or don&apos;t</h3>
-              <p>When you&apos;re ready, Michael can pull the part from <strong>PartsNow.ai</strong> and get it shipped or set up for pickup. No pressure — the answer is free whether you buy or not.</p>
+              <p>When you&apos;re ready, Mike can pull the part from <strong>PartsNow.ai</strong> and get it shipped or set up for pickup. No pressure — the answer is free whether you buy or not.</p>
             </div>
           </div>
 
           <div className="contact-cluster center" style={{ marginTop: 56 }}>
             <button className="btn btn-chat btn-lg" onClick={() => openChat()}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-              Chat with Michael
+              Chat with Mike
             </button>
             <a className="btn btn-call btn-lg" href="tel:+18652905485">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-              Call Michael
+              Call Mike
             </a>
             <a className="btn btn-text btn-lg" href="sms:+18652905485">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/></svg>
-              Text Michael
+              Text Mike
             </a>
           </div>
-          <p className="contact-lines center">Talk to Michael: <a href="tel:+18652905485">(865) 290-5485</a> — calls and texts, English or Spanish</p>
+          <p className="contact-lines center">Talk to Mike: <a href="tel:+18652905485">(865) 290-5485</a> — calls and texts, English or Spanish</p>
 
           <figure className="how-video after-cta">
-            <figcaption>See Michael in action.</figcaption>
+            <figcaption>See Mike in action.</figcaption>
             <div className="video-frame">
               <button className="video-play" type="button" onClick={() => openChat()}>
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
               </button>
               <span className="video-tag">Demo · 0:48</span>
-              <span className="video-hint">See Michael in action — type a symptom, he names the part</span>
+              <span className="video-hint">See Mike in action — type a symptom, he names the part</span>
             </div>
           </figure>
         </div>
@@ -287,13 +287,13 @@ export function LandingPage() {
         <div className="wrap">
           <div className="sec-head">
             <span className="eyebrow">Real situations</span>
-            <h2>Stuff people ask Michael every day.</h2>
+            <h2>Stuff people ask Mike every day.</h2>
           </div>
           <div className="scenario-grid">
             <article className="scenario-card" style={{ backgroundImage: "url('/scene-brake-wheel.jpg')" }}>
               <span className="quote-icon">&ldquo;</span>
               <p className="ask">Grinding noise when I brake and a light on the dash. What do I fix first?</p>
-              <div className="resolve"><span className="s-ava"><Image src="/steve-face.png" alt="" width={22} height={22} /></span>Michael walks through it and tells you where to start.</div>
+              <div className="resolve"><span className="s-ava"><Image src="/steve-face.png" alt="" width={22} height={22} /></span>Mike walks through it and tells you where to start.</div>
               <a className="scenario-watch" href="https://youtube.com/shorts/Ypnt4WmSMS4" target="_blank" rel="noopener">
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
                 Watch the video
@@ -311,7 +311,7 @@ export function LandingPage() {
             <article className="scenario-card" style={{ backgroundImage: "url('/scene-night-call.jpg')" }}>
               <span className="quote-icon">&ldquo;</span>
               <p className="ask">Truck&apos;s down at 2 a.m. and every counter&apos;s closed. Can you help?</p>
-              <div className="resolve"><span className="s-ava"><Image src="/steve-face.png" alt="" width={22} height={22} /></span>Michael&apos;s up. Chat, call, or text — he answers.</div>
+              <div className="resolve"><span className="s-ava"><Image src="/steve-face.png" alt="" width={22} height={22} /></span>Mike&apos;s up. Chat, call, or text — he answers.</div>
               <a className="scenario-watch" href="https://youtube.com/shorts/h-LZ5V-Vofg" target="_blank" rel="noopener">
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
                 Watch the video
@@ -375,10 +375,10 @@ export function LandingPage() {
       <section className="final-cta">
         <div className="globe" />
         <div className="wrap">
-          <h2>Your truck won&apos;t fix itself.<br />Ask Michael.</h2>
+          <h2>Your truck won&apos;t fix itself.<br />Ask Mike.</h2>
           <p>Free answer in about a minute. No account, no catch. Chat, call, or text — English or Spanish, any hour.</p>
           <form className="chatbox on-dark" onSubmit={submitCta} autoComplete="off">
-            <input className="chatbox-input" type="text" value={ctaInput} onChange={(e) => setCtaInput(e.target.value)} placeholder="Tell Michael what's going on…" />
+            <input className="chatbox-input" type="text" value={ctaInput} onChange={(e) => setCtaInput(e.target.value)} placeholder="Tell Mike what's going on…" />
             <button className="chatbox-send" type="submit">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m13 5 7 7-7 7"/></svg>
             </button>
@@ -410,13 +410,13 @@ export function LandingPage() {
               Calls and texts, English or Spanish · <a href="mailto:support@partsnow.ai">support@partsnow.ai</a>
             </div>
             <div className="fsocial">
-              <a href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/company/partsnow-ai" target="_blank" rel="noopener" aria-label="LinkedIn">
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.74v20.52C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.74V1.74C24 .78 23.2 0 22.22 0z"/></svg>
               </a>
-              <a href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Facebook">
+              <a href="https://www.facebook.com/1157337360790693" target="_blank" rel="noopener" aria-label="Facebook">
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07c0 6.02 4.39 11.01 10.13 11.93v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.08 24 18.09 24 12.07z"/></svg>
               </a>
-              <a href="https://www.youtube.com/" target="_blank" rel="noopener" aria-label="YouTube">
+              <a href="https://www.youtube.com/playlist?list=PL3qg78k_nkrfPi1bgleu20Nr4k7MXRUHW" target="_blank" rel="noopener" aria-label="YouTube">
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2C0 8.07 0 12 0 12s0 3.93.5 5.8a3.02 3.02 0 0 0 2.12 2.14c1.88.51 9.38.51 9.38.51s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14C24 15.93 24 12 24 12s0-3.93-.5-5.8zM9.6 15.6V8.4l6.27 3.6L9.6 15.6z"/></svg>
               </a>
             </div>
@@ -433,8 +433,8 @@ export function LandingPage() {
       {/* STEVE FAB */}
       {!chatOpen && (
         <button className="steve-fab" onClick={() => openChat()}>
-          <span className="fab-ava"><Image src="/steve-face.png" alt="Michael" width={38} height={38} /></span>
-          <span>Chat with Michael</span>
+          <span className="fab-ava"><Image src="/steve-face.png" alt="Mike" width={38} height={38} /></span>
+          <span>Chat with Mike</span>
         </button>
       )}
 
@@ -442,11 +442,11 @@ export function LandingPage() {
       <div className={`steve-overlay${chatOpen ? " open" : ""}`} onClick={closeChat} />
 
       {/* STEVE PANEL */}
-      <div className={`steve-panel${chatOpen ? " open" : ""}`} role="dialog" aria-label="Chat with Michael">
+      <div className={`steve-panel${chatOpen ? " open" : ""}`} role="dialog" aria-label="Chat with Mike">
         <div className="sp-head">
-          <div className="sp-ava"><Image src="/steve-face.png" alt="Michael" width={42} height={42} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 20%", borderRadius: "50%" }} /></div>
+          <div className="sp-ava"><Image src="/steve-face.png" alt="Mike" width={42} height={42} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 20%", borderRadius: "50%" }} /></div>
           <div className="sp-meta">
-            <div className="nm">Michael</div>
+            <div className="nm">Mike</div>
             <div className="st">
               <span style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--success-500)", display: "inline-block" }} />
               Online · Parts consultant
@@ -501,7 +501,7 @@ export function LandingPage() {
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
           </button>
         </div>
-        <div className="sp-disclaim">Michael is an AI assistant. Always confirm safety-critical repairs with a pro.</div>
+        <div className="sp-disclaim">Mike is an AI assistant. Always confirm safety-critical repairs with a pro.</div>
       </div>
     </>
   );

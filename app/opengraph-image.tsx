@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Ask Michael — free AI truck parts specialist at PartsNow.ai";
+export const alt = "Ask Mike — free AI truck parts specialist at PartsNow.ai";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -25,7 +25,7 @@ export default function OpengraphImage() {
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ display: "flex", fontSize: 86, fontWeight: 800, lineHeight: 1.05 }}>
-            Truck down? Ask Michael.
+            Truck down? Ask Mike.
           </div>
           <div style={{ display: "flex", marginTop: 24, fontSize: 38, color: "#c7d2e0", fontWeight: 500 }}>
             Free AI specialist for heavy-duty truck &amp; trailer parts.

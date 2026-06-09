@@ -12,8 +12,8 @@ const jetbrains = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["lati
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://agent.partsnow.ai"),
-  title: "Truck down? Ask Michael. — Free AI Truck Parts Consultant | PartsNow.ai",
-  description: "Michael is a free AI specialist for heavy-duty truck and trailer parts. Describe the symptom, paste a VIN, or snap a photo. No account required. English & Spanish, 24/7.",
+  title: "Truck down? Ask Mike. — Free AI Truck Parts Consultant | PartsNow.ai",
+  description: "Mike is a free AI specialist for heavy-duty truck and trailer parts. Describe the symptom, paste a VIN, or snap a photo. No account required. English & Spanish, 24/7.",
   applicationName: "PartsNow.ai",
   category: "automotive",
   keywords: [
@@ -34,14 +34,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "https://agent.partsnow.ai",
-    title: "Truck down? Ask Michael. — Free AI Parts Consultant",
+    title: "Truck down? Ask Mike. — Free AI Parts Consultant",
     description: "Free AI consultant for heavy-duty truck and trailer parts. Chat, call, or text — English or Spanish, any hour.",
     siteName: "PartsNow.ai",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Truck down? Ask Michael. — Free AI Parts Consultant",
+    title: "Truck down? Ask Mike. — Free AI Parts Consultant",
     description: "Free AI consultant for heavy-duty truck and trailer parts. Chat, call, or text — English or Spanish, any hour.",
   },
   robots: {
