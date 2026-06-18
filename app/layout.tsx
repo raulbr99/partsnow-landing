@@ -30,7 +30,15 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "PartsNow.ai" }],
   alternates: { canonical: "/" },
-  icons: { icon: "/favicon.svg" },
+  icons: {
+    // A square PNG >=48px is what Google reliably uses for the search-result
+    // favicon (SVG support there is inconsistent, and the legacy .ico is 16/32px).
+    // Listed first so it wins; the SVG stays for crisp modern-browser tabs.
+    icon: [
+      { url: "/icon-512.png", type: "image/png", sizes: "512x512" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+  },
   openGraph: {
     type: "website",
     url: "https://agent.partsnow.ai",
