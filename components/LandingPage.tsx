@@ -344,6 +344,20 @@ export function LandingPage() {
         </div>
       </section>
 
+      {/* APP DOWNLOAD */}
+      <section className="section app-download">
+        <div className="wrap">
+          <Image
+            className="app-banner"
+            src="/app-download-banner.png"
+            alt="Download the new PartsNow app — live video, chat, and catalogue search to find the right truck or trailer part in seconds. Available on Google Play and the App Store."
+            width={2400}
+            height={1256}
+            sizes="(max-width: 1200px) calc(100vw - 64px), 1136px"
+          />
+        </div>
+      </section>
+
       {/* ABOUT US */}
       <section className="about-section" id="about">
         <div className="globe" />
