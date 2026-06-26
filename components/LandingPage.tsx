@@ -17,6 +17,8 @@ const SEEDS: Record<string, string> = {
 
 const FOLLOWUPS = ["It's a 2020 Kenworth T680", "Gets worse when I brake", "Can I just call instead?"];
 
+const DEMO_VIDEO = "https://hsgoueam2pjhncqb.public.blob.vercel-storage.com/mike-demo.mp4";
+
 export function LandingPage() {
   const [chatOpen, setChatOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMsg[]>([]);
@@ -27,6 +29,8 @@ export function LandingPage() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
   const [heroInput, setHeroInput] = useState("");
   const [ctaInput, setCtaInput] = useState("");
+  const [videoPlaying, setVideoPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   // Keep API-format history separately (excludes greeting)
@@ -35,6 +39,11 @@ export function LandingPage() {
   useEffect(() => {
     if (bodyRef.current) bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
   }, [messages, typing]);
+
+  // Autoplay the demo as soon as the viewer taps the poster (carries the click gesture).
+  useEffect(() => {
+    if (videoPlaying) videoRef.current?.play().catch(() => {});
+  }, [videoPlaying]);
 
   const send = useCallback(async (text: string) => {
     const t = text.trim();
@@ -272,11 +281,25 @@ export function LandingPage() {
           <figure className="how-video after-cta">
             <figcaption>See Mike in action.</figcaption>
             <div className="video-frame">
-              <button className="video-play" type="button" onClick={() => openChat()}>
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-              </button>
-              <span className="video-tag">Demo · 0:48</span>
-              <span className="video-hint">See Mike in action — type a symptom, he names the part</span>
+              {videoPlaying ? (
+                <video
+                  ref={videoRef}
+                  className="video-el"
+                  src={DEMO_VIDEO}
+                  controls
+                  autoPlay
+                  playsInline
+                  preload="auto"
+                />
+              ) : (
+                <button className="video-poster" type="button" onClick={() => setVideoPlaying(true)} aria-label="Play the Mike demo video">
+                  <span className="video-play">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                  </span>
+                  <span className="video-tag">Demo · 0:31</span>
+                  <span className="video-hint">See Mike in action — type a symptom, he names the part</span>
+                </button>
+              )}
             </div>
           </figure>
         </div>
