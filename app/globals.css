@@ -245,8 +245,16 @@ h1, h2, h3, .display { font-family: var(--font-sans); }
 .situations { background: var(--white); }
 
 .app-download { background: var(--gray-50); }
+.app-download .app-banner-frame {
+  position: relative;
+  padding: 4px;
+  border-radius: 28px;
+  background: linear-gradient(118deg, var(--teal-300) 0%, var(--teal-500) 28%, var(--navy-700) 58%, var(--orange-500) 100%);
+  box-shadow: 0 22px 54px rgba(31, 75, 113, 0.20), 0 4px 14px rgba(0, 0, 0, 0.06);
+  line-height: 0;
+}
 .app-download .app-banner-wrap { position: relative; display: block; line-height: 0; }
-.app-download .app-banner { display: block; width: 100%; height: auto; border-radius: var(--radius-2xl); box-shadow: var(--shadow-lg); }
+.app-download .app-banner { display: block; width: 100%; height: auto; border-radius: var(--radius-2xl); }
 .app-download .badge-link { position: absolute; display: block; border-radius: 8px; transition: background var(--transition-fast); }
 .app-download .badge-link:hover { background: rgba(255,255,255,0.14); }
 .app-download .badge-gp { left: 5.33%; top: 72.85%; width: 12.67%; height: 6.77%; }

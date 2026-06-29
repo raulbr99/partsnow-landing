@@ -352,17 +352,19 @@ export function LandingPage() {
       {/* APP DOWNLOAD */}
       <section className="section app-download">
         <div className="wrap">
-          <div className="app-banner-wrap">
-            <Image
-              className="app-banner"
-              src="/app-download-banner.png"
-              alt="Download the new PartsNow app — live video, chat, and catalogue search to find the right truck or trailer part in seconds. Available on Google Play and the App Store."
-              width={2400}
-              height={1256}
-              sizes="(max-width: 1200px) calc(100vw - 64px), 1136px"
-            />
-            <a className="badge-link badge-gp" href={GOOGLE_PLAY_URL} target="_blank" rel="noopener" aria-label="Get the PartsNow app on Google Play" />
-            <a className="badge-link badge-as" href={APP_STORE_URL} target="_blank" rel="noopener" aria-label="Download the PartsNow app on the App Store" />
+          <div className="app-banner-frame">
+            <div className="app-banner-wrap">
+              <Image
+                className="app-banner"
+                src="/app-download-banner.png"
+                alt="Download the new PartsNow app — live video, chat, and catalogue search to find the right truck or trailer part in seconds. Available on Google Play and the App Store."
+                width={2400}
+                height={1256}
+                sizes="(max-width: 1200px) calc(100vw - 72px), 1128px"
+              />
+              <a className="badge-link badge-gp" href={GOOGLE_PLAY_URL} target="_blank" rel="noopener" aria-label="Get the PartsNow app on Google Play" />
+              <a className="badge-link badge-as" href={APP_STORE_URL} target="_blank" rel="noopener" aria-label="Download the PartsNow app on the App Store" />
+            </div>
           </div>
         </div>
       </section>
