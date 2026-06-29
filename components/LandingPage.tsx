@@ -19,6 +19,11 @@ const FOLLOWUPS = ["It's a 2020 Kenworth T680", "Gets worse when I brake", "Can 
 
 const DEMO_VIDEO = "https://hsgoueam2pjhncqb.public.blob.vercel-storage.com/mike-demo.mp4";
 
+// App store destinations for the download banner badges. Temporary: both point to
+// the /app "coming soon" page until the store listings are live.
+const GOOGLE_PLAY_URL = "/app";
+const APP_STORE_URL = "/app";
+
 export function LandingPage() {
   const [chatOpen, setChatOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMsg[]>([]);
@@ -347,14 +352,18 @@ export function LandingPage() {
       {/* APP DOWNLOAD */}
       <section className="section app-download">
         <div className="wrap">
-          <Image
-            className="app-banner"
-            src="/app-download-banner.png"
-            alt="Download the new PartsNow app — live video, chat, and catalogue search to find the right truck or trailer part in seconds. Available on Google Play and the App Store."
-            width={2400}
-            height={1256}
-            sizes="(max-width: 1200px) calc(100vw - 64px), 1136px"
-          />
+          <div className="app-banner-wrap">
+            <Image
+              className="app-banner"
+              src="/app-download-banner.png"
+              alt="Download the new PartsNow app — live video, chat, and catalogue search to find the right truck or trailer part in seconds. Available on Google Play and the App Store."
+              width={2400}
+              height={1256}
+              sizes="(max-width: 1200px) calc(100vw - 64px), 1136px"
+            />
+            <a className="badge-link badge-gp" href={GOOGLE_PLAY_URL} target="_blank" rel="noopener" aria-label="Get the PartsNow app on Google Play" />
+            <a className="badge-link badge-as" href={APP_STORE_URL} target="_blank" rel="noopener" aria-label="Download the PartsNow app on the App Store" />
+          </div>
         </div>
       </section>
 

@@ -245,7 +245,29 @@ h1, h2, h3, .display { font-family: var(--font-sans); }
 .situations { background: var(--white); }
 
 .app-download { background: var(--gray-50); }
+.app-download .app-banner-wrap { position: relative; display: block; line-height: 0; }
 .app-download .app-banner { display: block; width: 100%; height: auto; border-radius: var(--radius-2xl); box-shadow: var(--shadow-lg); }
+.app-download .badge-link { position: absolute; display: block; border-radius: 8px; transition: background var(--transition-fast); }
+.app-download .badge-link:hover { background: rgba(255,255,255,0.14); }
+.app-download .badge-gp { left: 5.33%; top: 72.85%; width: 12.67%; height: 6.77%; }
+.app-download .badge-as { left: 19.38%; top: 72.85%; width: 12.67%; height: 6.85%; }
+
+/* App "coming soon" holding page (/app) */
+.coming-soon { position: relative; min-height: 100svh; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 48px 24px; text-align: center; color: var(--white); background: radial-gradient(circle at 80% 10%, rgba(64,134,150,0.34) 0%, transparent 50%), linear-gradient(135deg, var(--navy-950) 0%, var(--navy-800) 100%); }
+.coming-soon .globe { position: absolute; inset: 0; background-image: url("/background-globe.png"); background-size: cover; background-position: center; opacity: 0.07; mix-blend-mode: screen; pointer-events: none; }
+.coming-soon .cs-inner { position: relative; z-index: 2; max-width: 600px; }
+.coming-soon .cs-logo { height: 48px; width: auto; margin: 0 auto 28px; }
+.coming-soon .cs-eyebrow { display: block; font-family: var(--font-sans); font-size: 12px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--teal-300); margin-bottom: 14px; }
+.coming-soon h1 { font-size: clamp(44px, 9vw, 72px); font-weight: 900; letter-spacing: -0.035em; line-height: 1.02; margin: 0 0 20px; color: var(--white); text-wrap: balance; }
+.coming-soon .cs-lead { font-size: 18px; line-height: 1.6; color: rgba(255,255,255,0.82); margin: 0 auto 22px; max-width: 520px; text-wrap: pretty; }
+.coming-soon .cs-lead strong { color: var(--white); font-weight: 700; }
+.coming-soon .cs-sub { font-size: 15px; color: rgba(255,255,255,0.6); margin: 0 0 24px; }
+.coming-soon .cs-actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+.coming-soon .cs-btn { display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-sans); font-size: 15px; font-weight: 700; padding: 14px 26px; border-radius: var(--radius-pill); transition: background var(--transition-fast), transform var(--transition-fast); }
+.coming-soon .cs-btn-primary { background: var(--orange-400); color: #fff; }
+.coming-soon .cs-btn-primary:hover { background: var(--orange-500); transform: translateY(-1px); }
+.coming-soon .cs-btn-ghost { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.25); }
+.coming-soon .cs-btn-ghost:hover { background: rgba(255,255,255,0.16); }
 .situations .scenario-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .scenario-card { position: relative; min-height: 400px; padding: 28px 26px; border: none; border-radius: var(--radius-xl); overflow: hidden; background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: flex-end; color: var(--white); box-shadow: var(--shadow-md); }
 .scenario-card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,30,43,0.12) 0%, rgba(15,30,43,0.55) 48%, rgba(15,30,43,0.93) 100%); }
