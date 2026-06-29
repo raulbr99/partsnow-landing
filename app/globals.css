@@ -246,7 +246,15 @@ h1, h2, h3, .display { font-family: var(--font-sans); }
 
 .app-download { background: var(--white); }
 .app-download .app-banner-wrap { position: relative; display: block; line-height: 0; }
-.app-download .app-banner { display: block; width: 100%; height: auto; }
+.app-download .app-banner {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* The photo on the right is a hard crop; fade it into the page so the right
+     edge dissolves like the soft top/left edges baked into the artwork. */
+  -webkit-mask-image: linear-gradient(to right, #000 88%, transparent 100%);
+  mask-image: linear-gradient(to right, #000 88%, transparent 100%);
+}
 .app-download .badge-link { position: absolute; display: block; border-radius: 8px; transition: background var(--transition-fast); }
 .app-download .badge-link:hover { background: rgba(255,255,255,0.14); }
 .app-download .badge-gp { left: 5.33%; top: 72.85%; width: 12.67%; height: 6.77%; }
