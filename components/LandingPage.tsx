@@ -291,6 +291,7 @@ export function LandingPage() {
                   ref={videoRef}
                   className="video-el"
                   src={DEMO_VIDEO}
+                  poster="/demo-poster.jpg"
                   controls
                   autoPlay
                   playsInline
@@ -298,6 +299,8 @@ export function LandingPage() {
                 />
               ) : (
                 <button className="video-poster" type="button" onClick={() => setVideoPlaying(true)} aria-label="Play the Mike demo video">
+                  <Image className="video-poster-img" src="/demo-poster.jpg" alt="" width={1600} height={900} sizes="(max-width: 800px) 100vw, 760px" priority={false} />
+                  <span className="video-scrim" />
                   <span className="video-play">
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
                   </span>

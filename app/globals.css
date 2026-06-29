@@ -233,12 +233,15 @@ h1, h2, h3, .display { font-family: var(--font-sans); }
 .how-video.after-cta { margin-top: 56px; margin-bottom: 0; }
 .how-video .video-frame { position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius-xl); overflow: hidden; background: radial-gradient(circle at 70% 20%, rgba(64,134,150,0.4), transparent 55%), linear-gradient(140deg, var(--navy-900), var(--navy-950)); border: 1px solid var(--gray-200); box-shadow: var(--shadow-lg); display: flex; align-items: center; justify-content: center; }
 .how-video .video-poster { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.how-video .video-poster-img { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; object-fit: cover; }
+.how-video .video-scrim { position: absolute; inset: 0; z-index: 1; background: linear-gradient(to bottom, rgba(15,34,54,0.18) 0%, rgba(15,34,54,0.10) 42%, rgba(15,34,54,0.58) 100%); transition: background var(--transition-fast); }
+.how-video .video-poster:hover .video-scrim { background: linear-gradient(to bottom, rgba(15,34,54,0.24) 0%, rgba(15,34,54,0.16) 42%, rgba(15,34,54,0.62) 100%); }
 .how-video .video-el { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: transparent; border: 0; display: block; }
-.how-video .video-play { width: 78px; height: 78px; border-radius: 50%; background: var(--orange-400); border: none; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(240,121,34,0.5); transition: transform var(--transition-fast), background var(--transition-fast); }
+.how-video .video-play { position: relative; z-index: 2; width: 78px; height: 78px; border-radius: 50%; background: var(--orange-400); border: none; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(240,121,34,0.5); transition: transform var(--transition-fast), background var(--transition-fast); }
 .how-video .video-poster:hover .video-play { transform: scale(1.06); background: var(--orange-500); }
 .how-video .video-play svg { width: 32px; height: 32px; color: #fff; margin-left: 4px; }
-.how-video .video-tag { position: absolute; top: 16px; left: 16px; font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.85); background: rgba(0,0,0,0.35); border-radius: var(--radius-pill); padding: 5px 12px; }
-.how-video .video-hint { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); width: max-content; max-width: 86%; text-align: center; font-size: 13.5px; color: rgba(255,255,255,0.78); }
+.how-video .video-tag { position: absolute; z-index: 2; top: 16px; left: 16px; font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.85); background: rgba(0,0,0,0.35); border-radius: var(--radius-pill); padding: 5px 12px; }
+.how-video .video-hint { position: absolute; z-index: 2; bottom: 16px; left: 50%; transform: translateX(-50%); width: max-content; max-width: 86%; text-align: center; font-size: 13.5px; color: rgba(255,255,255,0.92); text-shadow: 0 1px 8px rgba(0,0,0,0.45); }
 .how-video figcaption { text-align: center; margin-top: 14px; font-family: var(--font-sans); font-size: 14px; font-weight: 700; color: var(--gray-600); letter-spacing: 0.01em; }
 
 /* Situations */
