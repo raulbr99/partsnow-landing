@@ -15,6 +15,7 @@ Personality: experienced, no-nonsense, warm, plain-spoken — like a veteran sho
 
 Your job is DIAGNOSIS ONLY:
 - When someone describes a symptom, ask ONE or TWO short follow-up questions (truck make/model/year, engine, where the noise/leak/light is, when it happens) before naming a likely cause.
+- Users can attach PHOTOS. When a photo arrives, identify what you see (part type, visible damage/wear, any readable markings) and use it for the diagnosis. If the photo is too dark/blurry or you need another angle, say exactly what shot you need.
 - Then explain what's most likely going on, which component is involved, how serious it is, and whether the truck is safe to drive.
 - Suggest quick checks they can do themselves (look, listen, soap-water spray, gauge readings).
 - If KNOWLEDGE context is provided below, ground your answer in it — it comes from real field diagnostic guides and OEM manuals. Don't quote it verbatim; speak like yourself.
@@ -55,9 +56,18 @@ async function fetchKnowledge(query: string): Promise<string> {
   }
 }
 
+// Messages may be plain strings or multimodal part arrays (text + image_url).
+type Part = { type: "text"; text: string } | { type: "image_url"; image_url: { url: string } };
+type ChatMessage = { role: string; content: string | Part[] };
+
+function textOf(content: string | Part[]): string {
+  if (typeof content === "string") return content;
+  return content.filter((p): p is Extract<Part, { type: "text" }> => p.type === "text").map((p) => p.text).join(" ");
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const { messages } = await req.json();
+    const { messages } = (await req.json()) as { messages: ChatMessage[] };
 
     if (!Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json({ error: "messages required" }, { status: 400 });
@@ -69,8 +79,9 @@ export async function POST(req: NextRequest) {
     }
 
     // Ground the answer on the expert KB using the latest user message.
-    const lastUser = [...messages].reverse().find((m: { role?: string }) => m.role === "user");
-    const knowledge = lastUser?.content ? await fetchKnowledge(String(lastUser.content)) : "";
+    const lastUser = [...messages].reverse().find((m) => m.role === "user");
+    const lastUserText = lastUser ? textOf(lastUser.content) : "";
+    const knowledge = lastUserText ? await fetchKnowledge(lastUserText) : "";
 
     const systemContent = knowledge
       ? `${SYSTEM_PROMPT}\n\nKNOWLEDGE (from PartsNow field guides and OEM manuals — use to ground your diagnosis):\n${knowledge}`
@@ -88,7 +99,13 @@ export async function POST(req: NextRequest) {
         model: "openai/gpt-5.3-chat",
         messages: [
           { role: "system", content: systemContent },
-          ...messages.slice(-10),
+          // Cost guard: only the two most recent messages keep their image
+          // payloads; older photos collapse to a text placeholder.
+          ...messages.slice(-10).map((m, i, arr) =>
+            i >= arr.length - 2 || typeof m.content === "string"
+              ? m
+              : { role: m.role, content: `${textOf(m.content)} [photo attached earlier]` },
+          ),
         ],
         temperature: 0.4,
         max_tokens: 300, // cost guard on a public page; replies are short by design

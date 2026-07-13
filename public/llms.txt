@@ -20,7 +20,38 @@
 - Categories: brakes & wheel end, air system, electrical & lighting, engine, filtration, trailer parts, driveline, hydraulics
 - 50,000+ new and OEM parts with OEM cross-references from trusted dealers
 
+## US Truck Encyclopedia
+Specs, engines, years, GVWR ratings and history for 209+ US commercial truck models (Class 3–8) across 25 makes — each model has its own page with common replacement parts and Mike available for diagnosis.
+- [Truck encyclopedia index](https://agent.partsnow.ai/trucks): browse and compare every make and model
+- [Freightliner](https://agent.partsnow.ai/trucks/freightliner)
+- [Peterbilt](https://agent.partsnow.ai/trucks/peterbilt)
+- [Kenworth](https://agent.partsnow.ai/trucks/kenworth)
+- [Volvo Trucks](https://agent.partsnow.ai/trucks/volvo-trucks)
+- [Mack Trucks](https://agent.partsnow.ai/trucks/mack-trucks)
+- [International](https://agent.partsnow.ai/trucks/international)
+- [Western Star](https://agent.partsnow.ai/trucks/western-star)
+- [Autocar](https://agent.partsnow.ai/trucks/autocar)
+- [Hino](https://agent.partsnow.ai/trucks/hino)
+- [Isuzu](https://agent.partsnow.ai/trucks/isuzu)
+- [Ford](https://agent.partsnow.ai/trucks/ford)
+- [Ram](https://agent.partsnow.ai/trucks/ram)
+- [Chevrolet](https://agent.partsnow.ai/trucks/chevrolet)
+- [GMC](https://agent.partsnow.ai/trucks/gmc)
+- [Mitsubishi Fuso (legacy)](https://agent.partsnow.ai/trucks/mitsubishi-fuso)
+- [RIZON](https://agent.partsnow.ai/trucks/rizon)
+- [Sterling (legacy)](https://agent.partsnow.ai/trucks/sterling)
+- [Caterpillar (legacy)](https://agent.partsnow.ai/trucks/caterpillar)
+- [Battle Motors](https://agent.partsnow.ai/trucks/battle-motors)
+- [Kalmar Ottawa](https://agent.partsnow.ai/trucks/kalmar-ottawa)
+- [Capacity](https://agent.partsnow.ai/trucks/capacity)
+- [Tesla](https://agent.partsnow.ai/trucks/tesla)
+- [Nikola (legacy)](https://agent.partsnow.ai/trucks/nikola)
+- [Lion Electric (legacy)](https://agent.partsnow.ai/trucks/lion-electric)
+- [BYD](https://agent.partsnow.ai/trucks/byd)
+
 ## Links
 - [Chat with Mike](https://agent.partsnow.ai): Free AI truck parts consultant
+- [US Truck Encyclopedia](https://agent.partsnow.ai/trucks): Every US commercial truck make & model, Class 3–8
+- [Truck Guides](https://agent.partsnow.ai/guides): Daily practical guides — diagnosis, maintenance and part selection for heavy-duty trucks
 - [PartsNow catalog](https://partsnow.ai): Browse and buy 50,000+ parts
 - [PartsNow llms.txt](https://partsnow.ai/llms.txt): Platform-level AI documentation

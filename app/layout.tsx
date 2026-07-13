@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Montserrat, Inter, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { GoogleAnalytics } from "@next/third-parties/google";
+import { MikeChat } from "@/components/MikeChat";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -61,12 +63,17 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // Dedicated GA4 data stream for agent.partsnow.ai (separate from partsnow.ai's).
+  // Override with NEXT_PUBLIC_GA_ID in the environment if it ever changes.
+  const gaId = process.env.NEXT_PUBLIC_GA_ID ?? "G-PNZ5WE5NZQ";
   return (
     <html lang="en" className={`${montserrat.variable} ${inter.variable} ${jetbrains.variable}`}>
       <body>
         {children}
+        <MikeChat />
         <Analytics />
       </body>
+      {gaId ? <GoogleAnalytics gaId={gaId} /> : null}
     </html>
   );
 }

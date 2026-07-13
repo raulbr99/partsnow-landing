@@ -92,6 +92,23 @@
   --font-mono: var(--font-jetbrains);
 }
 
+/* Tailwind color tokens for the truck encyclopedia pages (ported from the
+   partsnow.ai marketplace) mapped onto the landing palette above. */
+@theme {
+  --color-primary: #357e8d;         /* teal-600 */
+  --color-primary-light: #7fc0ce;   /* teal-300 */
+  --color-primary-dark: #2d6b78;    /* teal-700 */
+  --color-accent: #f07922;          /* orange-400 */
+  --color-accent-dark: #e06c0f;     /* orange-500 */
+  --color-secondary: #1f4b71;       /* navy-800 */
+  --color-secondary-light: #2a5d86; /* navy-700 */
+  --color-card: #ffffff;
+  --color-foreground: #0f1e2b;      /* gray-950 */
+  --color-muted: #808fa1;           /* gray-600 */
+  --color-border: #dde3e9;          /* gray-200 */
+  --color-neutral-light: #f4f5f7;   /* gray-100 */
+}
+
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
@@ -337,8 +354,29 @@ h1, h2, h3, .display { font-family: var(--font-sans); }
 .cta-altlines a svg { width: 16px; height: 16px; color: var(--teal-300); }
 .cta-altlines .alt-nums { width: 100%; margin-top: 4px; font-size: 14px; color: rgba(255,255,255,0.6); }
 
+/* Guide article typography (markdown rendered by marked) */
+.guide-prose { font-size: 16px; line-height: 1.7; color: var(--gray-800); }
+.guide-prose p { margin: 0 0 16px; }
+.guide-prose p:last-child { margin-bottom: 0; }
+.guide-prose strong { color: var(--gray-950); font-weight: 700; }
+.guide-prose a { color: var(--teal-600); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+.guide-prose ul, .guide-prose ol { margin: 0 0 16px; padding-left: 22px; }
+.guide-prose ul { list-style: disc; }
+.guide-prose ol { list-style: decimal; }
+.guide-prose li { margin: 6px 0; }
+.guide-prose h3 { font-size: 18px; font-weight: 800; color: var(--navy-900); margin: 22px 0 10px; }
+.guide-prose code { font-family: var(--font-mono); font-size: 14px; background: var(--gray-100); border-radius: 4px; padding: 1px 5px; }
+.guide-prose blockquote { margin: 0 0 16px; padding: 10px 18px; border-left: 3px solid var(--teal-500); background: var(--gray-50); color: var(--gray-700); }
+
+/* Truck encyclopedia promo (home) */
+.trucks-promo { background: var(--gray-100); }
+.trucks-promo .sec-head { margin-bottom: 28px; }
+.trucks-promo-cta { display: flex; justify-content: center; }
+
 /* Footer */
 .footer { background: var(--navy-950); color: rgba(255,255,255,0.6); padding: 64px 0 40px; }
+.footer-slim .flinks { font-size: 14px; margin: 0; }
+.footer-slim .flinks a { color: var(--teal-300); font-weight: 600; }
 .footer-slim .wrap { display: flex; align-items: flex-start; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
 .footer-slim .blurb { font-size: 14px; line-height: 1.6; max-width: 360px; margin: 0 0 18px; }
 .footer-slim .logo { height: 28px; margin-bottom: 18px; }
@@ -393,6 +431,15 @@ h1, h2, h3, .display { font-family: var(--font-sans); }
 .steve-panel .sp-foot .sp-send:disabled { background: var(--gray-300); }
 .steve-panel .sp-foot .sp-send svg { width: 18px; height: 18px; color: white; }
 .steve-panel .sp-disclaim { font-size: 10.5px; color: var(--gray-500); text-align: center; padding: 0 0 9px; background: var(--white); }
+.steve-panel .sp-foot .sp-attach { width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0; background: var(--gray-100); border: 1.5px solid var(--gray-200); color: var(--gray-600); display: flex; align-items: center; justify-content: center; transition: color var(--transition-fast), border-color var(--transition-fast); }
+.steve-panel .sp-foot .sp-attach:hover { color: var(--teal-600); border-color: var(--teal-400); }
+.steve-panel .sp-foot .sp-attach svg { width: 19px; height: 19px; }
+.sp-msg-img { display: block; max-width: 100%; border-radius: 10px; margin-bottom: 8px; }
+.sp-attach-preview { display: flex; align-items: center; gap: 10px; padding: 8px 14px; background: var(--teal-100); border-top: 1px solid var(--teal-300); font-size: 12.5px; color: var(--teal-700); font-weight: 600; }
+.sp-attach-preview img { width: 40px; height: 40px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+.sp-attach-preview span { flex: 1; }
+.sp-attach-preview button { background: none; border: none; color: var(--teal-700); width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.sp-attach-preview button svg { width: 15px; height: 15px; }
 
 /* Responsive */
 @media (max-width: 980px) {

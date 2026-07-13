@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { FAQ_ITEMS } from "@/app/faq-data";
-
-type ChatMsg = { role: "steve" | "user"; text: string };
-
-const FALLBACK = "Got it — tell me more about the truck (make, model, year) and I'll point you in the right direction. Or call/text (865) 290-5485 and I'll help right now.";
+import { openMikeChat } from "@/components/MikeChat";
+import { SiteNav } from "@/components/SiteNav";
+import { SiteFooter } from "@/components/SiteFooter";
 
 const SEEDS: Record<string, string> = {
   symptom: "My truck's making a noise it wasn't making yesterday and I'm not sure what part I need.",
@@ -15,128 +15,39 @@ const SEEDS: Record<string, string> = {
   es: "Hola Mike, necesito ayuda para encontrar una pieza para mi camión. ¿Me puedes ayudar?",
 };
 
-const FOLLOWUPS = ["It's a 2020 Kenworth T680", "Gets worse when I brake", "Can I just call instead?"];
-
 const DEMO_VIDEO = "https://hsgoueam2pjhncqb.public.blob.vercel-storage.com/mike-demo.mp4";
 
-// App store destinations for the download banner badges. Temporary: both point to
-// the /app "coming soon" page until the store listings are live.
-const GOOGLE_PLAY_URL = "/app";
-const APP_STORE_URL = "/app";
+// App store destinations for the download banner badges — live store listings.
+const GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=ai.partsnow.app";
+const APP_STORE_URL = "https://apps.apple.com/app/id6779235305";
 
 export function LandingPage() {
-  const [chatOpen, setChatOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMsg[]>([]);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [typing, setTyping] = useState(false);
-  const [busy, setBusy] = useState(false);
-  const [opened, setOpened] = useState(false);
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
   const [heroInput, setHeroInput] = useState("");
   const [ctaInput, setCtaInput] = useState("");
   const [videoPlaying, setVideoPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
-  const bodyRef = useRef<HTMLDivElement>(null);
-  // Keep API-format history separately (excludes greeting)
-  const historyRef = useRef<{ role: "user" | "assistant"; content: string }[]>([]);
-
-  useEffect(() => {
-    if (bodyRef.current) bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
-  }, [messages, typing]);
 
   // Autoplay the demo as soon as the viewer taps the poster (carries the click gesture).
   useEffect(() => {
     if (videoPlaying) videoRef.current?.play().catch(() => {});
   }, [videoPlaying]);
 
-  const send = useCallback(async (text: string) => {
-    const t = text.trim();
-    if (!t || busy) return;
-    setBusy(true);
-    setSuggestions([]);
-    setMessages((m) => [...m, { role: "user", text: t }]);
-    historyRef.current.push({ role: "user", content: t });
-    setTyping(true);
-
-    try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: historyRef.current }),
-      });
-      const data = await res.json();
-      const reply: string = data.reply || FALLBACK;
-      historyRef.current.push({ role: "assistant", content: reply });
-      setTyping(false);
-      setMessages((m) => {
-        const next = [...m, { role: "steve" as const, text: reply }];
-        if (next.length <= 4) setSuggestions(FOLLOWUPS);
-        return next;
-      });
-    } catch {
-      setTyping(false);
-      setMessages((m) => [...m, { role: "steve" as const, text: FALLBACK }]);
-    }
-
-    setBusy(false);
-    setTimeout(() => inputRef.current?.focus(), 50);
-  }, [busy]);
-
-  const openChat = useCallback((seedKey?: string) => {
-    setChatOpen(true);
-    if (!opened) {
-      setOpened(true);
-      setMessages([{ role: "steve", text: "Hey, I'm Mike — your parts guy at PartsNow. Tell me what's going on with your truck, or what part you're chasing. No account needed, and this is free." }]);
-      setSuggestions(["It's making a noise", "Warning light is on", "I have a part number"]);
-    }
-    if (seedKey) {
-      const seed = SEEDS[seedKey] || seedKey;
-      setTimeout(() => send(seed), 360);
-    }
-    setTimeout(() => inputRef.current?.focus(), 280);
-  }, [opened, send]);
-
-  const closeChat = () => setChatOpen(false);
-
   const submitHero = (e: React.FormEvent) => {
     e.preventDefault();
-    const t = heroInput.trim();
-    openChat();
-    if (t) { setTimeout(() => send(t), 360); setHeroInput(""); }
+    openMikeChat(heroInput.trim() || undefined);
+    setHeroInput("");
   };
 
   const submitCta = (e: React.FormEvent) => {
     e.preventDefault();
-    const t = ctaInput.trim();
-    openChat();
-    if (t) { setTimeout(() => send(t), 360); setCtaInput(""); }
-  };
-
-  const sendFromPanel = () => {
-    const t = inputRef.current;
-    if (t) { send(t.value); t.value = ""; t.style.height = "auto"; }
+    openMikeChat(ctaInput.trim() || undefined);
+    setCtaInput("");
   };
 
   return (
     <>
-      {/* NAV */}
-      <nav className="nav nav-main">
-        <div className="wrap">
-          <Image className="logo" src="/logo-white.svg" alt="PartsNow.ai" width={140} height={42} />
-          <div className="nav-links">
-            <a href="#how">How it works</a>
-            <a href="#about">About us</a>
-            <a href="#faq">FAQs</a>
-          </div>
-          <div className="nav-right">
-            <button className="btn btn-chat btn-sm" onClick={() => openChat()}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-              Chat with Mike
-            </button>
-          </div>
-        </div>
-      </nav>
+      <SiteNav />
 
       {/* HERO */}
       <header className="hero hero-chat">
@@ -162,19 +73,19 @@ export function LandingPage() {
             </form>
 
             <div className="quick-chips">
-              <button className="qchip" onClick={() => openChat("symptom")}>
+              <button className="qchip" onClick={() => openMikeChat(SEEDS.symptom)}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12h3l2-6 4 12 2-6h7"/></svg>
                 Describe a symptom
               </button>
-              <button className="qchip" onClick={() => openChat("photo")}>
+              <button className="qchip" onClick={() => openMikeChat(undefined, { attach: true })}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg>
                 Upload a photo
               </button>
-              <button className="qchip" onClick={() => openChat("vin")}>
+              <button className="qchip" onClick={() => openMikeChat(SEEDS.vin)}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10v4M11 10v4M15 10l2 4M17 10l-2 4"/></svg>
                 Enter a VIN
               </button>
-              <button className="qchip qchip-es" onClick={() => openChat("es")}>
+              <button className="qchip qchip-es" onClick={() => openMikeChat(SEEDS.es)}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
                 En español
               </button>
@@ -222,7 +133,7 @@ export function LandingPage() {
             </blockquote>
             <p className="bio reach-line"><strong>Reach him however&apos;s easiest:</strong></p>
             <div className="contact-cluster compact">
-              <button className="btn btn-chat" onClick={() => openChat()}>
+              <button className="btn btn-chat" onClick={() => openMikeChat()}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                 Chat with Mike
               </button>
@@ -268,7 +179,7 @@ export function LandingPage() {
           </div>
 
           <div className="contact-cluster center" style={{ marginTop: 56 }}>
-            <button className="btn btn-chat btn-lg" onClick={() => openChat()}>
+            <button className="btn btn-chat btn-lg" onClick={() => openMikeChat()}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
               Chat with Mike
             </button>
@@ -348,6 +259,23 @@ export function LandingPage() {
                 Watch the video
               </a>
             </article>
+          </div>
+        </div>
+      </section>
+
+      {/* TRUCK ENCYCLOPEDIA */}
+      <section className="section trucks-promo" id="trucks">
+        <div className="wrap">
+          <div className="sec-head">
+            <span className="eyebrow">US Truck Encyclopedia</span>
+            <h2>Know your truck. Every make, every model.</h2>
+            <p>Specs, engines and history for every US commercial truck, Class 3 to 8 — with Mike on every page to help you diagnose yours.</p>
+          </div>
+          <div className="trucks-promo-cta">
+            <Link className="btn btn-chat btn-lg" href="/trucks">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 18h14M5 18a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h8l4 4h2a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2"/><circle cx="8" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>
+              Browse the truck encyclopedia
+            </Link>
           </div>
         </div>
       </section>
@@ -446,112 +374,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="footer footer-slim">
-        <div className="wrap">
-          <div className="fbrand">
-            <Image className="logo" src="/logo-white.svg" alt="PartsNow.ai" width={120} height={28} />
-            <p className="blurb">AI-powered truck and trailer parts. 50,000+ parts from trusted dealers, shipped nationwide. Based in Knoxville, TN.</p>
-          </div>
-          <div className="fcontact-block">
-            <div className="fcontact">
-              EN <a href="tel:+18652905485">(865) 290-5485</a> · ES <a href="tel:+18652175813">(865) 217-5813</a><br />
-              Both lines take calls and texts · <a href="mailto:support@partsnow.ai">support@partsnow.ai</a>
-            </div>
-            <div className="fsocial">
-              <a href="https://www.linkedin.com/company/partsnow-ai" target="_blank" rel="noopener" aria-label="LinkedIn">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.8 0 0 .78 0 1.74v20.52C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.74V1.74C24 .78 23.2 0 22.22 0z"/></svg>
-              </a>
-              <a href="https://www.facebook.com/1157337360790693" target="_blank" rel="noopener" aria-label="Facebook">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07c0 6.02 4.39 11.01 10.13 11.93v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.25h3.33l-.53 3.49h-2.8V24C19.61 23.08 24 18.09 24 12.07z"/></svg>
-              </a>
-              <a href="https://www.youtube.com/playlist?list=PL3qg78k_nkrfPi1bgleu20Nr4k7MXRUHW" target="_blank" rel="noopener" aria-label="YouTube">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2C0 8.07 0 12 0 12s0 3.93.5 5.8a3.02 3.02 0 0 0 2.12 2.14c1.88.51 9.38.51 9.38.51s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14C24 15.93 24 12 24 12s0-3.93-.5-5.8zM9.6 15.6V8.4l6.27 3.6L9.6 15.6z"/></svg>
-              </a>
-            </div>
-          </div>
-        </div>
-        <div className="wrap">
-          <div className="fbottom">
-            <span>© 2026 PartsNow.ai · An agentic commerce platform by talkrev.ai</span>
-            <span>Knoxville, TN</span>
-          </div>
-        </div>
-      </footer>
-
-      {/* STEVE FAB */}
-      {!chatOpen && (
-        <button className="steve-fab" onClick={() => openChat()}>
-          <span className="fab-ava"><Image src="/steve-face.png" alt="Mike" width={38} height={38} /></span>
-          <span>Chat with Mike</span>
-        </button>
-      )}
-
-      {/* OVERLAY */}
-      <div className={`steve-overlay${chatOpen ? " open" : ""}`} onClick={closeChat} />
-
-      {/* STEVE PANEL */}
-      <div className={`steve-panel${chatOpen ? " open" : ""}`} role="dialog" aria-label="Chat with Mike">
-        <div className="sp-head">
-          <div className="sp-ava"><Image src="/steve-face.png" alt="Mike" width={42} height={42} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 20%", borderRadius: "50%" }} /></div>
-          <div className="sp-meta">
-            <div className="nm">Mike</div>
-            <div className="st">
-              <span style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--success-500)", display: "inline-block" }} />
-              Online · Parts consultant
-            </div>
-          </div>
-          <a className="sp-call" href="tel:+18652905485">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            Call
-          </a>
-          <button className="sp-close" onClick={closeChat} aria-label="Close">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-          </button>
-        </div>
-
-        <div className="sp-body" ref={bodyRef}>
-          {messages.map((m, i) => (
-            <div key={i} className={`sp-msg ${m.role}`}>{m.text}</div>
-          ))}
-          {typing && (
-            <div className="sp-typing"><span /><span /><span /></div>
-          )}
-        </div>
-
-        {suggestions.length > 0 && (
-          <div className="sp-suggest">
-            {suggestions.map((s) => (
-              <button key={s} className="sg" onClick={() => { setSuggestions([]); send(s); }}>{s}</button>
-            ))}
-          </div>
-        )}
-
-        <div className="sp-foot">
-          <textarea
-            ref={inputRef}
-            rows={1}
-            placeholder="Describe the problem or part…"
-            onInput={(e) => {
-              const el = e.currentTarget;
-              el.style.height = "auto";
-              el.style.height = Math.min(el.scrollHeight, 120) + "px";
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                send(e.currentTarget.value);
-                e.currentTarget.value = "";
-                e.currentTarget.style.height = "auto";
-              }
-            }}
-          />
-          <button className="sp-send" disabled={busy} onClick={sendFromPanel} aria-label="Send">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
-          </button>
-        </div>
-        <div className="sp-disclaim">Mike is an AI assistant. Always confirm safety-critical repairs with a pro.</div>
-      </div>
+      <SiteFooter />
     </>
   );
 }
