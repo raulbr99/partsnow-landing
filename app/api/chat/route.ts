@@ -9,6 +9,25 @@ import { NextRequest, NextResponse } from "next/server";
 const RAG_QUERY_URL = "https://rag.talkrev.ai/query";
 const RAG_TENANT = "parts-now-knowledge";
 
+// Browser callers allowed cross-origin (the Ask Mike Space on Hugging Face).
+// Deliberately an allowlist, NOT "*": this endpoint spends OpenRouter credits.
+const ALLOWED_ORIGINS = new Set(["https://partsnow-ask-mike.static.hf.space"]);
+
+function corsHeaders(req: NextRequest): Record<string, string> {
+  const origin = req.headers.get("origin") || "";
+  if (!ALLOWED_ORIGINS.has(origin)) return {};
+  return {
+    "Access-Control-Allow-Origin": origin,
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Vary": "Origin",
+  };
+}
+
+export async function OPTIONS(req: NextRequest) {
+  return new Response(null, { status: 204, headers: corsHeaders(req) });
+}
+
 const SYSTEM_PROMPT = `You are Mike, the friendly AI truck-diagnosis consultant for PartsNow.ai, a heavy-duty truck and trailer parts platform based in Knoxville, TN. You help owner-operators, mechanics, and fleet managers figure out WHAT IS WRONG with their truck or trailer.
 
 Personality: experienced, no-nonsense, warm, plain-spoken — like a veteran shop foreman. You speak fluent Freightliner, Peterbilt, Kenworth, Mack, Volvo, and International.
@@ -70,12 +89,12 @@ export async function POST(req: NextRequest) {
     const { messages } = (await req.json()) as { messages: ChatMessage[] };
 
     if (!Array.isArray(messages) || messages.length === 0) {
-      return NextResponse.json({ error: "messages required" }, { status: 400 });
+      return NextResponse.json({ error: "messages required" }, { status: 400, headers: corsHeaders(req) });
     }
 
     const apiKey = process.env.OPENROUTER_API_KEY;
     if (!apiKey) {
-      return NextResponse.json({ error: "API not configured" }, { status: 500 });
+      return NextResponse.json({ error: "API not configured" }, { status: 500, headers: corsHeaders(req) });
     }
 
     // Ground the answer on the expert KB using the latest user message.
@@ -119,9 +138,12 @@ export async function POST(req: NextRequest) {
     const data = await response.json();
     const reply = data.choices?.[0]?.message?.content?.trim() || "Sorry, I couldn't get a response. Try calling (865) 290-5485.";
 
-    return NextResponse.json({ reply }, { headers: { "x-mike": "diagnosis-v2" } });
+    return NextResponse.json({ reply }, { headers: { "x-mike": "diagnosis-v2", ...corsHeaders(req) } });
   } catch (error) {
     console.error("Mike chat error:", error);
-    return NextResponse.json({ reply: "Something went wrong on my end. Call me at (865) 290-5485 and I'll help you out." });
+    return NextResponse.json(
+      { reply: "Something went wrong on my end. Call me at (865) 290-5485 and I'll help you out." },
+      { headers: corsHeaders(req) },
+    );
   }
 }
