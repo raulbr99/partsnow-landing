@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     url: `${BASE}/guides`,
     type: "website",
-    images: [{ url: `${BASE}/opengraph-image` }],
+    // Image comes from app/guides/opengraph-image.tsx (file convention).
   },
 };
 
