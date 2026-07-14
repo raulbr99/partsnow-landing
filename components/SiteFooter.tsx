@@ -32,6 +32,19 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="wrap">
+        <div className="fbadges">
+          <a href="https://twelve.tools/" target="_blank" rel="noopener">
+            <img src="https://twelve.tools/badge3-dark.svg" alt="Featured on Twelve Tools" width={200} height={54} />
+          </a>
+          <a href="https://turbo0.com/item/partsnowai" target="_blank" rel="noopener noreferrer">
+            <img src="https://img.turbo0.com/badge-listed-dark.svg" alt="Listed on Turbo0" style={{ height: 54, width: "auto" }} />
+          </a>
+          <a href="https://fazier.com/" target="_blank" rel="noopener">
+            <img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=dark" width={120} alt="Fazier badge" />
+          </a>
+        </div>
+      </div>
+      <div className="wrap">
         <div className="fbottom">
           <span>© 2026 PartsNow.ai · An agentic commerce platform by talkrev.ai</span>
           <span>Knoxville, TN</span>
