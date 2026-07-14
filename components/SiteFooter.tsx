@@ -42,6 +42,9 @@ export function SiteFooter() {
           <a href="https://fazier.com/" target="_blank" rel="noopener">
             <img src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=dark" width={120} alt="Fazier badge" />
           </a>
+          <a href="https://startupfa.me/s/agent.partsnow.ai-763?utm_source=agent.partsnow.ai" target="_blank" rel="noopener">
+            <img src="https://startupfa.me/badges/featured/dark-small.webp" alt="PartsNow.ai - Featured on Startup Fame" width={224} height={36} />
+          </a>
         </div>
       </div>
       <div className="wrap">
