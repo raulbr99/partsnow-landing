@@ -5,6 +5,9 @@ import { redirect } from "next/navigation";
 
 const APP_STORE_URL = "https://apps.apple.com/app/id6779235305";
 const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=ai.partsnow.app";
+// Native store schemes: open the store app directly without rendering the web listing.
+const APP_STORE_SCHEME = "itms-apps://apps.apple.com/app/id6779235305";
+const PLAY_STORE_SCHEME = "market://details?id=ai.partsnow.app";
 
 export const metadata: Metadata = {
   title: "Get the PartsNow App",
@@ -17,8 +20,8 @@ export const metadata: Metadata = {
 
 export default async function AppDownloadPage() {
   const ua = (await headers()).get("user-agent") ?? "";
-  if (/iPhone|iPad|iPod/i.test(ua)) redirect(APP_STORE_URL);
-  if (/Android/i.test(ua)) redirect(PLAY_STORE_URL);
+  if (/iPhone|iPad|iPod/i.test(ua)) redirect(APP_STORE_SCHEME);
+  if (/Android/i.test(ua)) redirect(PLAY_STORE_SCHEME);
 
   return (
     <main className="coming-soon">
