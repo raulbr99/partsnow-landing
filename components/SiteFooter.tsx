@@ -8,7 +8,7 @@ export function SiteFooter() {
       <div className="wrap">
         <div className="fbrand">
           <Image className="logo" src="/logo-white.svg" alt="PartsNow.ai" width={120} height={28} />
-          <p className="blurb">AI-powered truck and trailer parts. 16,000+ parts from trusted dealers, shipped nationwide. Based in Knoxville, TN.</p>
+          <p className="blurb">AI-powered truck and trailer parts. 50,000+ parts from trusted dealers, shipped nationwide. Based in Knoxville, TN.</p>
           <p className="flinks">
             <Link href="/trucks">US Truck Encyclopedia</Link> · <Link href="/guides">Truck Guides</Link> · <a href="https://partsnow.ai" target="_blank" rel="noopener">Browse the catalogue</a>
           </p>
