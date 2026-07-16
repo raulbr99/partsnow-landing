@@ -19,7 +19,7 @@ const jsonLd = {
       url: "https://partsnow.ai",
       logo: `${SITE_URL}/PartsNow-Icon.png`,
       description:
-        "AI-powered heavy-duty truck and trailer parts platform. 50,000+ new and OEM parts from trusted dealers, shipped nationwide from Knoxville, TN.",
+        "AI-powered heavy-duty truck and trailer parts platform. 16,000+ new and OEM parts from trusted dealers, shipped nationwide from Knoxville, TN.",
       sameAs: [
         "https://partsnow.ai",
         "https://www.linkedin.com/company/partsnow-ai",

@@ -101,7 +101,7 @@ export function LandingPage() {
         <div className="wrap">
           <div className="problem-inner">
             <h2>Stop searching.<br />Just describe it.</h2>
-            <p>The truck&apos;s making a sound it didn&apos;t make yesterday. A light&apos;s on. Something&apos;s leaking and you&apos;re not sure from where. You don&apos;t need a catalogue with 50,000 parts to scroll through. You need a straight answer: <strong>what&apos;s wrong, which part fixes it, and what to do first.</strong></p>
+            <p>The truck&apos;s making a sound it didn&apos;t make yesterday. A light&apos;s on. Something&apos;s leaking and you&apos;re not sure from where. You don&apos;t need a catalogue with 16,000 parts to scroll through. You need a straight answer: <strong>what&apos;s wrong, which part fixes it, and what to do first.</strong></p>
             <div className="steve-for-box">
               <span>That&apos;s what Mike is for.</span>
               <span className="down-arrow" aria-hidden="true">
@@ -308,7 +308,7 @@ export function LandingPage() {
             <p className="about-lead"><strong>PartsNow.ai is an AI-powered agentic commerce platform</strong> connecting fleet operators, repair shops, and owner-operators with the parts they need.</p>
           </div>
           <div className="stats">
-            <div className="stat"><div className="n">50,000+</div><div className="l">New &amp; OEM parts</div></div>
+            <div className="stat"><div className="n">16,000+</div><div className="l">New &amp; OEM parts</div></div>
             <div className="stat"><div className="n">93</div><div className="l">Trusted dealers</div></div>
             <div className="stat"><div className="n">Knoxville, TN</div><div className="l">Nationwide shipping</div></div>
             <div className="stat"><div className="n">Free</div><div className="l">Local pickup</div></div>
@@ -316,7 +316,7 @@ export function LandingPage() {
           <div className="about-cta">
             <div className="ac-copy">
               <h3>Already know the part?</h3>
-              <p>Browse the full catalogue — 50,000+ new and OEM parts, shipped nationwide with free local pickup in Knoxville.</p>
+              <p>Browse the full catalogue — 16,000+ new and OEM parts, shipped nationwide with free local pickup in Knoxville.</p>
             </div>
             <a className="btn-catalogue-light" href="https://partsnow.ai" target="_blank" rel="noopener">
               Browse the catalogue
