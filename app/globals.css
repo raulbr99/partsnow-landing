@@ -291,8 +291,24 @@ h1, h2, h3, .display { font-family: var(--font-sans); }
 .coming-soon .cs-lead strong { color: var(--white); font-weight: 700; }
 .coming-soon .cs-sub { font-size: 15px; color: rgba(255,255,255,0.6); margin: 0 0 24px; }
 .coming-soon .cs-actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
-.coming-soon .cs-stores { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; justify-content: center; margin-bottom: 32px; }
-.coming-soon .cs-stores img { display: block; }
+.coming-soon .cs-stores { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: center; margin-bottom: 32px; }
+.coming-soon .cs-stores a {
+  display: block;
+  height: 40px;
+  line-height: 0;
+  overflow: hidden;
+}
+.coming-soon .cs-stores img {
+  display: block;
+  height: 40px;
+  width: auto;
+}
+/* Official Play PNG includes large transparent padding — scale + clip so ink matches Apple. */
+.coming-soon .cs-stores a.cs-store-play img {
+  height: 60px;
+  width: auto;
+  margin: -10px -12px;
+}
 .coming-soon .cs-qr { display: inline-flex; flex-direction: column; align-items: center; gap: 10px; }
 .coming-soon .cs-qr img { display: block; border-radius: 12px; background: var(--white); padding: 10px; }
 .coming-soon .cs-qr span { font-size: 13px; color: rgba(255,255,255,0.55); }

@@ -35,20 +35,18 @@ export default async function AppDownloadPage() {
           available on the <strong>App Store</strong> and <strong>Google Play</strong>.
         </p>
         <div className="cs-stores">
-          <a href={APP_STORE_URL} target="_blank" rel="noopener">
+          <a href={APP_STORE_URL} target="_blank" rel="noopener" className="cs-store-apple">
             <img
-              src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us"
+              src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
               alt="Download on the App Store"
               height={40}
             />
           </a>
-          <a href={PLAY_STORE_URL} target="_blank" rel="noopener">
-            {/* Official Play badge includes transparent padding — taller height ≈ same ink as Apple at 40. */}
+          <a href={PLAY_STORE_URL} target="_blank" rel="noopener" className="cs-store-play">
             <img
               src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
               alt="Get it on Google Play"
-              height={58}
-              style={{ margin: "-9px 0" }}
+              height={60}
             />
           </a>
         </div>
