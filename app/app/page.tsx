@@ -39,14 +39,16 @@ export default async function AppDownloadPage() {
             <img
               src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us"
               alt="Download on the App Store"
-              height={54}
+              height={40}
             />
           </a>
           <a href={PLAY_STORE_URL} target="_blank" rel="noopener">
+            {/* Official Play badge includes transparent padding — taller height ≈ same ink as Apple at 40. */}
             <img
               src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
               alt="Get it on Google Play"
-              height={80}
+              height={58}
+              style={{ margin: "-9px 0" }}
             />
           </a>
         </div>
