@@ -141,25 +141,25 @@ export default function ModelDetail({ model }: { model: FlatModel }) {
         </div>
       )}
 
-      {/* CTAs */}
-      <div className="px-6 sm:px-8 pb-7 pt-1 flex flex-col sm:flex-row gap-3 border-t border-border/60">
+      {/* CTAs — Ask Mike primary; Find parts + Call secondary outline */}
+      <div className="px-6 sm:px-8 pb-7 pt-5 flex flex-col sm:flex-row gap-3 border-t border-border/60">
         <AskMikeButton
           make={model.make}
           model={model.model}
           label="Ask Mike about this truck"
-          className="flex-1 inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-dark text-white text-sm font-bold px-5 py-3 rounded-xl transition-colors mt-4"
+          className="flex-1 inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-dark text-white text-sm font-bold px-5 py-3 rounded-xl transition-colors"
         />
         <a
           href={partsHref(model.make, model.model)}
           target="_blank"
           rel="noopener"
-          className="flex-1 inline-flex items-center justify-center gap-2 bg-secondary hover:bg-secondary-light text-white text-sm font-bold px-5 py-3 rounded-xl transition-colors sm:mt-4"
+          className="flex-1 inline-flex items-center justify-center gap-2 bg-card border border-border text-foreground hover:border-primary/50 hover:text-primary text-sm font-bold px-5 py-3 rounded-xl transition-colors"
         >
           <Wrench className="w-4 h-4" /> Find parts at PartsNow.ai
         </a>
         <a
           href="tel:+18652905485"
-          className="flex-1 inline-flex items-center justify-center gap-2 bg-card border border-border text-foreground hover:border-primary/50 hover:text-primary text-sm font-bold px-5 py-3 rounded-xl transition-colors sm:mt-4"
+          className="flex-1 inline-flex items-center justify-center gap-2 bg-card border border-border text-foreground hover:border-primary/50 hover:text-primary text-sm font-bold px-5 py-3 rounded-xl transition-colors"
         >
           Call or text (865) 290-5485
         </a>

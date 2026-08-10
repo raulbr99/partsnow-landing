@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root {
   --navy-950: #0f2236;
@@ -48,9 +47,10 @@
   --color-border: var(--gray-200);
   --color-border-strong: var(--gray-300);
   --gradient-hero: linear-gradient(135deg, var(--navy-900) 0%, var(--teal-600) 100%);
-  --font-sans: 'Montserrat', sans-serif;
-  --font-widget: 'Inter', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  /* next/font vars from layout.tsx — Google Fonts @import breaks after Tailwind expand */
+  --font-sans: var(--font-montserrat), sans-serif;
+  --font-widget: var(--font-inter), sans-serif;
+  --font-mono: var(--font-jetbrains), monospace;
   --text-xs: 0.6875rem;
   --text-sm: 0.75rem;
   --text-base: 0.875rem;
