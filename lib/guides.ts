@@ -40,7 +40,20 @@ export interface GuideIndexEntry {
   postUrl: string; // public blob URL of the full guide JSON
 }
 
+/** A topic queued for the generator to write next. Seeded by the daily routine
+ * (demand-driven picks) or by hand from superadmin. Only `title` is required;
+ * the generator fills the rest with sensible defaults. */
+export interface BacklogTopic {
+  title: string;
+  category?: string;
+  angle?: string;
+  rag_query?: string;
+  image_prompt?: string;
+  truck?: { make: string; model: string } | null;
+}
+
 const INDEX_PATH = "guides/index.json";
+const BACKLOG_PATH = "guides/backlog.json";
 
 /** All published guides, newest first. Empty on any storage error.
  * Pages must use the default (ISR-friendly) mode; only the always-dynamic
@@ -57,6 +70,38 @@ export async function getGuideIndex(fresh = false): Promise<GuideIndexEntry[]> {
   } catch {
     return [];
   }
+}
+
+/** Read the topic backlog (may be empty). Fresh read — callers are the always
+ * dynamic generator route only. Empty on any storage error. */
+export async function getBacklog(): Promise<BacklogTopic[]> {
+  try {
+    const { blobs } = await list({ prefix: BACKLOG_PATH, limit: 1 });
+    if (blobs.length === 0) return [];
+    const res = await fetch(blobs[0].url, { cache: "no-store" });
+    if (!res.ok) return [];
+    const items = (await res.json()) as BacklogTopic[];
+    return Array.isArray(items) ? items.filter((t) => t?.title) : [];
+  } catch {
+    return [];
+  }
+}
+
+/** Pop the first backlog topic and persist the remainder BEFORE the caller
+ * generates, so a mid-run failure can't re-serve (and double-publish) the same
+ * topic. Returns null when the backlog is empty or unreadable. */
+export async function popBacklogTopic(): Promise<BacklogTopic | null> {
+  const items = await getBacklog();
+  if (items.length === 0) return null;
+  const [next, ...rest] = items;
+  await put(BACKLOG_PATH, JSON.stringify(rest), {
+    access: "public",
+    contentType: "application/json",
+    addRandomSuffix: false,
+    allowOverwrite: true,
+    cacheControlMaxAge: 60,
+  });
+  return next;
 }
 
 export async function getGuide(slug: string): Promise<Guide | null> {
