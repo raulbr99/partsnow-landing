@@ -879,8 +879,79 @@ h1, h2, h3, .display { font-family: var(--font-sans); }
   border: 0; border-radius: 12px; padding: 10px 16px; background: var(--teal-500); color: #fff; font-weight: 700; cursor: pointer;
 }
 .mike-simli-form button:disabled { opacity: 0.5; cursor: not-allowed; }
-.mike-simli-end {
-  border: 0; background: transparent; color: var(--gray-600); font-size: 13px; text-decoration: underline; cursor: pointer;
+.mike-simli-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+.mike-simli-actions--hero {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 4px 0 2px;
+}
+.mike-simli-actions--meet {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+.mike-simli-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: var(--radius-pill);
+  padding: 7px 12px;
+  font-family: var(--font-widget);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+}
+.mike-simli-chip svg { width: 12px; height: 12px; flex-shrink: 0; }
+.mike-simli-chip--stop {
+  border: 1px solid rgba(211, 61, 68, 0.6);
+  background: rgba(211, 61, 68, 0.28);
+  color: #fff;
+}
+.mike-simli-chip--stop:hover {
+  background: rgba(211, 61, 68, 0.42);
+  border-color: #d33d44;
+  transform: translateY(-1px);
+}
+.mike-simli-chip--end {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.88);
+}
+.mike-simli-chip--end:hover {
+  background: rgba(64, 134, 150, 0.28);
+  border-color: var(--teal-400);
+  transform: translateY(-1px);
+}
+.mike-simli-actions--meet .mike-simli-chip--stop {
+  background: #d33d44;
+  border-color: #d33d44;
+  color: #fff;
+}
+.mike-simli-actions--meet .mike-simli-chip--stop:hover {
+  background: #b83238;
+  border-color: #b83238;
+}
+.mike-simli-actions--meet .mike-simli-chip--end {
+  background: var(--white);
+  border-color: var(--gray-300);
+  color: var(--navy-900);
+}
+.mike-simli-actions--meet .mike-simli-chip--end:hover {
+  background: var(--gray-100);
+  border-color: var(--teal-500);
 }
 .mike-simli-status { font-size: 13px; color: var(--gray-700); text-align: center; max-width: 340px; margin: 0; white-space: normal; overflow-wrap: anywhere; }
 .mike-simli-status--hero,

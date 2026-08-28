@@ -4,10 +4,12 @@ export function startWordReveal(
   onUpdate: (visible: string) => void,
   shouldAbort: () => boolean,
   wordMs = 300,
+  onComplete?: () => void,
 ): () => void {
   const words = text.trim().split(/\s+/).filter(Boolean);
   if (!words.length) {
     onUpdate(text);
+    onComplete?.();
     return () => {};
   }
 
@@ -20,6 +22,8 @@ export function startWordReveal(
     onUpdate(words.slice(0, i).join(" "));
     if (i < words.length) {
       timer = setTimeout(step, wordMs);
+    } else {
+      onComplete?.();
     }
   };
 

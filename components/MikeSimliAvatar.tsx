@@ -20,8 +20,11 @@ export type MikeSimliHandle = {
   isActive: () => boolean;
   isReady: () => boolean;
   isThinking: () => boolean;
+  isSpeaking: () => boolean;
   ask: (question: string) => Promise<void>;
   activate: () => Promise<void>;
+  /** Stop current speech; keeps session open. */
+  interrupt: () => void;
   stop: () => Promise<void>;
 };
 
@@ -71,6 +74,7 @@ export const MikeSimliAvatar = forwardRef<MikeSimliHandle, Props>(function MikeS
   const [connecting, setConnecting] = useState(false);
   const [input, setInput] = useState("");
   const [showPoster, setShowPoster] = useState(true);
+  const [speaking, setSpeaking] = useState(false);
 
   const language = locale === "es" ? "es" : "en";
   const ready = active || textOnly;
@@ -101,14 +105,20 @@ export const MikeSimliAvatar = forwardRef<MikeSimliHandle, Props>(function MikeS
     speakGenRef.current += 1;
     stopReveal();
     clientRef.current?.ClearBuffer();
+    setSpeaking(false);
   }, [stopReveal]);
+
+  const interruptSpeech = useCallback(() => {
+    cancelSpeech();
+    setStatusText(null);
+  }, [cancelSpeech, setStatusText]);
 
   const runSpeech = useCallback(
     (text: string) => {
       const client = clientRef.current;
-      if (!client || textOnly) return;
+      if (!client || textOnly) return Promise.resolve();
       const gen = speakGenRef.current;
-      void speakViaTts(client, stripForSpeech(text), language, () => gen !== speakGenRef.current).catch(
+      return speakViaTts(client, stripForSpeech(text), language, () => gen !== speakGenRef.current).catch(
         () => undefined,
       );
     },
@@ -126,11 +136,31 @@ export const MikeSimliAvatar = forwardRef<MikeSimliHandle, Props>(function MikeS
       }
 
       const gen = speakGenRef.current;
+      let ttsDone = false;
+      let captionDone = false;
+      const maybeFinishSpeaking = () => {
+        if (gen !== speakGenRef.current) return;
+        if (ttsDone && captionDone) setSpeaking(false);
+      };
+
+      setSpeaking(true);
       stopReveal();
-      stopRevealRef.current = startWordReveal(clean, setStatusText, () => gen !== speakGenRef.current);
-      runSpeech(clean);
+      stopRevealRef.current = startWordReveal(
+        clean,
+        setStatusText,
+        () => gen !== speakGenRef.current,
+        300,
+        () => {
+          captionDone = true;
+          maybeFinishSpeaking();
+        },
+      );
+      void runSpeech(clean).finally(() => {
+        ttsDone = true;
+        maybeFinishSpeaking();
+      });
     },
-    [runSpeech, stopReveal, textOnly],
+    [runSpeech, setStatusText, stopReveal, textOnly],
   );
 
   const stopSession = useCallback(async () => {
@@ -275,11 +305,13 @@ export const MikeSimliAvatar = forwardRef<MikeSimliHandle, Props>(function MikeS
       isActive: () => active,
       isReady: () => ready,
       isThinking: () => thinking,
+      isSpeaking: () => speaking,
       ask,
       activate,
+      interrupt: interruptSpeech,
       stop: stopSession,
     }),
-    [active, activate, ask, ready, stopSession, thinking],
+    [active, activate, ask, interruptSpeech, ready, speaking, stopSession, thinking],
   );
 
   useEffect(() => {
@@ -372,6 +404,25 @@ export const MikeSimliAvatar = forwardRef<MikeSimliHandle, Props>(function MikeS
         )}
       </div>
 
+      {isHero && active && (
+        <div className="mike-simli-actions mike-simli-actions--hero">
+          {speaking && (
+            <button type="button" className="mike-simli-chip mike-simli-chip--stop" onClick={interruptSpeech}>
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                <rect x="7" y="7" width="10" height="10" rx="2" />
+              </svg>
+              {locale === "es" ? "Parar" : "Stop"}
+            </button>
+          )}
+          <button type="button" className="mike-simli-chip mike-simli-chip--end" onClick={() => void stopSession()}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden>
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+            {locale === "es" ? "Cerrar" : "End"}
+          </button>
+        </div>
+      )}
+
       {!isHero && !ready && (
         <button
           type="button"
@@ -403,9 +454,22 @@ export const MikeSimliAvatar = forwardRef<MikeSimliHandle, Props>(function MikeS
             </button>
           </form>
           {active && (
-            <button type="button" className="mike-simli-end" onClick={() => void stopSession()}>
-              End
-            </button>
+            <div className="mike-simli-actions mike-simli-actions--meet">
+              {speaking && (
+                <button type="button" className="mike-simli-chip mike-simli-chip--stop" onClick={interruptSpeech}>
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                    <rect x="7" y="7" width="10" height="10" rx="2" />
+                  </svg>
+                  {locale === "es" ? "Parar" : "Stop"}
+                </button>
+              )}
+              <button type="button" className="mike-simli-chip mike-simli-chip--end" onClick={() => void stopSession()}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden>
+                  <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+                {locale === "es" ? "Cerrar" : "End"}
+              </button>
+            </div>
           )}
         </>
       )}
