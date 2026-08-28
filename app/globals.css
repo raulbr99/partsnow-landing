@@ -513,7 +513,11 @@ h1, h2, h3, .display { font-family: var(--font-sans); }
 }
 
 /* Hero feature slider (agent.partsnow.ai) */
-.hero-slider { position: relative; z-index: 1; }
+.hero-slider {
+  position: relative;
+  z-index: 1;
+  min-height: 100%;
+}
 .hero-slider-track-wrap { overflow: hidden; }
 .hero-slider-track { display: flex; align-items: stretch; transition: transform 500ms ease; }
 @media (prefers-reduced-motion: reduce) { .hero-slider-track { transition: none; } }
