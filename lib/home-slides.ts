@@ -15,16 +15,21 @@ export interface AgentFeatureSlide {
   bullets: string[];
 }
 
-type Row = {
+export type AgentSlideRow = {
   id: string;
   href: string;
   photo: string;
   show_call: boolean;
   eyebrow_en: string;
+  eyebrow_es: string;
   title_en: string;
+  title_es: string;
   description_en: string;
+  description_es: string;
   cta_en: string;
+  cta_es: string;
   bullets_en: string[] | null;
+  bullets_es: string[] | null;
 };
 
 function anonClient() {
@@ -36,12 +41,14 @@ function anonClient() {
   });
 }
 
-async function fetchActiveAgentRows(): Promise<Row[]> {
+async function fetchActiveAgentRows(): Promise<AgentSlideRow[]> {
   const sb = anonClient();
   if (!sb) return [];
   const { data, error } = await sb
     .from("home_slides")
-    .select("id, href, photo, show_call, eyebrow_en, title_en, description_en, cta_en, bullets_en")
+    .select(
+      "id, href, photo, show_call, eyebrow_en, eyebrow_es, title_en, title_es, description_en, description_es, cta_en, cta_es, bullets_en, bullets_es",
+    )
     .eq("active", true)
     .eq("site", "agent")
     .order("sort_order", { ascending: true });
@@ -49,7 +56,7 @@ async function fetchActiveAgentRows(): Promise<Row[]> {
     console.error("[home-slides]", error.message);
     return [];
   }
-  return (data as Row[]) ?? [];
+  return (data as AgentSlideRow[]) ?? [];
 }
 
 export const getActiveAgentHomeSlides = unstable_cache(
@@ -58,16 +65,25 @@ export const getActiveAgentHomeSlides = unstable_cache(
   { revalidate: 60, tags: [HOME_SLIDES_CACHE_TAG] },
 );
 
-export function mapAgentSlides(rows: Row[]): AgentFeatureSlide[] {
+export function mapAgentSlidesForLocale(
+  rows: AgentSlideRow[],
+  locale: "en" | "es",
+): AgentFeatureSlide[] {
+  const es = locale === "es";
   return rows.map((r) => ({
     key: r.id,
     href: r.href,
     photo: r.photo,
     showCall: r.show_call,
-    eyebrow: r.eyebrow_en,
-    title: r.title_en,
-    description: r.description_en,
-    cta: r.cta_en,
-    bullets: r.bullets_en ?? [],
+    eyebrow: es ? r.eyebrow_es : r.eyebrow_en,
+    title: es ? r.title_es : r.title_en,
+    description: es ? r.description_es : r.description_en,
+    cta: es ? r.cta_es : r.cta_en,
+    bullets: (es ? r.bullets_es : r.bullets_en) ?? [],
   }));
+}
+
+/** @deprecated Prefer passing rows + mapAgentSlidesForLocale client-side */
+export function mapAgentSlides(rows: AgentSlideRow[]): AgentFeatureSlide[] {
+  return mapAgentSlidesForLocale(rows, "en");
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { FAQ_ITEMS } from "@/app/faq-data";
@@ -9,7 +9,8 @@ import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 import { HeroFeatureSlider } from "@/components/HeroFeatureSlider";
 import { AgentFeatureSlide } from "@/components/AgentFeatureSlide";
-import type { AgentFeatureSlide as AgentSlide } from "@/lib/home-slides";
+import { mapAgentSlidesForLocale, type AgentSlideRow } from "@/lib/home-slides";
+import { useBrowserLocale, setSiteLocale } from "@/lib/use-browser-locale";
 import { MIKE_SEEDS } from "@/lib/resolve-slide-href";
 
 const DEMO_VIDEO = "https://hsgoueam2pjhncqb.public.blob.vercel-storage.com/mike-demo.mp4";
@@ -18,7 +19,12 @@ const DEMO_VIDEO = "https://hsgoueam2pjhncqb.public.blob.vercel-storage.com/mike
 const GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=ai.partsnow.app";
 const APP_STORE_URL = "https://apps.apple.com/app/id6779235305";
 
-export function LandingPage({ featureSlides = [] }: { featureSlides?: AgentSlide[] }) {
+export function LandingPage({ featureSlideRows = [] }: { featureSlideRows?: AgentSlideRow[] }) {
+  const locale = useBrowserLocale();
+  const featureSlides = useMemo(
+    () => mapAgentSlidesForLocale(featureSlideRows, locale),
+    [featureSlideRows, locale],
+  );
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
   const [heroInput, setHeroInput] = useState("");
   const [ctaInput, setCtaInput] = useState("");
@@ -76,7 +82,13 @@ export function LandingPage({ featureSlides = [] }: { featureSlides?: AgentSlide
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10v4M11 10v4M15 10l2 4M17 10l-2 4"/></svg>
             Enter a VIN
           </button>
-          <button className="qchip qchip-es" onClick={() => openMikeChat(MIKE_SEEDS.es)}>
+          <button
+            className="qchip qchip-es"
+            onClick={() => {
+              setSiteLocale("es");
+              openMikeChat(MIKE_SEEDS.es);
+            }}
+          >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
             En español
           </button>
@@ -98,7 +110,7 @@ export function LandingPage({ featureSlides = [] }: { featureSlides?: AgentSlide
           {[
             heroMainSlide,
             ...featureSlides.map((slide) => (
-              <AgentFeatureSlide key={slide.key} slide={slide} />
+              <AgentFeatureSlide key={slide.key} slide={slide} locale={locale} />
             )),
           ]}
         </HeroFeatureSlider>

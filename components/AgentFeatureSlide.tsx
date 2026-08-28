@@ -42,7 +42,13 @@ function SlideCta({ href, label }: { href: string; label: string }) {
   );
 }
 
-export function AgentFeatureSlide({ slide }: { slide: AgentFeatureSlide }) {
+export function AgentFeatureSlide({
+  slide,
+  locale = "en",
+}: {
+  slide: AgentFeatureSlide;
+  locale?: "en" | "es";
+}) {
   return (
     <div className="hero-feature-slide">
       <div className="wrap hero-feature-inner">
@@ -57,7 +63,7 @@ export function AgentFeatureSlide({ slide }: { slide: AgentFeatureSlide }) {
               <SlideCta href={slide.href} label={slide.cta} />
               {slide.showCall && (
                 <a className="btn btn-call btn-lg" href="tel:+18652905485">
-                  Call Mike · (865) 290-5485
+                  {locale === "es" ? "Llamar a Mike · (865) 290-5485" : "Call Mike · (865) 290-5485"}
                 </a>
               )}
             </div>
