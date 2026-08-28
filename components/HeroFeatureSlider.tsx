@@ -74,10 +74,10 @@ export function HeroFeatureSlider({
 
       {count > 1 && (
         <>
-          <div className="group/edge pointer-events-none absolute top-0 bottom-12 left-0 z-10 hidden w-[min(24%,11rem)] md:block">
+          <div className="group/edge pointer-events-none absolute inset-y-0 left-0 z-10 hidden w-[min(24%,11rem)] md:block">
             <span
               aria-hidden
-              className="absolute inset-y-0 -left-[18%] right-[-22%] opacity-0 transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
+              className="absolute -inset-y-[12%] -left-[18%] right-[-22%] opacity-0 transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
               style={{
                 background:
                   "linear-gradient(125deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.42) 28%, rgba(0,0,0,0.14) 55%, transparent 78%)",
@@ -96,10 +96,10 @@ export function HeroFeatureSlider({
               />
             </button>
           </div>
-          <div className="group/edge pointer-events-none absolute top-0 bottom-12 right-0 z-10 hidden w-[min(24%,11rem)] md:block">
+          <div className="group/edge pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-[min(24%,11rem)] md:block">
             <span
               aria-hidden
-              className="absolute inset-y-0 -right-[18%] left-[-22%] opacity-0 transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
+              className="absolute -inset-y-[12%] -right-[18%] left-[-22%] opacity-0 transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
               style={{
                 background:
                   "linear-gradient(305deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.42) 28%, rgba(0,0,0,0.14) 55%, transparent 78%)",
