@@ -1,34 +1,21 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import type { AgentFeatureSlide } from "@/lib/home-slides";
 import { useShouldLoadSlidePhoto, useHeroSliderActiveIndex, useHeroSliderSlideIndex } from "@/lib/hero-slider-context";
 import { activateSlideHref } from "@/lib/resolve-slide-href";
 
 function SlidePhoto({ src, priority }: { src: string; priority?: boolean }) {
-  if (/^https?:\/\//i.test(src)) {
-    return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src={src}
-        alt=""
-        className="hero-feature-photo-img hero-feature-photo-img--absolute"
-        loading={priority ? "eager" : "lazy"}
-        decoding="async"
-        fetchPriority={priority ? "high" : "low"}
-      />
-    );
-  }
   return (
-    <Image
+    // Pre-optimized static assets (WebP in /public) — serve directly; skip _next/image.
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
       src={src}
       alt=""
-      fill
-      className="hero-feature-photo-img"
-      sizes="(max-width: 900px) 100vw, 560px"
-      priority={priority}
-      loading={priority ? undefined : "lazy"}
+      className="hero-feature-photo-img hero-feature-photo-img--absolute"
+      loading={priority ? "eager" : "lazy"}
+      decoding="async"
+      fetchPriority={priority ? "high" : "low"}
     />
   );
 }
