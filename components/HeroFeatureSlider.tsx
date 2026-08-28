@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const SWIPE_THRESHOLD_PX = 48;
+const EDGE_HOVER_RATIO = 0.4;
 
 const EDGE_WASH_LEFT: CSSProperties = {
   background:
@@ -17,6 +18,8 @@ const EDGE_WASH_RIGHT: CSSProperties = {
   filter: "blur(22px)",
 };
 
+type HoverEdge = "left" | "right" | null;
+
 export function HeroFeatureSlider({
   children,
   autoAdvanceMs = 7000,
@@ -28,12 +31,27 @@ export function HeroFeatureSlider({
   const count = slides.length;
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [hoverEdge, setHoverEdge] = useState<HoverEdge>(null);
   const stoppedRef = useRef(false);
   const touchStartX = useRef<number | null>(null);
+  const sliderRef = useRef<HTMLDivElement>(null);
 
   function goTo(next: number, manual = false) {
     if (manual) stoppedRef.current = true;
     setIndex(((next % count) + count) % count);
+  }
+
+  function updateHoverEdge(clientX: number) {
+    const el = sliderRef.current;
+    if (!el || !window.matchMedia("(min-width: 768px)").matches) {
+      setHoverEdge(null);
+      return;
+    }
+    const { left, width } = el.getBoundingClientRect();
+    const ratio = (clientX - left) / width;
+    if (ratio <= EDGE_HOVER_RATIO) setHoverEdge("left");
+    else if (ratio >= 1 - EDGE_HOVER_RATIO) setHoverEdge("right");
+    else setHoverEdge(null);
   }
 
   useEffect(() => {
@@ -47,14 +65,21 @@ export function HeroFeatureSlider({
 
   if (count === 0) return null;
 
+  const edgeVisible = (side: HoverEdge) => hoverEdge === side;
+
   return (
     <div
+      ref={sliderRef}
       role="region"
       aria-roledescription="carousel"
       aria-label="Feature highlights"
       className="hero-slider"
       onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
+      onMouseLeave={() => {
+        setPaused(false);
+        setHoverEdge(null);
+      }}
+      onMouseMove={(e) => updateHoverEdge(e.clientX)}
       onFocusCapture={() => setPaused(true)}
       onBlurCapture={() => setPaused(false)}
       onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
@@ -86,41 +111,50 @@ export function HeroFeatureSlider({
 
       {count > 1 && (
         <>
-          <div className="group/edge absolute inset-y-0 left-0 z-20 hidden w-[40%] md:block">
+          {/* Visual wash only — pointer-events-none so slide CTAs stay clickable (partsnow.ai). */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 z-20 hidden w-[40%] md:block">
             <span
               aria-hidden
-              className="hero-slider-edge-wash pointer-events-none absolute inset-y-0 -left-[10%] right-[-22%] opacity-0 transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
+              className={`hero-slider-edge-wash absolute inset-y-0 -left-[10%] right-[-22%] transition-opacity duration-300 ${
+                edgeVisible("left") ? "opacity-100" : "opacity-0"
+              }`}
               style={EDGE_WASH_LEFT}
             />
             <button
               type="button"
               aria-label="Previous slide"
               onClick={() => goTo(index - 1, true)}
-              className="absolute inset-0 flex w-full cursor-pointer items-center justify-start border-0 bg-transparent p-0 pl-4"
+              className={`pointer-events-auto absolute inset-y-0 left-0 flex w-14 cursor-pointer items-center justify-center border-0 bg-transparent p-0 transition-opacity duration-300 ${
+                edgeVisible("left") ? "opacity-100" : "opacity-0"
+              }`}
             >
               <ChevronLeft
                 aria-hidden
                 strokeWidth={2.5}
-                className="h-8 w-8 text-white opacity-0 drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
+                className="h-8 w-8 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]"
               />
             </button>
           </div>
-          <div className="group/edge absolute inset-y-0 right-0 z-20 hidden w-[40%] md:block">
+          <div className="pointer-events-none absolute inset-y-0 right-0 z-20 hidden w-[40%] md:block">
             <span
               aria-hidden
-              className="hero-slider-edge-wash pointer-events-none absolute inset-y-0 -right-[10%] left-[-22%] opacity-0 transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
+              className={`hero-slider-edge-wash absolute inset-y-0 -right-[10%] left-[-22%] transition-opacity duration-300 ${
+                edgeVisible("right") ? "opacity-100" : "opacity-0"
+              }`}
               style={EDGE_WASH_RIGHT}
             />
             <button
               type="button"
               aria-label="Next slide"
               onClick={() => goTo(index + 1, true)}
-              className="absolute inset-0 flex w-full cursor-pointer items-center justify-end border-0 bg-transparent p-0 pr-4"
+              className={`pointer-events-auto absolute inset-y-0 right-0 flex w-14 cursor-pointer items-center justify-center border-0 bg-transparent p-0 transition-opacity duration-300 ${
+                edgeVisible("right") ? "opacity-100" : "opacity-0"
+              }`}
             >
               <ChevronRight
                 aria-hidden
                 strokeWidth={2.5}
-                className="h-8 w-8 text-white opacity-0 drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
+                className="h-8 w-8 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]"
               />
             </button>
           </div>
