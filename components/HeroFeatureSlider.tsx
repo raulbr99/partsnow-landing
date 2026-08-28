@@ -27,6 +27,7 @@ type HoverEdge = "left" | "right" | null;
 /** Match --edge-wash in globals.css */
 function edgeHoverRatio(): number {
   if (typeof window === "undefined") return 0.26;
+  if (window.matchMedia("(min-width: 1536px)").matches) return 0.44;
   if (window.matchMedia("(min-width: 1280px)").matches) return 0.4;
   if (window.matchMedia("(min-width: 1024px)").matches) return 0.34;
   if (window.matchMedia("(min-width: 768px)").matches) return 0.26;
@@ -164,7 +165,7 @@ export function HeroFeatureSlider({
                 <ChevronLeft
                   aria-hidden
                   strokeWidth={2.5}
-                  className="h-8 w-8 shrink-0 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]"
+                  className="hero-slider-edge-icon"
                 />
               </button>
             </div>
@@ -183,7 +184,7 @@ export function HeroFeatureSlider({
                 <ChevronRight
                   aria-hidden
                   strokeWidth={2.5}
-                  className="h-8 w-8 shrink-0 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]"
+                  className="hero-slider-edge-icon"
                 />
               </button>
             </div>

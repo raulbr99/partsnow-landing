@@ -520,17 +520,31 @@ h1, h2, h3, .display { font-family: var(--font-sans); }
   /* Edge hover + click strips (md+); tuned per breakpoint */
   --edge-wash: 26%;
   --edge-click: 20%;
+  --edge-icon: 2rem;
+  --edge-hit-padding: 1rem;
 }
 @media (min-width: 1024px) {
   .hero-slider {
     --edge-wash: 34%;
     --edge-click: 28%;
+    --edge-icon: 2.75rem;
+    --edge-hit-padding: 1.35rem;
   }
 }
 @media (min-width: 1280px) {
   .hero-slider {
     --edge-wash: 40%;
     --edge-click: 32%;
+    --edge-icon: 3.25rem;
+    --edge-hit-padding: 1.75rem;
+  }
+}
+@media (min-width: 1536px) {
+  .hero-slider {
+    --edge-wash: 44%;
+    --edge-click: 36%;
+    --edge-icon: 3.75rem;
+    --edge-hit-padding: 2.25rem;
   }
 }
 .hero-slider-track-wrap { overflow: hidden; }
@@ -597,12 +611,19 @@ h1, h2, h3, .display { font-family: var(--font-sans); }
 .hero-slider-edge--left .hero-slider-edge-hit {
   left: 0;
   justify-content: flex-start;
-  padding-left: 1rem;
+  padding-left: var(--edge-hit-padding);
 }
 .hero-slider-edge--right .hero-slider-edge-hit {
   right: 0;
   justify-content: flex-end;
-  padding-right: 1rem;
+  padding-right: var(--edge-hit-padding);
+}
+.hero-slider-edge-icon {
+  width: var(--edge-icon);
+  height: var(--edge-icon);
+  flex-shrink: 0;
+  color: #fff;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.45));
 }
 
 .hero-feature-slide {

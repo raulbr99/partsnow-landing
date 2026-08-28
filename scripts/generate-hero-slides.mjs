@@ -6,6 +6,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
+import sharp from "sharp";
 
 const __dir = dirname(fileURLToPath(import.meta.url));
 const outDir = join(__dir, "../public/hero-slides");
@@ -37,37 +38,37 @@ function loadKey() {
 
 const SLIDES = [
   {
-    file: "slide-symptom.jpg",
+    file: "slide-symptom.webp",
     prompt:
       "A diesel mechanic in a blue work uniform and cap leaning over an open hood of a heavy-duty semi truck in a well-lit repair shop, inspecting the engine with a focused expression. Grease-stained hands, realistic industrial environment, warm shop lighting mixed with cool daylight from bay doors. Professional commercial photography, realistic, cinematic lighting, shallow depth of field, no text, no logos, no watermark.",
   },
   {
-    file: "slide-photo-part.jpg",
+    file: "slide-photo-part.webp",
     prompt:
       "Close-up of a worn heavy-duty truck brake drum and wheel hub on a lift in a truck repair bay, a mechanic gloved hand holding a smartphone to photograph the damaged part. Sharp detail on metal wear and rust, realistic workshop background softly blurred. Professional commercial photography, realistic, cinematic lighting, no text, no logos, no watermark, no readable phone screen content.",
   },
   {
-    file: "slide-vin.jpg",
+    file: "slide-vin.webp",
     prompt:
       "Close-up of a metal VIN identification plate on the lower corner of a semi truck windshield, shot from inside the cab at a slight angle, dashboard edge visible, natural daylight. Blurred unreadable characters on the plate, realistic fleet truck interior, professional automotive photography, no text, no logos, no watermark.",
   },
   {
-    file: "slide-guides.jpg",
+    file: "slide-guides.webp",
     prompt:
       "A truck driver or diesel mechanic sitting in the cab of a parked semi truck at a rest stop, reading a repair checklist on a tablet, engine bay visible through the open driver door in background. Calm focused mood, golden hour light through windshield, realistic documentary style. Professional commercial photography, blank tablet screen, no text, no logos, no watermark.",
   },
   {
-    file: "slide-encyclopedia.jpg",
+    file: "slide-encyclopedia.webp",
     prompt:
       "Editorial wide shot of three different heavy-duty trucks lined up in a fleet yard, red cab, white cab, and blue cab, shot at three-quarter front angle. Clean asphalt, overcast soft light, realistic North American trucking environment. Professional fleet photography, no readable brand badges, no text, no logos, no watermark.",
   },
   {
-    file: "slide-phone.jpg",
+    file: "slide-phone.webp",
     prompt:
       "A truck driver in a high-visibility vest inside a semi truck cab at night, holding a phone to his ear while parked on a dark highway shoulder, dashboard lights glowing softly. Through the windshield, faint highway lights and rain on glass. Moody cinematic night photography, realistic, empathetic and calm. No readable phone screen, no text, no logos, no watermark.",
   },
   {
-    file: "slide-spanish.jpg",
+    file: "slide-spanish.webp",
     prompt:
       "Professional portrait of a friendly male heavy-duty truck parts specialist in his 40s, short dark hair, wearing a navy blue polo shirt, arms crossed, warm confident smile, neutral dark teal gradient studio background. Head and shoulders, clean corporate portrait style. Realistic, no text, no logos, no watermark.",
   },
@@ -113,9 +114,10 @@ for (const slide of SLIDES) {
     continue;
   }
   console.log(`generating ${slide.file}...`);
-  const buf = await generateOne(slide.prompt);
+  const jpeg = await generateOne(slide.prompt);
+  const buf = await sharp(jpeg).webp({ quality: 82 }).toBuffer();
   writeFileSync(dest, buf);
-  console.log(`  wrote ${dest} (${(buf.length / 1024).toFixed(0)} KB)`);
+  console.log(`  wrote ${dest} (${(buf.length / 1024).toFixed(0)} KB, from ${(jpeg.length / 1024).toFixed(0)} KB jpeg)`);
 }
 
 console.log("done");
