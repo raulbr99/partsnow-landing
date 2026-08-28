@@ -86,10 +86,10 @@ export function HeroFeatureSlider({
 
       {count > 1 && (
         <>
-          <div className="group/edge pointer-events-none absolute inset-y-0 left-0 z-20 hidden w-[min(28%,12rem)] md:block">
+          <div className="group/edge pointer-events-none absolute inset-y-0 left-0 z-20 hidden w-[min(24%,11rem)] md:block">
             <span
               aria-hidden
-              className="hero-slider-edge-wash absolute -inset-y-[20%] -left-[25%] right-[-30%] opacity-0 transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
+              className="hero-slider-edge-wash absolute inset-y-0 -left-[10%] right-[-22%] opacity-0 transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
               style={EDGE_WASH_LEFT}
             />
             <button
@@ -105,10 +105,10 @@ export function HeroFeatureSlider({
               />
             </button>
           </div>
-          <div className="group/edge pointer-events-none absolute inset-y-0 right-0 z-20 hidden w-[min(28%,12rem)] md:block">
+          <div className="group/edge pointer-events-none absolute inset-y-0 right-0 z-20 hidden w-[min(20%,9rem)] md:block">
             <span
               aria-hidden
-              className="hero-slider-edge-wash absolute -inset-y-[20%] -right-[25%] left-[-30%] opacity-0 transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
+              className="hero-slider-edge-wash absolute inset-y-0 -right-[8%] left-[-18%] opacity-0 transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
               style={EDGE_WASH_RIGHT}
             />
             <button
