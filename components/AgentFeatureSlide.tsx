@@ -7,7 +7,7 @@ import { activateSlideHref } from "@/lib/resolve-slide-href";
 
 function SlidePhoto({ src }: { src: string }) {
   if (/^https?:\/\//i.test(src)) {
-    return <img src={src} alt="" className="hero-feature-photo-img" />;
+    return <img src={src} alt="" className="hero-feature-photo-img hero-feature-photo-img--absolute" />;
   }
   return (
     <Image
@@ -48,7 +48,7 @@ export function AgentFeatureSlide({ slide }: { slide: AgentFeatureSlide }) {
       <div className="wrap hero-feature-inner">
         <div className="hero-feature-grid">
           <div className="hero-feature-copy">
-            {slide.eyebrow ? <p className="hero-feature-eyebrow">{slide.eyebrow}</p> : null}
+            {slide.eyebrow ? <span className="hero-feature-eyebrow">{slide.eyebrow}</span> : null}
             <h2 className="hero-feature-title">{slide.title}</h2>
             <p className="hero-feature-desc">{slide.description}</p>
             <div className="hero-feature-actions">
@@ -69,7 +69,10 @@ export function AgentFeatureSlide({ slide }: { slide: AgentFeatureSlide }) {
           </div>
           {slide.photo ? (
             <div className="hero-feature-photo">
-              <SlidePhoto src={slide.photo} />
+              <div className="hero-feature-photo-frame">
+                <SlidePhoto src={slide.photo} />
+                <span className="hero-feature-photo-scrim" aria-hidden />
+              </div>
             </div>
           ) : null}
         </div>
