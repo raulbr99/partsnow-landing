@@ -10,7 +10,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { HeroFeatureSlider } from "@/components/HeroFeatureSlider";
 import { AgentFeatureSlide } from "@/components/AgentFeatureSlide";
 import { mapAgentSlidesForLocale, type AgentSlideRow } from "@/lib/home-slides";
-import { useBrowserLocale, setSiteLocale } from "@/lib/use-browser-locale";
+import { useBrowserLocale, setSiteLocale, type SiteLocale } from "@/lib/use-browser-locale";
 import { MIKE_SEEDS } from "@/lib/resolve-slide-href";
 
 const DEMO_VIDEO = "https://hsgoueam2pjhncqb.public.blob.vercel-storage.com/mike-demo.mp4";
@@ -19,8 +19,14 @@ const DEMO_VIDEO = "https://hsgoueam2pjhncqb.public.blob.vercel-storage.com/mike
 const GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=ai.partsnow.app";
 const APP_STORE_URL = "https://apps.apple.com/app/id6779235305";
 
-export function LandingPage({ featureSlideRows = [] }: { featureSlideRows?: AgentSlideRow[] }) {
-  const locale = useBrowserLocale();
+export function LandingPage({
+  featureSlideRows = [],
+  initialLocale = "en",
+}: {
+  featureSlideRows?: AgentSlideRow[];
+  initialLocale?: SiteLocale;
+}) {
+  const locale = useBrowserLocale(initialLocale);
   const featureSlides = useMemo(
     () => mapAgentSlidesForLocale(featureSlideRows, locale),
     [featureSlideRows, locale],
@@ -52,7 +58,7 @@ export function LandingPage({ featureSlideRows = [] }: { featureSlideRows?: Agen
     <div className="wrap">
       <div className="hero-center">
         <div className="steve-avatar">
-          <Image className="sa-photo" src="/steve-face.png" alt="Mike" width={96} height={96} />
+          <Image className="sa-photo" src="/steve-face.png" alt="Mike" width={96} height={96} priority />
           <span className="sa-spark">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.6 5.2L19 9l-5.4 1.8L12 16l-1.6-5.2L5 9l5.4-1.8z"/></svg>
           </span>
@@ -106,7 +112,9 @@ export function LandingPage({ featureSlideRows = [] }: { featureSlideRows?: Agen
       {/* HERO */}
       <header className="hero hero-chat">
         <div className="globe" />
-        <HeroFeatureSlider>
+        <HeroFeatureSlider
+          slidePhotos={["", ...featureSlides.map((s) => s.photo)]}
+        >
           {[
             heroMainSlide,
             ...featureSlides.map((slide) => (

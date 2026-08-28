@@ -1,6 +1,7 @@
 import { LandingPage } from "@/components/LandingPage";
 import { FAQ_ITEMS } from "@/app/faq-data";
 import { getActiveAgentHomeSlides } from "@/lib/home-slides";
+import { detectInitialLocale } from "@/lib/detect-locale";
 
 const SITE_URL = "https://agent.partsnow.ai";
 
@@ -102,10 +103,15 @@ const jsonLd = {
 
 export default async function Home() {
   const featureSlideRows = await getActiveAgentHomeSlides();
+  const initialLocale = await detectInitialLocale();
+  const nextSlidePhoto = featureSlideRows[0]?.photo;
   return (
     <>
+      {nextSlidePhoto ? (
+        <link rel="preload" as="image" href={nextSlidePhoto} fetchPriority="low" />
+      ) : null}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <LandingPage featureSlideRows={featureSlideRows} />
+      <LandingPage featureSlideRows={featureSlideRows} initialLocale={initialLocale} />
     </>
   );
 }

@@ -3,6 +3,11 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+import {
+  HeroSliderActiveIndexProvider,
+  HeroSliderSlideIndexProvider,
+} from "@/lib/hero-slider-context";
+
 const SWIPE_THRESHOLD_PX = 48;
 const EDGE_HOVER_RATIO = 0.4;
 
@@ -22,9 +27,12 @@ type HoverEdge = "left" | "right" | null;
 
 export function HeroFeatureSlider({
   children,
+  slidePhotos = [],
   autoAdvanceMs = 7000,
 }: {
   children: React.ReactNode[];
+  /** Photo URL per slide index (for preloading neighbors). */
+  slidePhotos?: string[];
   autoAdvanceMs?: number;
 }) {
   const slides = children.filter(Boolean);
@@ -63,11 +71,24 @@ export function HeroFeatureSlider({
     return () => clearInterval(id);
   }, [count, paused, autoAdvanceMs]);
 
+  useEffect(() => {
+    if (!slidePhotos.length) return;
+    const preload = (i: number) => {
+      const src = slidePhotos[((i % count) + count) % count];
+      if (!src) return;
+      const img = new window.Image();
+      img.src = src;
+    };
+    preload(index + 1);
+    preload(index - 1);
+  }, [index, slidePhotos, count]);
+
   if (count === 0) return null;
 
   const edgeVisible = (side: HoverEdge) => hoverEdge === side;
 
   return (
+    <HeroSliderActiveIndexProvider index={index}>
     <div
       ref={sliderRef}
       role="region"
@@ -103,7 +124,7 @@ export function HeroFeatureSlider({
               inert={i !== index}
               className="hero-slider-slide"
             >
-              {slide}
+              <HeroSliderSlideIndexProvider index={i}>{slide}</HeroSliderSlideIndexProvider>
             </div>
           ))}
         </div>
@@ -173,5 +194,6 @@ export function HeroFeatureSlider({
         </>
       )}
     </div>
+    </HeroSliderActiveIndexProvider>
   );
 }

@@ -17,8 +17,8 @@ function readLocale(): SiteLocale {
 }
 
 /** Browser / ?lang= / localStorage preference for bilingual slide copy. */
-export function useBrowserLocale(): SiteLocale {
-  const [locale, setLocale] = useState<SiteLocale>("en");
+export function useBrowserLocale(initial: SiteLocale = "en"): SiteLocale {
+  const [locale, setLocale] = useState<SiteLocale>(initial);
 
   useEffect(() => {
     setLocale(readLocale());

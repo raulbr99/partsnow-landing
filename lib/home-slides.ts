@@ -62,7 +62,7 @@ async function fetchActiveAgentRows(): Promise<AgentSlideRow[]> {
 export const getActiveAgentHomeSlides = unstable_cache(
   fetchActiveAgentRows,
   ["home-slides-active-agent"],
-  { revalidate: 60, tags: [HOME_SLIDES_CACHE_TAG] },
+  { revalidate: 300, tags: [HOME_SLIDES_CACHE_TAG] },
 );
 
 export function mapAgentSlidesForLocale(
