@@ -86,17 +86,17 @@ export function HeroFeatureSlider({
 
       {count > 1 && (
         <>
-          <div className="group/edge pointer-events-none absolute inset-y-0 left-0 z-20 hidden w-[min(32%,14rem)] md:block">
+          <div className="group/edge absolute inset-y-0 left-0 z-20 hidden w-[40%] md:block">
             <span
               aria-hidden
-              className="hero-slider-edge-wash absolute inset-y-0 -left-[10%] right-[-22%] opacity-0 transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
+              className="hero-slider-edge-wash pointer-events-none absolute inset-y-0 -left-[10%] right-[-22%] opacity-0 transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
               style={EDGE_WASH_LEFT}
             />
             <button
               type="button"
               aria-label="Previous slide"
               onClick={() => goTo(index - 1, true)}
-              className="pointer-events-auto absolute inset-y-0 left-0 flex w-14 cursor-pointer items-center justify-center border-0 bg-transparent p-0"
+              className="absolute inset-0 flex w-full cursor-pointer items-center justify-start border-0 bg-transparent p-0 pl-4"
             >
               <ChevronLeft
                 aria-hidden
@@ -105,17 +105,17 @@ export function HeroFeatureSlider({
               />
             </button>
           </div>
-          <div className="group/edge pointer-events-none absolute inset-y-0 right-0 z-20 hidden w-[min(24%,11rem)] md:block">
+          <div className="group/edge absolute inset-y-0 right-0 z-20 hidden w-[40%] md:block">
             <span
               aria-hidden
-              className="hero-slider-edge-wash absolute inset-y-0 -right-[10%] left-[-22%] opacity-0 transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
+              className="hero-slider-edge-wash pointer-events-none absolute inset-y-0 -right-[10%] left-[-22%] opacity-0 transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
               style={EDGE_WASH_RIGHT}
             />
             <button
               type="button"
               aria-label="Next slide"
               onClick={() => goTo(index + 1, true)}
-              className="pointer-events-auto absolute inset-y-0 right-0 flex w-14 cursor-pointer items-center justify-center border-0 bg-transparent p-0"
+              className="absolute inset-0 flex w-full cursor-pointer items-center justify-end border-0 bg-transparent p-0 pr-4"
             >
               <ChevronRight
                 aria-hidden
