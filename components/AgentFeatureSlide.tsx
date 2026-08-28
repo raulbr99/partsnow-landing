@@ -44,33 +44,35 @@ function SlideCta({ href, label }: { href: string; label: string }) {
 
 export function AgentFeatureSlide({ slide }: { slide: AgentFeatureSlide }) {
   return (
-    <div className="wrap hero-feature-slide">
-      <div className="hero-feature-grid">
-        <div className="hero-feature-copy">
-          {slide.eyebrow ? <p className="hero-feature-eyebrow">{slide.eyebrow}</p> : null}
-          <h2 className="hero-feature-title">{slide.title}</h2>
-          <p className="hero-feature-desc">{slide.description}</p>
-          <div className="hero-feature-actions">
-            <SlideCta href={slide.href} label={slide.cta} />
-            {slide.showCall && (
-              <a className="btn btn-call btn-lg" href="tel:+18652905485">
-                Call Mike · (865) 290-5485
-              </a>
+    <div className="hero-feature-slide">
+      <div className="wrap hero-feature-inner">
+        <div className="hero-feature-grid">
+          <div className="hero-feature-copy">
+            {slide.eyebrow ? <p className="hero-feature-eyebrow">{slide.eyebrow}</p> : null}
+            <h2 className="hero-feature-title">{slide.title}</h2>
+            <p className="hero-feature-desc">{slide.description}</p>
+            <div className="hero-feature-actions">
+              <SlideCta href={slide.href} label={slide.cta} />
+              {slide.showCall && (
+                <a className="btn btn-call btn-lg" href="tel:+18652905485">
+                  Call Mike · (865) 290-5485
+                </a>
+              )}
+            </div>
+            {slide.bullets.length > 0 && (
+              <ul className="hero-feature-bullets">
+                {slide.bullets.map((b) => (
+                  <li key={b}>{b}</li>
+                ))}
+              </ul>
             )}
           </div>
-          {slide.bullets.length > 0 && (
-            <ul className="hero-feature-bullets">
-              {slide.bullets.map((b) => (
-                <li key={b}>{b}</li>
-              ))}
-            </ul>
-          )}
+          {slide.photo ? (
+            <div className="hero-feature-photo">
+              <SlidePhoto src={slide.photo} />
+            </div>
+          ) : null}
         </div>
-        {slide.photo ? (
-          <div className="hero-feature-photo">
-            <SlidePhoto src={slide.photo} />
-          </div>
-        ) : null}
       </div>
     </div>
   );
