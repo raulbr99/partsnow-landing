@@ -15,7 +15,7 @@ function SlidePhoto({ src }: { src: string }) {
       alt=""
       fill
       className="hero-feature-photo-img"
-      sizes="(max-width: 900px) 100vw, 420px"
+      sizes="(max-width: 900px) 100vw, 560px"
     />
   );
 }
@@ -23,20 +23,20 @@ function SlidePhoto({ src }: { src: string }) {
 function SlideCta({ href, label }: { href: string; label: string }) {
   if (href.startsWith("chat:")) {
     return (
-      <button type="button" className="btn btn-chat" onClick={() => activateSlideHref(href)}>
+      <button type="button" className="btn btn-chat btn-lg" onClick={() => activateSlideHref(href)}>
         {label}
       </button>
     );
   }
   if (href.startsWith("/")) {
     return (
-      <Link className="btn btn-chat" href={href}>
+      <Link className="btn btn-chat btn-lg" href={href}>
         {label}
       </Link>
     );
   }
   return (
-    <a className="btn btn-chat" href={href}>
+    <a className="btn btn-chat btn-lg" href={href}>
       {label}
     </a>
   );
@@ -53,7 +53,7 @@ export function AgentFeatureSlide({ slide }: { slide: AgentFeatureSlide }) {
           <div className="hero-feature-actions">
             <SlideCta href={slide.href} label={slide.cta} />
             {slide.showCall && (
-              <a className="btn btn-call" href="tel:+18652905485">
+              <a className="btn btn-call btn-lg" href="tel:+18652905485">
                 Call Mike · (865) 290-5485
               </a>
             )}
