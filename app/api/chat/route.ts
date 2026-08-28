@@ -9,6 +9,12 @@ import { NextRequest, NextResponse } from "next/server";
 const RAG_QUERY_URL = "https://rag.talkrev.ai/query";
 const RAG_TENANT = "parts-now-knowledge";
 
+// From env so a retired model is an env var change, not a manual redeploy of
+// this project. OpenRouter dropped openai/gpt-5.3-chat on 2026-08-10 (404 "No
+// endpoints found") and Mike answered every question with the generic error.
+// The fallback must accept image_url — this route forwards user photos.
+const CHAT_MODEL = process.env.MODEL_NAME || "openai/gpt-5.6-terra";
+
 // Browser callers allowed cross-origin (the Ask Mike Space on Hugging Face).
 // Deliberately an allowlist, NOT "*": this endpoint spends OpenRouter credits.
 const ALLOWED_ORIGINS = new Set(["https://partsnow-ask-mike.static.hf.space"]);
@@ -115,7 +121,7 @@ export async function POST(req: NextRequest) {
         "X-Title": "PartsNow Mike",
       },
       body: JSON.stringify({
-        model: "openai/gpt-5.3-chat",
+        model: CHAT_MODEL,
         messages: [
           { role: "system", content: systemContent },
           // Cost guard: only the two most recent messages keep their image

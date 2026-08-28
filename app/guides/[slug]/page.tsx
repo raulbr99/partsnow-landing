@@ -21,13 +21,49 @@ const PARTS_BY_GUIDE_CATEGORY: Record<string, string[]> = {
   "Seasonal & Roadside": ["Electrical & Lighting", "Air System"],
 };
 
+const PART_STOPWORDS = new Set([
+  "the", "for", "and", "how", "your", "you", "with", "guide", "truck", "trucks",
+  "parts", "part", "when", "what", "why", "best", "top", "fix", "fixes", "fixing",
+  "symptoms", "signs", "checklist", "vs", "diagnosis", "replacement", "replace",
+  "common", "class", "heavy", "duty", "semi", "step",
+]);
+
+// Products from this guide's catalog categories, ranked by how well each matches
+// the guide's title keywords — so a DPF guide surfaces DPF parts, not just the
+// first product in the category. Falls back to one-per-group so it never regresses
+// to empty, and this ranking upgrades every existing guide at render time.
 function partsForGuide(guide: Guide): CommonPart[] {
   const cats = PARTS_BY_GUIDE_CATEGORY[guide.category];
   if (!cats) return [];
-  return PART_GROUPS.filter((g) => cats.includes(g.category))
-    .map((g) => g.products[0])
-    .filter(Boolean)
-    .slice(0, 8);
+  const groups = PART_GROUPS.filter((g) => cats.includes(g.category));
+
+  const seen = new Set<string>();
+  const products = groups
+    .flatMap((g) => g.products)
+    .filter((p) => p && !seen.has(p.handle) && seen.add(p.handle));
+
+  const terms = (guide.title.toLowerCase().match(/[a-z0-9]+/g) ?? [])
+    .filter((w) => w.length > 2 && !PART_STOPWORDS.has(w));
+
+  const hits = products
+    .map((p) => {
+      const hay = `${p.title} ${p.sku}`.toLowerCase();
+      return { p, score: terms.reduce((n, t) => n + (hay.includes(t) ? 1 : 0), 0) };
+    })
+    .filter((s) => s.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .map((s) => s.p);
+
+  // Blend topical hits first, then one representative per group as filler.
+  const used = new Set<string>();
+  const merged: CommonPart[] = [];
+  for (const p of [...hits, ...groups.map((g) => g.products[0])]) {
+    if (p && !used.has(p.handle)) {
+      used.add(p.handle);
+      merged.push(p);
+    }
+  }
+  return merged.slice(0, 8);
 }
 
 const BASE = "https://agent.partsnow.ai";
@@ -68,7 +104,13 @@ export default async function GuidePage({ params }: PageProps) {
   if (!guide) notFound();
 
   const canonical = `${BASE}/guides/${guide.slug}`;
-  const related = (await getGuideIndex()).filter((g) => g.slug !== guide.slug).slice(0, 3);
+  // Related by topic: same-category guides first (most relevant), then fill with
+  // the most recent from other categories. Index is already newest-first.
+  const others = (await getGuideIndex()).filter((g) => g.slug !== guide.slug);
+  const related = [
+    ...others.filter((g) => g.category === guide.category),
+    ...others.filter((g) => g.category !== guide.category),
+  ].slice(0, 3);
 
   // Product how-tos get HowTo schema (sections = steps); everything else is an Article.
   const stripMd = (s: string) => s.replace(/[*_`>#-]/g, "").replace(/\s+/g, " ").trim();
