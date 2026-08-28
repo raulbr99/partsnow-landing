@@ -7,13 +7,10 @@ import { FAQ_ITEMS } from "@/app/faq-data";
 import { openMikeChat } from "@/components/MikeChat";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
-
-const SEEDS: Record<string, string> = {
-  symptom: "My truck's making a noise it wasn't making yesterday and I'm not sure what part I need.",
-  photo: "I've got the old part in my hand but there's no number on it. Can I send you a photo so you can identify it?",
-  vin: "Can you look up the right parts using my VIN? I'll give you the number.",
-  es: "Hola Mike, necesito ayuda para encontrar una pieza para mi camión. ¿Me puedes ayudar?",
-};
+import { HeroFeatureSlider } from "@/components/HeroFeatureSlider";
+import { AgentFeatureSlide } from "@/components/AgentFeatureSlide";
+import type { AgentFeatureSlide as AgentSlide } from "@/lib/home-slides";
+import { MIKE_SEEDS } from "@/lib/resolve-slide-href";
 
 const DEMO_VIDEO = "https://hsgoueam2pjhncqb.public.blob.vercel-storage.com/mike-demo.mp4";
 
@@ -21,7 +18,7 @@ const DEMO_VIDEO = "https://hsgoueam2pjhncqb.public.blob.vercel-storage.com/mike
 const GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=ai.partsnow.app";
 const APP_STORE_URL = "https://apps.apple.com/app/id6779235305";
 
-export function LandingPage() {
+export function LandingPage({ featureSlides = [] }: { featureSlides?: AgentSlide[] }) {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
   const [heroInput, setHeroInput] = useState("");
   const [ctaInput, setCtaInput] = useState("");
@@ -45,6 +42,51 @@ export function LandingPage() {
     setCtaInput("");
   };
 
+  const heroMainSlide = (
+    <div className="wrap">
+      <div className="hero-center">
+        <div className="steve-avatar">
+          <Image className="sa-photo" src="/steve-face.png" alt="Mike" width={96} height={96} />
+          <span className="sa-spark">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.6 5.2L19 9l-5.4 1.8L12 16l-1.6-5.2L5 9l5.4-1.8z"/></svg>
+          </span>
+          <span className="sa-live" />
+        </div>
+        <p className="ava-cap">Mike · AI truck parts specialist</p>
+        <h1>Truck down?<br /><span className="teal">Start here.</span></h1>
+        <p className="sub">Mike is a <strong>free AI specialist for heavy-duty truck and trailer parts.</strong> Describe what you need, he&apos;ll help you identify the issue, find the right part, or point you in the right direction.</p>
+
+        <form className="chatbox" onSubmit={submitHero} autoComplete="off">
+          <input className="chatbox-input" type="text" value={heroInput} onChange={(e) => setHeroInput(e.target.value)} placeholder="Tell Mike what's going on with your truck…" />
+          <button className="chatbox-send" type="submit">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m13 5 7 7-7 7"/></svg>
+          </button>
+        </form>
+
+        <div className="quick-chips">
+          <button className="qchip" onClick={() => openMikeChat(MIKE_SEEDS.symptom)}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12h3l2-6 4 12 2-6h7"/></svg>
+            Describe a symptom
+          </button>
+          <button className="qchip" onClick={() => openMikeChat(undefined, { attach: true })}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg>
+            Upload a photo
+          </button>
+          <button className="qchip" onClick={() => openMikeChat(MIKE_SEEDS.vin)}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10v4M11 10v4M15 10l2 4M17 10l-2 4"/></svg>
+            Enter a VIN
+          </button>
+          <button className="qchip qchip-es" onClick={() => openMikeChat(MIKE_SEEDS.es)}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+            En español
+          </button>
+        </div>
+
+        <p className="hero-microline">Free. No account. Or call/text: <a href="tel:+18652905485">(865) 290-5485</a> EN · <a href="tel:+18652175813">(865) 217-5813</a> ES</p>
+      </div>
+    </div>
+  );
+
   return (
     <>
       <SiteNav />
@@ -52,48 +94,14 @@ export function LandingPage() {
       {/* HERO */}
       <header className="hero hero-chat">
         <div className="globe" />
-        <div className="wrap">
-          <div className="hero-center">
-            <div className="steve-avatar">
-              <Image className="sa-photo" src="/steve-face.png" alt="Mike" width={96} height={96} />
-              <span className="sa-spark">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.6 5.2L19 9l-5.4 1.8L12 16l-1.6-5.2L5 9l5.4-1.8z"/></svg>
-              </span>
-              <span className="sa-live" />
-            </div>
-            <p className="ava-cap">Mike · AI truck parts specialist</p>
-            <h1>Truck down?<br /><span className="teal">Start here.</span></h1>
-            <p className="sub">Mike is a <strong>free AI specialist for heavy-duty truck and trailer parts.</strong> Describe what you need, he&apos;ll help you identify the issue, find the right part, or point you in the right direction.</p>
-
-            <form className="chatbox" onSubmit={submitHero} autoComplete="off">
-              <input className="chatbox-input" type="text" value={heroInput} onChange={(e) => setHeroInput(e.target.value)} placeholder="Tell Mike what's going on with your truck…" />
-              <button className="chatbox-send" type="submit">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m13 5 7 7-7 7"/></svg>
-              </button>
-            </form>
-
-            <div className="quick-chips">
-              <button className="qchip" onClick={() => openMikeChat(SEEDS.symptom)}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12h3l2-6 4 12 2-6h7"/></svg>
-                Describe a symptom
-              </button>
-              <button className="qchip" onClick={() => openMikeChat(undefined, { attach: true })}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></svg>
-                Upload a photo
-              </button>
-              <button className="qchip" onClick={() => openMikeChat(SEEDS.vin)}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10v4M11 10v4M15 10l2 4M17 10l-2 4"/></svg>
-                Enter a VIN
-              </button>
-              <button className="qchip qchip-es" onClick={() => openMikeChat(SEEDS.es)}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
-                En español
-              </button>
-            </div>
-
-            <p className="hero-microline">Free. No account. Or call/text: <a href="tel:+18652905485">(865) 290-5485</a> EN · <a href="tel:+18652175813">(865) 217-5813</a> ES</p>
-          </div>
-        </div>
+        <HeroFeatureSlider>
+          {[
+            heroMainSlide,
+            ...featureSlides.map((slide) => (
+              <AgentFeatureSlide key={slide.key} slide={slide} />
+            )),
+          ]}
+        </HeroFeatureSlider>
       </header>
 
       {/* THE PROBLEM */}

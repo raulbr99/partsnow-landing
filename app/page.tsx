@@ -1,7 +1,10 @@
 import { LandingPage } from "@/components/LandingPage";
 import { FAQ_ITEMS } from "@/app/faq-data";
+import { getActiveAgentHomeSlides, mapAgentSlides } from "@/lib/home-slides";
 
 const SITE_URL = "https://agent.partsnow.ai";
+
+export const revalidate = 60;
 
 // Build-time freshness signal — refreshed on every deploy (recency matters for AI search).
 const LAST_UPDATED = new Date().toISOString();
@@ -97,14 +100,13 @@ const jsonLd = {
   ],
 };
 
-export default function Home() {
+export default async function Home() {
+  const rows = await getActiveAgentHomeSlides();
+  const featureSlides = mapAgentSlides(rows);
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <LandingPage />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <LandingPage featureSlides={featureSlides} />
     </>
   );
 }

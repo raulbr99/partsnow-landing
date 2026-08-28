@@ -1,0 +1,77 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import type { AgentFeatureSlide } from "@/lib/home-slides";
+import { activateSlideHref } from "@/lib/resolve-slide-href";
+
+function SlidePhoto({ src }: { src: string }) {
+  if (/^https?:\/\//i.test(src)) {
+    return <img src={src} alt="" className="hero-feature-photo-img" />;
+  }
+  return (
+    <Image
+      src={src}
+      alt=""
+      fill
+      className="hero-feature-photo-img"
+      sizes="(max-width: 900px) 100vw, 420px"
+    />
+  );
+}
+
+function SlideCta({ href, label }: { href: string; label: string }) {
+  if (href.startsWith("chat:")) {
+    return (
+      <button type="button" className="btn btn-chat" onClick={() => activateSlideHref(href)}>
+        {label}
+      </button>
+    );
+  }
+  if (href.startsWith("/")) {
+    return (
+      <Link className="btn btn-chat" href={href}>
+        {label}
+      </Link>
+    );
+  }
+  return (
+    <a className="btn btn-chat" href={href}>
+      {label}
+    </a>
+  );
+}
+
+export function AgentFeatureSlide({ slide }: { slide: AgentFeatureSlide }) {
+  return (
+    <div className="wrap hero-feature-slide">
+      <div className="hero-feature-grid">
+        <div className="hero-feature-copy">
+          {slide.eyebrow ? <p className="hero-feature-eyebrow">{slide.eyebrow}</p> : null}
+          <h2 className="hero-feature-title">{slide.title}</h2>
+          <p className="hero-feature-desc">{slide.description}</p>
+          <div className="hero-feature-actions">
+            <SlideCta href={slide.href} label={slide.cta} />
+            {slide.showCall && (
+              <a className="btn btn-call" href="tel:+18652905485">
+                Call Mike · (865) 290-5485
+              </a>
+            )}
+          </div>
+          {slide.bullets.length > 0 && (
+            <ul className="hero-feature-bullets">
+              {slide.bullets.map((b) => (
+                <li key={b}>{b}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+        {slide.photo ? (
+          <div className="hero-feature-photo">
+            <SlidePhoto src={slide.photo} />
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+}
