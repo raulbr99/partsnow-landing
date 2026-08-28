@@ -7,14 +7,14 @@ const SWIPE_THRESHOLD_PX = 48;
 
 const EDGE_WASH_LEFT: CSSProperties = {
   background:
-    "linear-gradient(125deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.45) 24%, rgba(0,0,0,0.2) 48%, rgba(0,0,0,0.06) 68%, transparent 85%)",
-  filter: "blur(18px)",
+    "linear-gradient(90deg, rgba(0,0,0,0.26) 0%, rgba(0,0,0,0.12) 32%, rgba(0,0,0,0.04) 52%, transparent 72%)",
+  filter: "blur(22px)",
 };
 
 const EDGE_WASH_RIGHT: CSSProperties = {
   background:
-    "linear-gradient(305deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.45) 24%, rgba(0,0,0,0.2) 48%, rgba(0,0,0,0.06) 68%, transparent 85%)",
-  filter: "blur(18px)",
+    "linear-gradient(270deg, rgba(0,0,0,0.26) 0%, rgba(0,0,0,0.12) 32%, rgba(0,0,0,0.04) 52%, transparent 72%)",
+  filter: "blur(22px)",
 };
 
 export function HeroFeatureSlider({
