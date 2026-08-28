@@ -75,10 +75,10 @@ export function HeroFeatureSlider({
       {count > 1 && (
         <>
           <button type="button" className="hero-slider-edge hero-slider-edge-left" aria-label="Previous slide" onClick={() => goTo(index - 1, true)}>
-            <ChevronLeft aria-hidden size={32} />
+            <ChevronLeft aria-hidden size={24} />
           </button>
           <button type="button" className="hero-slider-edge hero-slider-edge-right" aria-label="Next slide" onClick={() => goTo(index + 1, true)}>
-            <ChevronRight aria-hidden size={32} />
+            <ChevronRight aria-hidden size={24} />
           </button>
           <div className="hero-slider-dots">
             {slides.map((_, i) => (

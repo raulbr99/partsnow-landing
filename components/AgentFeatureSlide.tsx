@@ -48,7 +48,9 @@ export function AgentFeatureSlide({ slide }: { slide: AgentFeatureSlide }) {
       <div className="wrap hero-feature-inner">
         <div className="hero-feature-grid">
           <div className="hero-feature-copy">
-            {slide.eyebrow ? <span className="hero-feature-eyebrow">{slide.eyebrow}</span> : null}
+            {slide.eyebrow ? (
+              <span className="eyebrow on-dark hero-feature-eyebrow">{slide.eyebrow}</span>
+            ) : null}
             <h2 className="hero-feature-title">{slide.title}</h2>
             <p className="hero-feature-desc">{slide.description}</p>
             <div className="hero-feature-actions">
@@ -68,10 +70,9 @@ export function AgentFeatureSlide({ slide }: { slide: AgentFeatureSlide }) {
             )}
           </div>
           {slide.photo ? (
-            <div className="hero-feature-photo">
-              <div className="hero-feature-photo-frame">
+            <div className="hero-feature-visual">
+              <div className="hero-feature-portrait">
                 <SlidePhoto src={slide.photo} />
-                <span className="hero-feature-photo-scrim" aria-hidden />
               </div>
             </div>
           ) : null}
