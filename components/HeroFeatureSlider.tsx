@@ -1,17 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const SWIPE_THRESHOLD_PX = 48;
 
-const EDGE_WASH_LEFT: React.CSSProperties = {
+const EDGE_WASH_LEFT: CSSProperties = {
   background:
     "linear-gradient(125deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.45) 24%, rgba(0,0,0,0.2) 48%, rgba(0,0,0,0.06) 68%, transparent 85%)",
   filter: "blur(18px)",
 };
 
-const EDGE_WASH_RIGHT: React.CSSProperties = {
+const EDGE_WASH_RIGHT: CSSProperties = {
   background:
     "linear-gradient(305deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.45) 24%, rgba(0,0,0,0.2) 48%, rgba(0,0,0,0.06) 68%, transparent 85%)",
   filter: "blur(18px)",
@@ -52,7 +52,7 @@ export function HeroFeatureSlider({
       role="region"
       aria-roledescription="carousel"
       aria-label="Feature highlights"
-      className="hero-slider group/slider"
+      className="hero-slider"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -89,7 +89,7 @@ export function HeroFeatureSlider({
           <div className="group/edge pointer-events-none absolute inset-y-0 left-0 z-20 hidden w-[min(28%,12rem)] md:block">
             <span
               aria-hidden
-              className="hero-slider-edge-wash absolute -inset-y-[20%] -left-[25%] right-[-30%] opacity-0 transition-opacity duration-300 group-hover/slider:opacity-70 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
+              className="hero-slider-edge-wash absolute -inset-y-[20%] -left-[25%] right-[-30%] opacity-0 transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
               style={EDGE_WASH_LEFT}
             />
             <button
@@ -101,14 +101,14 @@ export function HeroFeatureSlider({
               <ChevronLeft
                 aria-hidden
                 strokeWidth={2.5}
-                className="h-8 w-8 text-white opacity-0 drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] transition-opacity duration-300 group-hover/slider:opacity-75 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
+                className="h-8 w-8 text-white opacity-0 drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
               />
             </button>
           </div>
           <div className="group/edge pointer-events-none absolute inset-y-0 right-0 z-20 hidden w-[min(28%,12rem)] md:block">
             <span
               aria-hidden
-              className="hero-slider-edge-wash absolute -inset-y-[20%] -right-[25%] left-[-30%] opacity-0 transition-opacity duration-300 group-hover/slider:opacity-70 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
+              className="hero-slider-edge-wash absolute -inset-y-[20%] -right-[25%] left-[-30%] opacity-0 transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
               style={EDGE_WASH_RIGHT}
             />
             <button
@@ -120,7 +120,7 @@ export function HeroFeatureSlider({
               <ChevronRight
                 aria-hidden
                 strokeWidth={2.5}
-                className="h-8 w-8 text-white opacity-0 drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] transition-opacity duration-300 group-hover/slider:opacity-75 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
+                className="h-8 w-8 text-white opacity-0 drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
               />
             </button>
           </div>
