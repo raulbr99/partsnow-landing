@@ -524,28 +524,6 @@ h1, h2, h3, .display { font-family: var(--font-sans); }
   flex-direction: column;
 }
 
-.hero-slider-edge {
-  display: none;
-  position: absolute; top: 50%; transform: translateY(-50%);
-  width: 44px; height: 44px;
-  border: 1px solid rgba(255,255,255,0.22);
-  border-radius: 50%;
-  background: rgba(15,30,43,0.35);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  color: #fff; cursor: pointer; z-index: 2;
-  opacity: 0.9;
-  transition: background var(--transition-fast), border-color var(--transition-fast);
-}
-.hero-slider-edge:hover {
-  background: rgba(64,134,150,0.35);
-  border-color: rgba(127,192,206,0.55);
-}
-@media (min-width: 768px) { .hero-slider-edge { display: flex; align-items: center; justify-content: center; } }
-.hero-slider-edge-left { left: 16px; }
-.hero-slider-edge-right { right: 16px; }
-.hero-slider-edge svg { width: 24px; height: 24px; }
-
 .hero-slider-dots {
   display: flex; justify-content: center; gap: 8px;
   padding: 0 16px 24px; position: relative; z-index: 1;
