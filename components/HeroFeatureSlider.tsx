@@ -74,47 +74,47 @@ export function HeroFeatureSlider({
 
       {count > 1 && (
         <>
-          <div className="group/edge pointer-events-none absolute inset-y-0 left-0 z-10 hidden w-[min(36%,18rem)] md:block">
+          <div className="group/edge pointer-events-none absolute top-0 bottom-12 left-0 z-10 hidden w-[min(24%,11rem)] md:block">
             <span
               aria-hidden
-              className="absolute -inset-y-[20%] -left-[25%] right-[-30%] opacity-0 transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
+              className="absolute inset-y-0 -left-[18%] right-[-22%] opacity-0 transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
               style={{
                 background:
-                  "linear-gradient(125deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.45) 24%, rgba(0,0,0,0.2) 48%, rgba(0,0,0,0.06) 68%, transparent 85%)",
-                filter: "blur(18px)",
+                  "linear-gradient(125deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.42) 28%, rgba(0,0,0,0.14) 55%, transparent 78%)",
+                filter: "blur(14px)",
               }}
             />
             <button
               type="button"
               aria-label="Previous slide"
               onClick={() => goTo(index - 1, true)}
-              className="pointer-events-auto absolute inset-y-0 left-0 flex w-14 cursor-pointer items-center justify-center border-0 bg-transparent p-0"
+              className="pointer-events-auto absolute inset-y-0 left-0 flex w-12 cursor-pointer items-center justify-center border-0 bg-transparent p-0"
             >
               <ChevronLeft
                 aria-hidden
-                className="h-8 w-8 text-white opacity-0 drop-shadow-md transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
+                className="h-7 w-7 text-white opacity-0 drop-shadow-md transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
               />
             </button>
           </div>
-          <div className="group/edge pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-[min(36%,18rem)] md:block">
+          <div className="group/edge pointer-events-none absolute top-0 bottom-12 right-0 z-10 hidden w-[min(24%,11rem)] md:block">
             <span
               aria-hidden
-              className="absolute -inset-y-[20%] -right-[25%] left-[-30%] opacity-0 transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
+              className="absolute inset-y-0 -right-[18%] left-[-22%] opacity-0 transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
               style={{
                 background:
-                  "linear-gradient(305deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.45) 24%, rgba(0,0,0,0.2) 48%, rgba(0,0,0,0.06) 68%, transparent 85%)",
-                filter: "blur(18px)",
+                  "linear-gradient(305deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.42) 28%, rgba(0,0,0,0.14) 55%, transparent 78%)",
+                filter: "blur(14px)",
               }}
             />
             <button
               type="button"
               aria-label="Next slide"
               onClick={() => goTo(index + 1, true)}
-              className="pointer-events-auto absolute inset-y-0 right-0 flex w-14 cursor-pointer items-center justify-center border-0 bg-transparent p-0"
+              className="pointer-events-auto absolute inset-y-0 right-0 flex w-12 cursor-pointer items-center justify-center border-0 bg-transparent p-0"
             >
               <ChevronRight
                 aria-hidden
-                className="h-8 w-8 text-white opacity-0 drop-shadow-md transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
+                className="h-7 w-7 text-white opacity-0 drop-shadow-md transition-opacity duration-300 group-hover/edge:opacity-100 group-focus-within/edge:opacity-100"
               />
             </button>
           </div>
