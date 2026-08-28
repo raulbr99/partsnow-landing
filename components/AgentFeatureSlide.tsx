@@ -6,13 +6,14 @@ import { useShouldLoadSlidePhoto, useHeroSliderActiveIndex, useHeroSliderSlideIn
 import { activateSlideHref } from "@/lib/resolve-slide-href";
 
 function SlidePhoto({ src, priority }: { src: string; priority?: boolean }) {
+  const isMikePortrait = /steve\.png/i.test(src);
   return (
     // Pre-optimized static assets (WebP in /public) — serve directly; skip _next/image.
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={src}
       alt=""
-      className="hero-feature-photo-img hero-feature-photo-img--absolute"
+      className={`hero-feature-photo-img hero-feature-photo-img--absolute${isMikePortrait ? " hero-feature-photo-img--mike" : ""}`}
       loading={priority ? "eager" : "lazy"}
       decoding="async"
       fetchPriority={priority ? "high" : "low"}

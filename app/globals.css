@@ -520,31 +520,31 @@ h1, h2, h3, .display { font-family: var(--font-sans); }
   /* Edge hover + click strips (md+); tuned per breakpoint */
   --edge-wash: 26%;
   --edge-click: 20%;
-  --edge-icon: 2rem;
-  --edge-hit-padding: 1rem;
+  --edge-icon: 1.75rem;
+  --edge-hit-padding: 0.875rem;
 }
 @media (min-width: 1024px) {
   .hero-slider {
     --edge-wash: 34%;
     --edge-click: 28%;
-    --edge-icon: 2.75rem;
-    --edge-hit-padding: 1.35rem;
+    --edge-icon: 2.25rem;
+    --edge-hit-padding: 1.125rem;
   }
 }
 @media (min-width: 1280px) {
   .hero-slider {
     --edge-wash: 40%;
     --edge-click: 32%;
-    --edge-icon: 3.25rem;
-    --edge-hit-padding: 1.75rem;
+    --edge-icon: 2.625rem;
+    --edge-hit-padding: 1.5rem;
   }
 }
 @media (min-width: 1536px) {
   .hero-slider {
     --edge-wash: 44%;
     --edge-click: 36%;
-    --edge-icon: 3.75rem;
-    --edge-hit-padding: 2.25rem;
+    --edge-icon: 3rem;
+    --edge-hit-padding: 1.875rem;
   }
 }
 .hero-slider-track-wrap { overflow: hidden; }
@@ -727,6 +727,9 @@ h1, h2, h3, .display { font-family: var(--font-sans); }
 .hero-feature-photo-img--absolute {
   position: absolute;
   inset: 0;
+}
+.hero-feature-photo-img--mike {
+  object-position: 50% 18%;
 }
 .hero-feature-bullets {
   margin: 24px 0 0; padding: 0; list-style: none;
