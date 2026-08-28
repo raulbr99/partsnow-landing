@@ -38,10 +38,13 @@ export function HeroFeatureSlider({
   children,
   slidePhotos = [],
   autoAdvanceMs = 7000,
+  /** When true, autoplay is suspended (e.g. Mike Simli session on slide 0). */
+  autoplayLocked = false,
 }: {
   children: React.ReactNode[];
   slidePhotos?: string[];
   autoAdvanceMs?: number;
+  autoplayLocked?: boolean;
 }) {
   const slides = children.filter(Boolean);
   const count = slides.length;
@@ -78,13 +81,13 @@ export function HeroFeatureSlider({
   }, []);
 
   useEffect(() => {
-    if (count <= 1 || paused) return;
+    if (count <= 1 || paused || autoplayLocked) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const id = setInterval(() => {
       if (!stoppedRef.current) setIndex((i) => (i + 1) % count);
     }, autoAdvanceMs);
     return () => clearInterval(id);
-  }, [count, paused, autoAdvanceMs]);
+  }, [count, paused, autoplayLocked, autoAdvanceMs]);
 
   useEffect(() => {
     if (!slidePhotos.length) return;

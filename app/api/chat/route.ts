@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "messages required" }, { status: 400, headers: corsHeaders(req) });
     }
 
-    const apiKey = process.env.OPENROUTER_API_KEY;
+    const apiKey = process.env.OPENROUTER_API_KEY?.trim();
     if (!apiKey) {
       return NextResponse.json({ error: "API not configured" }, { status: 500, headers: corsHeaders(req) });
     }

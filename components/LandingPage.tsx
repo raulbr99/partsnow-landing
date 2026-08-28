@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useMemo } from "react";
+import type { MikeSimliHandle } from "@/components/MikeSimliAvatar";
 import Link from "next/link";
 import Image from "next/image";
 import { FAQ_ITEMS } from "@/app/faq-data";
@@ -12,6 +13,7 @@ import { AgentFeatureSlide } from "@/components/AgentFeatureSlide";
 import { mapAgentSlidesForLocale, type AgentSlideRow } from "@/lib/home-slides";
 import { useBrowserLocale, setSiteLocale, type SiteLocale } from "@/lib/use-browser-locale";
 import { MIKE_SEEDS } from "@/lib/resolve-slide-href";
+import { MikeSimliAvatar } from "@/components/MikeSimliAvatar";
 
 const DEMO_VIDEO = "https://hsgoueam2pjhncqb.public.blob.vercel-storage.com/mike-demo.mp4";
 
@@ -35,7 +37,9 @@ export function LandingPage({
   const [heroInput, setHeroInput] = useState("");
   const [ctaInput, setCtaInput] = useState("");
   const [videoPlaying, setVideoPlaying] = useState(false);
+  const [heroSimliEngaged, setHeroSimliEngaged] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const heroSimliRef = useRef<MikeSimliHandle>(null);
 
   // Autoplay the demo as soon as the viewer taps the poster (carries the click gesture).
   useEffect(() => {
@@ -44,7 +48,13 @@ export function LandingPage({
 
   const submitHero = (e: React.FormEvent) => {
     e.preventDefault();
-    openMikeChat(heroInput.trim() || undefined);
+    const msg = heroInput.trim();
+    if (msg && heroSimliRef.current?.isReady() && !heroSimliRef.current.isThinking()) {
+      void heroSimliRef.current.ask(msg);
+      setHeroInput("");
+      return;
+    }
+    openMikeChat(msg || undefined);
     setHeroInput("");
   };
 
@@ -57,16 +67,19 @@ export function LandingPage({
   const heroMainSlide = (
     <div className="wrap">
       <div className="hero-center">
-        <div className="steve-avatar">
-          <Image className="sa-photo" src="/steve-face.png" alt="Mike" width={96} height={96} priority />
-          <span className="sa-spark">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.6 5.2L19 9l-5.4 1.8L12 16l-1.6-5.2L5 9l5.4-1.8z"/></svg>
-          </span>
-          <span className="sa-live" />
-        </div>
-        <p className="ava-cap">Mike · AI truck parts specialist</p>
+        <MikeSimliAvatar
+          ref={heroSimliRef}
+          variant="hero"
+          locale={locale}
+          posterSrc="/steve-face.png"
+          frameClassName="steve-avatar mike-simli"
+          posterWidth={240}
+          posterHeight={240}
+          onEngagedChange={setHeroSimliEngaged}
+        />
+        <p className="ava-cap">Mike · AI parts specialist</p>
         <h1>Truck down?<br /><span className="teal">Start here.</span></h1>
-        <p className="sub">Mike is a <strong>free AI specialist for heavy-duty truck and trailer parts.</strong> Describe what you need, he&apos;ll help you identify the issue, find the right part, or point you in the right direction.</p>
+        <p className="sub">Describe what&apos;s wrong — Mike finds the <strong>right part</strong> or your next step.</p>
 
         <form className="chatbox" onSubmit={submitHero} autoComplete="off">
           <input className="chatbox-input" type="text" value={heroInput} onChange={(e) => setHeroInput(e.target.value)} placeholder="Tell Mike what's going on with your truck…" />
@@ -114,6 +127,7 @@ export function LandingPage({
         <div className="globe" />
         <HeroFeatureSlider
           slidePhotos={["", ...featureSlides.map((s) => s.photo)]}
+          autoplayLocked={heroSimliEngaged}
         >
           {[
             heroMainSlide,
@@ -143,12 +157,9 @@ export function LandingPage({
       {/* MEET STEVE */}
       <section className="section meet" id="meet">
         <div className="wrap">
-          <div className="portrait-col">
-            <div className="steve-portrait">
-              <Image className="portrait-photo" src="/steve.png" alt="Mike, AI parts specialist" width={340} height={340} />
-              <div className="online"><span className="dot" />Online now</div>
-            </div>
-          </div>
+        <div className="portrait-col">
+          <MikeSimliAvatar locale={locale} posterSrc="/steve.png" posterAlt="Mike, AI parts specialist" />
+        </div>
           <div className="info">
             <span className="eyebrow">Meet Mike</span>
             <h2>Your AI parts specialist.</h2>
